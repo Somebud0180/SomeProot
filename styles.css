@@ -81,9 +81,8 @@ section {
 }
 
 .hero {
-	height: 640px;
-	min-height: 360px;
-	max-height: 100vh;
+	height: auto;
+	min-height: clamp(360px, 45vh, 560px);
 	text-align: center;
 	padding: 4rem 2rem;
 	background-color: #18181b;
@@ -116,7 +115,7 @@ section {
 
 .banner {
 	width: 100%;
-	height: clamp(240px, 40vw, 512px);
+	height: clamp(320px, 18vw, 360px);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -125,7 +124,7 @@ section {
 
 .face {
 	display: flex;
-	gap: clamp(72px, 20vw, 240px);
+	gap: clamp(128px, 20vw, 240px);
 	position: relative;
 }
 
@@ -135,7 +134,7 @@ section {
 }
 
 .eye {
-	width: clamp(56px, 12vw, 196px);
+	width: clamp(96px, 12vw, 196px);
 	height: auto;
 	display: block;
 	transform-origin: center center;
@@ -143,13 +142,13 @@ section {
 }
 
 .mouth {
-	width: clamp(120px, 20vw, 240px);
+	width: clamp(192px, 20vw, 240px);
 	height: auto;
 	position: absolute;
 	top: 100%;
 	margin-top: clamp(24px, 4vw, 48px);
 	left: 50%;
-	margin-left: calc(clamp(120px, 20vw, 240px) / -2);
+	margin-left: calc(clamp(192px, 20vw, 240px) / -2);
 	transition: transform 0.5s ease-out; /* Slower transition for mouth */
 }
 
@@ -200,6 +199,30 @@ footer a {
 
 	.hero h2 {
 		font-size: 2rem;
+	}
+}
+
+@media (min-aspect-ratio: 16/9) {
+	.banner {
+		height: clamp(200px, 12vw, 300px);
+	}
+}
+
+@media (max-aspect-ratio: 3/4) {
+	.hero {
+		height: auto;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		padding-top: 3rem;
+		padding-bottom: 3rem;
+	}
+
+	.banner {
+		height: auto;
+		min-height: clamp(320px, 60vh, 720px);
+		margin-top: auto;
+		margin-bottom: auto;
 	}
 }
 
