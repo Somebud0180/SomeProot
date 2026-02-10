@@ -4,14 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Get the CTA button
     const ctaButton = document.getElementById('cta-button');
-
-    // Add click event listener
-    if (ctaButton) {
-        ctaButton.addEventListener('click', function() {
-            alert('Welcome! Let\'s get started building something amazing!');
-        });
-    }
-
+    
     // Smooth scroll for navigation links
     const navLinks = document.querySelectorAll('nav a[href^="#"]');
     
