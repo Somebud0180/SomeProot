@@ -9,9 +9,11 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
     color: #f3f3f3;
-    background-image: url('Assets/Pattern.png'), linear-gradient(180deg, #232344 0%, #18181b 90%);
-    background-repeat: repeat-y;
-    background-size: 100% auto;
+    --pattern-max: 640px;
+    background-image: url('Assets/Pattern_L.png'), url('Assets/Pattern_R.png'), linear-gradient(180deg, #232344 0%, #18181b 90%);
+    background-position: left top, right top, center;
+    background-repeat: repeat-y, repeat-y, no-repeat;
+    background-size: min(50vw, var(--pattern-max)) auto, min(50vw, var(--pattern-max)) auto, 100% 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
