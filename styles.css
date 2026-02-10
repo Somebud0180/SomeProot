@@ -116,7 +116,7 @@ section {
 
 .banner {
 	width: 100%;
-	height: 240px;
+	height: clamp(240px, 40vw, 512px);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -125,7 +125,7 @@ section {
 
 .face {
 	display: flex;
-	gap: 96px;
+	gap: clamp(72px, 20vw, 240px);
 	position: relative;
 }
 
@@ -135,24 +135,21 @@ section {
 }
 
 .eye {
-	width: 48px;
-	height: 96px;
-	background: white;
-	position: relative;
-	overflow: hidden;
+	width: clamp(56px, 12vw, 196px);
+	height: auto;
+	display: block;
+	transform-origin: center center;
 	animation: blink 4s infinite;
 }
 
 .mouth {
-	width: 120px;
-	height: 60px;
-	background: white;
-	border-radius: 0 0 60px 60px;
+	width: clamp(120px, 20vw, 240px);
+	height: auto;
 	position: absolute;
 	top: 100%;
-	margin-top: 32px;
+	margin-top: clamp(24px, 4vw, 48px);
 	left: 50%;
-	margin-left: -60px; /* Center: -half of width */
+	margin-left: calc(clamp(120px, 20vw, 240px) / -2);
 	transition: transform 0.5s ease-out; /* Slower transition for mouth */
 }
 
