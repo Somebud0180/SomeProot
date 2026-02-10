@@ -152,6 +152,26 @@ section {
 	transition: transform 0.5s ease-out; /* Slower transition for mouth */
 }
 
+.content {
+	margin: 2rem;
+	text-align: left;
+}
+
+.content h3 {
+	font-size: 1.8rem;
+	margin-bottom: 1rem;
+}
+
+.content p {
+	font-size: 1.1rem;
+	margin-bottom: 1.5rem;
+}
+
+.content a {
+	color: #8292da;
+	text-decoration: underline;
+}
+
 button {
 	background-color: white;
 	color: #5c6798;
