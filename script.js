@@ -42,6 +42,52 @@ document.addEventListener("DOMContentLoaded", function () {
 	sections.forEach((section) => {
 		observer.observe(section);
 	});
+
+	const hero = document.querySelector(".hero");
+	const banner = document.querySelector(".banner");
+	const tallScreenQuery = window.matchMedia("(max-aspect-ratio: 3/4)");
+	let scrollScheduled = false;
+
+	const updateTallScreenHeights = () => {
+		if (!hero || !banner) {
+			return;
+		}
+
+		if (!tallScreenQuery.matches) {
+			hero.style.removeProperty("height");
+			banner.style.removeProperty("height");
+			return;
+		}
+
+		const minHeroPx = 360;
+		const minBannerPx = 320;
+		const viewportHeight = window.innerHeight;
+		const startHero = Math.max(minHeroPx, viewportHeight);
+		const startBanner = Math.max(minBannerPx, viewportHeight * 0.6);
+		const shrinkDistance = Math.max(1, viewportHeight * 1.5);
+		const progress = Math.min(window.scrollY / shrinkDistance, 1);
+		const heroHeight = Math.round(startHero - (startHero - minHeroPx) * progress);
+		const bannerHeight = Math.round(startBanner - (startBanner - minBannerPx) * progress);
+
+		hero.style.height = `${heroHeight}px`;
+		banner.style.minHeight = `${bannerHeight}px`;
+	};
+
+	const scheduleUpdate = () => {
+		if (scrollScheduled) {
+			return;
+		}
+		scrollScheduled = true;
+		requestAnimationFrame(() => {
+			scrollScheduled = false;
+			updateTallScreenHeights();
+		});
+	};
+
+	window.addEventListener("scroll", scheduleUpdate, { passive: true });
+	window.addEventListener("resize", scheduleUpdate);
+	tallScreenQuery.addEventListener("change", scheduleUpdate);
+	updateTallScreenHeights();
 });
 
 // Select face elements for lagging motion

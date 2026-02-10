@@ -220,7 +220,6 @@ footer a {
 
 	.banner {
 		height: auto;
-		min-height: clamp(320px, 60vh, 720px);
 		margin-top: auto;
 		margin-bottom: auto;
 	}
