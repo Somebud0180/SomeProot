@@ -66,8 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		const startBanner = Math.max(minBannerPx, viewportHeight * 0.6);
 		const shrinkDistance = Math.max(1, viewportHeight * 1.5);
 		const progress = Math.min(window.scrollY / shrinkDistance, 1);
-		const heroHeight = Math.round(startHero - (startHero - minHeroPx) * progress);
-		const bannerHeight = Math.round(startBanner - (startBanner - minBannerPx) * progress);
+		const heroHeight = Math.round(
+			startHero - (startHero - minHeroPx) * progress,
+		);
+		const bannerHeight = Math.round(
+			startBanner - (startBanner - minBannerPx) * progress,
+		);
 
 		hero.style.height = `${heroHeight}px`;
 		banner.style.minHeight = `${bannerHeight}px`;
