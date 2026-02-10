@@ -63,13 +63,13 @@ document.addEventListener("mousemove", (e) => {
 	const moveY = yRatio * baseMove;
 
 	// Calculate speed multipliers based on mouse position
-	// The eye opposite to the mouse direction moves slower
+	// The eye opposite to the mouse direction moves slower horizontally
 	const leftEyeSpeed = xRatio > 0 ? 0.6 : 1; // Slower when mouse is right
 	const rightEyeSpeed = xRatio < 0 ? 0.6 : 1; // Slower when mouse is left
 	const mouthSpeed = 0.5; // Always slower
 
-	// Apply transforms with different speeds
-	leftEye.style.transform = `translate(${moveX * leftEyeSpeed}px, ${moveY * leftEyeSpeed}px)`;
-	rightEye.style.transform = `translate(${moveX * rightEyeSpeed}px, ${moveY * rightEyeSpeed}px)`;
+	// Apply transforms with different speeds (only X varies, Y stays same for alignment)
+	leftEye.style.transform = `translate(${moveX * leftEyeSpeed}px, ${moveY}px)`;
+	rightEye.style.transform = `translate(${moveX * rightEyeSpeed}px, ${moveY}px)`;
 	mouth.style.transform = `translate(${moveX * mouthSpeed}px, ${moveY * mouthSpeed}px)`;
 });
