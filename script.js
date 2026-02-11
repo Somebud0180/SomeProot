@@ -147,7 +147,8 @@ const updateFaceBounds = () => {
 			: faceMotionConfig.maxMoveY;
 	let containerMaxMoveY = aspectMaxMoveY;
 	if (banner && face) {
-		const bannerHeight = banner.clientHeight || banner.getBoundingClientRect().height;
+		const bannerHeight =
+			banner.clientHeight || banner.getBoundingClientRect().height;
 		const faceHeight = face.offsetHeight || face.getBoundingClientRect().height;
 		const margin = 12;
 		const available = (bannerHeight - faceHeight) / 2 - margin;
@@ -170,16 +171,8 @@ const updateFaceTargets = (clientX, clientY) => {
 	}
 	const rawXRatio = ((clientX - originX) / boundsWidth - 0.5) * 2;
 	const rawYRatio = ((clientY - originY) / boundsHeight - 0.5) * 2;
-	const xRatio = clamp(
-		rawXRatio + faceMotionConfig.cursorBiasX,
-		-1,
-		1,
-	);
-	const yRatio = clamp(
-		rawYRatio + faceMotionConfig.cursorBiasY,
-		-1,
-		1,
-	);
+	const xRatio = clamp(rawXRatio + faceMotionConfig.cursorBiasX, -1, 1);
+	const yRatio = clamp(rawYRatio + faceMotionConfig.cursorBiasY, -1, 1);
 	const baseMoveX = boundsWidth * 0.5;
 	const baseMoveY = boundsHeight * 0.5;
 	const moveX = clamp(
