@@ -239,17 +239,28 @@ footer a {
 
 /* Socials Page */
 .social {
-	background-color: #18181b;
+	background-color: rgba(107, 100, 113, 0.8);
 	border-radius: 1rem;
 	gap: 1.5rem;
 	align-items: center;
 }
 
 .social_content {
+	width: 100%;
 	display: flex;
 	flex-grow: 1;
 	flex-direction: row;
 	padding: 2rem;
+	justify-content: space-evenly;
+	gap: 2rem;
+	transition:
+		ease gap 0.5s,
+		ease width 0.5s;
+}
+
+.social_content img {
+	width: clamp(44px, 8vw, 96px);
+	height: auto;
 }
 
 /* Responsive Design */
