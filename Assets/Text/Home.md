@@ -2,7 +2,7 @@
 
 <!-- Section: Hero -->
 # Somebud's Corner
-## My little corner on the internet!
+### My little corner on the internet!
 
 <!-- Section: About -->
 # A bit about me

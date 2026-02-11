@@ -62,6 +62,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.body.style.setProperty("--header-height", `${headerHeight}px`);
 	};
 
+	const getViewportHeight = () => {
+		if (window.visualViewport && window.visualViewport.height) {
+			return window.visualViewport.height;
+		}
+		return window.innerHeight;
+	};
+
 	const updateTallScreenHeights = () => {
 		if (!hero || !banner) {
 			return;
@@ -70,17 +77,21 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (!tallScreenQuery.matches) {
 			hero.style.removeProperty("height");
 			banner.style.removeProperty("height");
+			banner.style.removeProperty("min-height");
 			return;
 		}
 
 		const minHeroPx = 360;
 		const minBannerPx = 320;
-		const viewportHeight = window.innerHeight;
+		const viewportHeight = getViewportHeight();
 		const availableHeight = Math.max(0, viewportHeight - headerHeight);
 		const startHero = Math.max(minHeroPx, availableHeight);
 		const startBanner = Math.max(minBannerPx, availableHeight * 0.6);
-		const shrinkDistance = Math.max(1, viewportHeight * 1.5);
-		const progress = Math.min(window.scrollY / shrinkDistance, 1);
+		const maxScroll = Math.max(
+			1,
+			document.documentElement.scrollHeight - getViewportHeight(),
+		);
+		const progress = Math.min(window.scrollY / maxScroll, 1);
 		const heroHeight = Math.round(
 			startHero - (startHero - minHeroPx) * progress,
 		);
@@ -106,7 +117,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	window.addEventListener("scroll", scheduleUpdate, { passive: true });
 	window.addEventListener("resize", scheduleUpdate);
-	tallScreenQuery.addEventListener("change", scheduleUpdate);
+	if (typeof tallScreenQuery.addEventListener === "function") {
+		tallScreenQuery.addEventListener("change", scheduleUpdate);
+	} else if (typeof tallScreenQuery.addListener === "function") {
+		tallScreenQuery.addListener(scheduleUpdate);
+	}
+	if (window.visualViewport) {
+		window.visualViewport.addEventListener("resize", scheduleUpdate);
+		window.visualViewport.addEventListener("scroll", scheduleUpdate);
+	}
 	updateHeaderHeight();
 	updateTallScreenHeights();
 	loadMarkdown();
@@ -121,19 +140,19 @@ const banner = document.querySelector(".banner");
 const heroArea = document.querySelector(".hero");
 
 const faceMotionConfig = {
-	maxMoveX: 160,
-	maxMoveXTall: 110,
-	maxMoveY: 320,
-	maxMoveYTall: 320,
-	faceEase: 0.045,
-	eyeEase: 0.07,
-	mouthEase: 0.06,
-	eyeParallax: 0.35,
-	eyeParallaxY: 0.12,
-	mouthParallax: 0.25,
-	mouthParallaxY: 0.14,
-	cursorBiasX: 0,
-	cursorBiasY: -0.12,
+	maxMoveX: 160, // Max horizontal movement in pixels
+	maxMoveXTall: 110, // Max horizontal movement for tall screens
+	maxMoveY: 320, // Max vertical movement in pixels
+	maxMoveYTall: 320, // Max vertical movement for tall screens
+	faceEase: 0.045, // Easing factor for face movement (higher = snappier)
+	eyeEase: 0.07, // Easing factor for eye movement (higher = snappier)
+	mouthEase: 0.01, // Easing factor for mouth movement (higher = snappier)
+	eyeParallax: 0.25, // Parallax factor for eye movement (higher = more movement)
+	eyeParallaxY: 0.12, // Separate parallax factor for vertical eye movement
+	mouthParallax: 0.25, // Parallax factor for mouth movement (higher = more movement)
+	mouthParallaxY: 0.14, // Separate parallax factor for vertical mouth movement
+	cursorBiasX: 0, // Horizontal bias to offset cursor influence
+	cursorBiasY: -0.15, // Vertical bias to offset cursor influence
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -253,10 +272,14 @@ motionTarget.addEventListener("mouseleave", () => {
 
 window.addEventListener("resize", () => {
 	updateFaceBounds();
+	updateHeaderHeight();
+	updateTallScreenHeights();
 });
 
 window.addEventListener("load", () => {
 	updateFaceBounds();
+	updateHeaderHeight();
+	updateTallScreenHeights();
 });
 
 async function loadMarkdown() {
