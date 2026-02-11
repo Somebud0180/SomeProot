@@ -7,7 +7,7 @@
     <title>SomeProot</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-page="Home">
     <header>
         <nav>
             <h1>SomeProot</h1>
@@ -19,40 +19,30 @@
 
     <main>
         <section id="home" class="hero">
-            <h2>Somebud's Corner</h2>
-            <p>Welcome to my little corner!</p>
+            <div section="Hero"></div>
             <div class="banner">
               <div class="face">
                 <div class="eye-container" id="left-eye-container">
-                  <img class="eye" src="Assets/Face/Eye_L.svg" alt="Left eye">
+                  <img class="eye" src="Assets/Texture/Face/Eye_L.svg" alt="Left eye">
                 </div>
                 <div class="eye-container" id="right-eye-container">
-                  <img class="eye" src="Assets/Face/Eye_R.svg" alt="Right eye">
+                  <img class="eye" src="Assets/Texture/Face/Eye_R.svg" alt="Right eye">
                 </div>
-                <img class="mouth" src="Assets/Face/Mouth.svg" alt="Mouth">
+                <img class="mouth" src="Assets/Texture/Face/Mouth.svg" alt="Mouth">
               </div>
             </div>
         </section>
         <section id="about" class="content">
-            <h2>About Me</h2>
-            <h5><a href= "">The boring version</a></h5>
-            <p>
-                Hello! I'm Somebud, I dabble in different things like coding and art. 
-                I typically do app development (in Swift) and some other minor projects like hardware.
-                I'm also starting to get into 3D modeling with a 3D printer!
-                I also kinda draw (poorly) and post it over at my <a href="https://www.instagram.com/somebud0180">Instagram account</a>.
-                <br><br>
-                I'm also a member of <a href="https://hackclub.com">Hack Club</a>, where I feel at home with other high schoolers who are into similar things!
-                If you are also a Hack Clubber, find me at the slack, handle is @Somebud!
-            </p>
+            <div section="About"></div>
         </section>
     </main>
 
     <footer>
-        <img src="Assets/Footer.png" alt="Signature. Love, Hack Club" height="32">
+        <img src="Assets/Texture/Footer.png" alt="Signature. Love, Hack Club" height="32">
         <p>&copy; 2026 Somebud. <a href="https://github.com/Somebud/SomeProot">Source on GitHub</a></p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

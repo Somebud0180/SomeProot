@@ -13,7 +13,7 @@ body {
 	color: #f3f3f3;
 	--pattern-max: 640px;
 	background-image:
-		url("Assets/Pattern_L.png"), url("Assets/Pattern_R.png"),
+		url("Assets/Texture/Pattern_L.png"), url("Assets/Texture/Pattern_R.png"),
 		linear-gradient(180deg, #232344 0%, #18181b 90%);
 	background-position:
 		left top,
@@ -87,6 +87,8 @@ section {
 	padding: 4rem 2rem;
 	background-color: #18181b;
 	overflow: hidden;
+	display: grid;
+	place-items: center;
 	/* Break out of main's max-width to fill full viewport width */
 	width: 100vw;
 	position: relative;
@@ -97,10 +99,15 @@ section {
 }
 
 .hero > * {
-	/* Constrain hero content to max-width */
+	grid-area: 1 / 1;
+}
+
+.hero > :not(.banner) {
+	/* Constrain hero text to max-width */
 	max-width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
+	z-index: 1;
 }
 
 .hero h2 {
