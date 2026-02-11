@@ -237,6 +237,21 @@ footer a {
 	text-decoration: underline;
 }
 
+/* Socials Page */
+.social {
+	background-color: #18181b;
+	border-radius: 1rem;
+	gap: 1.5rem;
+	align-items: center;
+}
+
+.social_content {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: row;
+	padding: 2rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
 	nav {

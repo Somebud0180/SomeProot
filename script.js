@@ -91,7 +91,8 @@ document.addEventListener("DOMContentLoaded", function () {
 			1,
 			document.documentElement.scrollHeight - getViewportHeight(),
 		);
-		const progress = Math.min(window.scrollY / maxScroll, 1);
+		const shrinkFactor = 0.5;
+		const progress = Math.min(window.scrollY / (maxScroll * shrinkFactor), 1);
 		const heroHeight = Math.round(
 			startHero - (startHero - minHeroPx) * progress,
 		);
