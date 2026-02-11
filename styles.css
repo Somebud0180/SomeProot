@@ -107,7 +107,7 @@ section {
 	max-width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
-	z-index: 1;
+	z-index: 2;
 }
 
 .hero h2 {
@@ -127,6 +127,7 @@ section {
 	justify-content: center;
 	align-items: center;
 	position: relative;
+	z-index: 0;
 }
 
 .face {
@@ -158,6 +159,21 @@ section {
 	left: 50%;
 	margin-left: calc(clamp(192px, 20vw, 240px) / -2);
 	will-change: transform;
+}
+
+.blur {
+	--blur_amount: 4px;
+	position: absolute;
+	inset: 0; /* fill the section */
+	width: 100%;
+	height: 100%;
+	backdrop-filter: blur(var(--blur_amount));
+	-webkit-backdrop-filter: blur(var(--blur_amount)); /* Safari support */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+	z-index: 1;
 }
 
 .content {
