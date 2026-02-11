@@ -112,13 +112,12 @@ section {
 	z-index: 2;
 }
 
-.hero h2 {
+.hero h1 {
 	font-size: 2.5rem;
-	margin-bottom: 1rem;
 	transition: ease font-size 0.5s;
 }
 
-.hero p {
+.hero h3 {
 	font-size: 1.2rem;
 	margin-bottom: 2rem;
 	transition: ease font-size 0.5s;
