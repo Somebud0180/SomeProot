@@ -45,8 +45,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	const hero = document.querySelector(".hero");
 	const banner = document.querySelector(".banner");
+	const header = document.querySelector("header");
 	const tallScreenQuery = window.matchMedia("(max-aspect-ratio: 3/4)");
 	let scrollScheduled = false;
+	let headerHeight = 0;
+
+	const updateHeaderHeight = () => {
+		if (!header) {
+			document.body.style.removeProperty("--header-height");
+			headerHeight = 0;
+			return;
+		}
+
+		const rect = header.getBoundingClientRect();
+		headerHeight = Math.max(0, Math.round(rect.height || 0));
+		document.body.style.setProperty("--header-height", `${headerHeight}px`);
+	};
 
 	const updateTallScreenHeights = () => {
 		if (!hero || !banner) {
@@ -62,8 +76,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		const minHeroPx = 360;
 		const minBannerPx = 320;
 		const viewportHeight = window.innerHeight;
-		const startHero = Math.max(minHeroPx, viewportHeight);
-		const startBanner = Math.max(minBannerPx, viewportHeight * 0.6);
+		const availableHeight = Math.max(0, viewportHeight - headerHeight);
+		const startHero = Math.max(minHeroPx, availableHeight);
+		const startBanner = Math.max(minBannerPx, availableHeight * 0.6);
 		const shrinkDistance = Math.max(1, viewportHeight * 1.5);
 		const progress = Math.min(window.scrollY / shrinkDistance, 1);
 		const heroHeight = Math.round(
@@ -84,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		scrollScheduled = true;
 		requestAnimationFrame(() => {
 			scrollScheduled = false;
+			updateHeaderHeight();
 			updateTallScreenHeights();
 		});
 	};
@@ -91,6 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	window.addEventListener("scroll", scheduleUpdate, { passive: true });
 	window.addEventListener("resize", scheduleUpdate);
 	tallScreenQuery.addEventListener("change", scheduleUpdate);
+	updateHeaderHeight();
 	updateTallScreenHeights();
 	loadMarkdown();
 });
