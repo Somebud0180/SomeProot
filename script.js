@@ -96,90 +96,157 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Select face elements for lagging motion
+const face = document.querySelector(".face");
 const leftEye = document.getElementById("left-eye-container");
 const rightEye = document.getElementById("right-eye-container");
 const mouth = document.querySelector(".mouth");
-let baseEyeMouthGap = null;
+const banner = document.querySelector(".banner");
+const heroArea = document.querySelector(".hero");
+
 const faceMotionConfig = {
-	minGap: 18,
-	maxGapIncrease: 120,
 	maxMoveX: 160,
 	maxMoveXTall: 110,
-	maxMoveY: 360,
-	maxMoveYTall: 360,
-	mouthSpeed: 0.4,
-	leftEyeSlow: 0.5,
-	rightEyeSlow: 0.5,
-	maxEyeMoveXScale: 0.85,
+	maxMoveY: 320,
+	maxMoveYTall: 320,
+	faceEase: 0.045,
+	eyeEase: 0.07,
+	mouthEase: 0.06,
+	eyeParallax: 0.35,
+	eyeParallaxY: 0.12,
+	mouthParallax: 0.25,
+	mouthParallaxY: 0.14,
+	cursorBiasX: 0,
+	cursorBiasY: -0.12,
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const updateBaseEyeMouthGap = () => {
-	if (!leftEye || !rightEye || !mouth) {
-		baseEyeMouthGap = null;
-		return;
-	}
-
-	const leftRect = leftEye.getBoundingClientRect();
-	const rightRect = rightEye.getBoundingClientRect();
-	const mouthRect = mouth.getBoundingClientRect();
-	const eyeBottom = Math.max(leftRect.bottom, rightRect.bottom);
-	baseEyeMouthGap = mouthRect.top - eyeBottom;
+const faceMotionState = {
+	targetX: 0,
+	targetY: 0,
+	currentX: 0,
+	currentY: 0,
+	currentEyeX: 0,
+	currentEyeY: 0,
+	currentMouthX: 0,
+	currentMouthY: 0,
+	maxMoveX: faceMotionConfig.maxMoveX,
+	maxMoveY: faceMotionConfig.maxMoveY,
 };
 
-window.addEventListener("resize", updateBaseEyeMouthGap);
-document.addEventListener("DOMContentLoaded", updateBaseEyeMouthGap);
-
-document.addEventListener("mousemove", (e) => {
-	// Normalize mouse position (x, y) for the viewport
-	const { clientX, clientY } = e;
+const updateFaceBounds = () => {
 	const { innerWidth, innerHeight } = window;
-
-	const xRatio = (clientX / innerWidth - 0.5) * 2; // x movement (-1 to 1)
-	const yRatio = (clientY / innerHeight - 0.5) * 2; // y movement (-1 to 1)
-
-	// Base movement amount
-	const baseMoveX = innerWidth * 0.5;
-	const baseMoveY = innerHeight * 0.5;
 	const aspectRatio = innerWidth / innerHeight;
-	const maxMoveX =
+	faceMotionState.maxMoveX =
 		aspectRatio < 0.8
 			? faceMotionConfig.maxMoveXTall
 			: faceMotionConfig.maxMoveX;
-	const maxMoveY =
+	const aspectMaxMoveY =
 		aspectRatio < 0.8
 			? faceMotionConfig.maxMoveYTall
 			: faceMotionConfig.maxMoveY;
-	let moveX = xRatio * baseMoveX;
-	let moveY = yRatio * baseMoveY;
-	moveX = clamp(moveX, -maxMoveX, maxMoveX);
-	moveY = clamp(moveY, -maxMoveY, maxMoveY);
+	let containerMaxMoveY = aspectMaxMoveY;
+	if (banner && face) {
+		const bannerHeight = banner.clientHeight || banner.getBoundingClientRect().height;
+		const faceHeight = face.offsetHeight || face.getBoundingClientRect().height;
+		const margin = 12;
+		const available = (bannerHeight - faceHeight) / 2 - margin;
+		containerMaxMoveY = Math.max(0, available);
+	}
+	faceMotionState.maxMoveY = Math.min(aspectMaxMoveY, containerMaxMoveY);
+};
 
-	// Calculate speed multipliers based on mouse position
-	// The eye opposite to the mouse direction moves slower horizontally
-	const leftEyeSpeed = xRatio > 0 ? faceMotionConfig.leftEyeSlow : 1; // Slower when mouse is right
-	const rightEyeSpeed = xRatio < 0 ? faceMotionConfig.rightEyeSlow : 1; // Slower when mouse is left
-	const mouthSpeed = faceMotionConfig.mouthSpeed; // Always slower
+const updateFaceTargets = (clientX, clientY) => {
+	let boundsWidth = window.innerWidth;
+	let boundsHeight = window.innerHeight;
+	let originX = 0;
+	let originY = 0;
+	if (heroArea) {
+		const rect = heroArea.getBoundingClientRect();
+		boundsWidth = rect.width || boundsWidth;
+		boundsHeight = rect.height || boundsHeight;
+		originX = rect.left;
+		originY = rect.top;
+	}
+	const rawXRatio = ((clientX - originX) / boundsWidth - 0.5) * 2;
+	const rawYRatio = ((clientY - originY) / boundsHeight - 0.5) * 2;
+	const xRatio = clamp(
+		rawXRatio + faceMotionConfig.cursorBiasX,
+		-1,
+		1,
+	);
+	const yRatio = clamp(
+		rawYRatio + faceMotionConfig.cursorBiasY,
+		-1,
+		1,
+	);
+	const baseMoveX = boundsWidth * 0.5;
+	const baseMoveY = boundsHeight * 0.5;
+	const moveX = clamp(
+		xRatio * baseMoveX,
+		-faceMotionState.maxMoveX,
+		faceMotionState.maxMoveX,
+	);
+	const moveY = clamp(
+		yRatio * baseMoveY,
+		-faceMotionState.maxMoveY,
+		faceMotionState.maxMoveY,
+	);
+	faceMotionState.targetX = moveX;
+	faceMotionState.targetY = moveY;
+};
 
-	if (baseEyeMouthGap !== null) {
-		const minGap = faceMotionConfig.minGap;
-		const maxGap = baseEyeMouthGap + faceMotionConfig.maxGapIncrease;
-		const gapSlope = mouthSpeed - 1;
-		if (gapSlope !== 0) {
-			const maxMoveY = (minGap - baseEyeMouthGap) / gapSlope;
-			const minMoveY = (maxGap - baseEyeMouthGap) / gapSlope;
-			moveY = clamp(moveY, minMoveY, maxMoveY);
-		}
+const animateFaceMotion = () => {
+	if (!face || !leftEye || !rightEye || !mouth) {
+		return;
 	}
 
-	// Apply transforms with different speeds (only X varies, Y stays same for alignment)
-	const maxEyeMoveX = maxMoveX * faceMotionConfig.maxEyeMoveXScale;
-	const leftEyeMoveX = clamp(moveX * leftEyeSpeed, -maxEyeMoveX, maxEyeMoveX);
-	const rightEyeMoveX = clamp(moveX * rightEyeSpeed, -maxEyeMoveX, maxEyeMoveX);
-	leftEye.style.transform = `translate(${leftEyeMoveX}px, ${moveY}px)`;
-	rightEye.style.transform = `translate(${rightEyeMoveX}px, ${moveY}px)`;
-	mouth.style.transform = `translate(${moveX * mouthSpeed}px, ${moveY * mouthSpeed}px)`;
+	const dx = faceMotionState.targetX - faceMotionState.currentX;
+	const dy = faceMotionState.targetY - faceMotionState.currentY;
+	faceMotionState.currentX += dx * faceMotionConfig.faceEase;
+	faceMotionState.currentY += dy * faceMotionConfig.faceEase;
+
+	const eyeTargetX = faceMotionState.targetX * faceMotionConfig.eyeParallax;
+	const eyeTargetY = faceMotionState.targetY * faceMotionConfig.eyeParallaxY;
+	const mouthTargetX = faceMotionState.targetX * faceMotionConfig.mouthParallax;
+	const mouthTargetY =
+		faceMotionState.targetY * faceMotionConfig.mouthParallaxY;
+	faceMotionState.currentEyeX +=
+		(eyeTargetX - faceMotionState.currentEyeX) * faceMotionConfig.eyeEase;
+	faceMotionState.currentEyeY +=
+		(eyeTargetY - faceMotionState.currentEyeY) * faceMotionConfig.eyeEase;
+	faceMotionState.currentMouthX +=
+		(mouthTargetX - faceMotionState.currentMouthX) * faceMotionConfig.mouthEase;
+	faceMotionState.currentMouthY +=
+		(mouthTargetY - faceMotionState.currentMouthY) * faceMotionConfig.mouthEase;
+
+	face.style.transform = `translate(${faceMotionState.currentX}px, ${faceMotionState.currentY}px)`;
+	leftEye.style.transform = `translate(${faceMotionState.currentEyeX}px, ${faceMotionState.currentEyeY}px)`;
+	rightEye.style.transform = `translate(${faceMotionState.currentEyeX}px, ${faceMotionState.currentEyeY}px)`;
+	mouth.style.transform = `translate(${faceMotionState.currentMouthX}px, ${faceMotionState.currentMouthY}px)`;
+
+	requestAnimationFrame(animateFaceMotion);
+};
+
+updateFaceBounds();
+requestAnimationFrame(animateFaceMotion);
+
+const motionTarget = heroArea || document;
+motionTarget.addEventListener("mousemove", (e) => {
+	updateFaceTargets(e.clientX, e.clientY);
+});
+
+motionTarget.addEventListener("mouseleave", () => {
+	faceMotionState.targetX = 0;
+	faceMotionState.targetY = 0;
+});
+
+window.addEventListener("resize", () => {
+	updateFaceBounds();
+});
+
+window.addEventListener("load", () => {
+	updateFaceBounds();
 });
 
 async function loadMarkdown() {

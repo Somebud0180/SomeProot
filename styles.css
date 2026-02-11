@@ -133,11 +133,12 @@ section {
 	display: flex;
 	gap: clamp(128px, 20vw, 240px);
 	position: relative;
+	will-change: transform;
 }
 
 .eye-container {
 	position: relative;
-	transition: transform 0.2s ease-out;
+	will-change: transform;
 }
 
 .eye {
@@ -156,7 +157,7 @@ section {
 	margin-top: clamp(24px, 4vw, 48px);
 	left: 50%;
 	margin-left: calc(clamp(192px, 20vw, 240px) / -2);
-	transition: transform 0.5s ease-out; /* Slower transition for mouth */
+	will-change: transform;
 }
 
 .content {
@@ -249,6 +250,8 @@ footer a {
 		height: auto;
 		margin-top: auto;
 		margin-bottom: auto;
+		padding-top: clamp(16px, 4vh, 48px);
+		padding-bottom: clamp(16px, 4vh, 48px);
 	}
 }
 
