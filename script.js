@@ -283,6 +283,98 @@ window.addEventListener("load", () => {
 	updateTallScreenHeights();
 });
 
+class SocialSelect {
+	constructor(originalSelectElement) {
+		this.originalSelect = originalSelectElement;
+		this.customSelect = document.createElement("div");
+		this.customSelect.classList.add("social__content");
+
+		this.originalSelect
+			.querySelectorAll("option")
+			.forEach((optionElement, index) => {
+				const socialItem = document.createElement("div");
+				socialItem.classList.add("social__item");
+
+				const socialName = this.toUpperCaseFirstLetter(optionElement.value);
+				const socialImage = document.createElement("img");
+				const line = document.createElement("div");
+
+				socialImage.src = "/Assets/Texture/Socials/" + socialName + ".png";
+				socialImage.alt = socialName;
+
+				line.classList.add("social__line");
+
+				socialImage.addEventListener("click", () => {
+					if (line.classList.contains("social__line--selected")) {
+						this._deselect(socialItem);
+					} else {
+						this._select(socialItem);
+					}
+				});
+
+				socialItem.appendChild(socialImage);
+				socialItem.appendChild(line);
+				this.customSelect.appendChild(socialItem);
+			});
+
+		this.originalSelect.insertAdjacentElement("afterend", this.customSelect);
+	}
+
+	_select(itemElement) {
+		this.customSelect.querySelectorAll(".social__item").forEach((item) => {
+			if (item !== itemElement) {
+				this._deselect(item);
+			}
+		});
+
+		const index = Array.from(this.customSelect.children).indexOf(itemElement);
+		this.originalSelect.querySelectorAll("option")[index].selected = true;
+
+		this.updateSelectedOptions();
+	}
+
+	_deselect(itemElement) {
+		const index = Array.from(this.customSelect.children).indexOf(itemElement);
+		this.originalSelect.querySelectorAll("option")[index].selected = false;
+		this.updateSelectedOptions();
+	}
+
+	updateSelectedOptions() {
+		this.customSelect
+			.querySelectorAll(".social__item")
+			.forEach((item, index) => {
+				const option = this.originalSelect.querySelectorAll("option")[index];
+				const line = item.querySelector(".social__line");
+				if (option.selected) {
+					line.classList.add("social__line--selected");
+				} else {
+					line.classList.remove("social__line--selected");
+				}
+			});
+
+		const details = document.querySelector(".social__details");
+		const selectedOption = this.originalSelect.querySelector("option:checked");
+		if (selectedOption) {
+			details.setAttribute(
+				"section",
+				this.toUpperCaseFirstLetter(selectedOption.value),
+			);
+		} else {
+			details.setAttribute("section", "None");
+		}
+
+		loadMarkdown();
+	}
+
+	toUpperCaseFirstLetter(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+}
+
+document.querySelectorAll(".social-select").forEach((selectElement) => {
+	new SocialSelect(selectElement);
+});
+
 async function loadMarkdown() {
 	try {
 		// Get page name from body data attribute
