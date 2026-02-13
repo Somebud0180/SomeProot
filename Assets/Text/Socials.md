@@ -1,4 +1,4 @@
-<!-- A place to write up text content for the social page -->
+<!-- A place to write up text content for the socials page -->
 
 <!-- Section: None -->
 

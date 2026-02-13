@@ -130,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	updateHeaderHeight();
 	updateTallScreenHeights();
 	loadMarkdown();
+	updateCardHeight();
 });
 
 // Select face elements for lagging motion
@@ -375,6 +376,19 @@ document.querySelectorAll(".social-select").forEach((selectElement) => {
 	new SocialSelect(selectElement);
 });
 
+function updateCardHeight() {
+	const card = document.getElementById("socialCard");
+	const details = document.querySelector(".social__details");
+	if (card && details) {
+		// Set current height as the starting point
+		card.style.maxHeight = card.scrollHeight + "px";
+		// Force a reflow to establish the "from" state
+		void card.offsetHeight;
+		// Now set the target height
+		card.style.maxHeight = details.scrollHeight + "px";
+	}
+}
+
 async function loadMarkdown() {
 	try {
 		// Get page name from body data attribute
@@ -418,6 +432,9 @@ async function loadMarkdown() {
 				element.innerHTML = sectionsMap[sectionName];
 			}
 		});
+
+		// Update card height with animation
+		updateCardHeight();
 	} catch (error) {
 		console.error("Error loading markdown:", error);
 	}
