@@ -2,22 +2,17 @@
 
 <!-- Section: None -->
 
-# Hi
+<h1 class="social__greeting"> Hi </h1>
 
-<img src="/Assets/Texture/Socials/Fallback_Profile.png" class="circle" alt="Slack Profile Picture" height="192"/>
-
-Go press the socials above to view my accounts!
+<p class="social__description"> Go press the socials above to view my accounts! </p>
 
 <!-- Section: Slack -->
 
-# Slack
-
-<img src="/Assets/Texture/Socials/Fallback_Profile.png" class="circle" alt="Slack Profile Picture" height="192"/>
+<img src="/Assets/Texture/Socials/Fallback_Profile.png" alt="Slack Profile Picture" class="social__profile"/>
 
 #### @Somebud
 
 I'm considerably active here and often lurk around but I also have my own channel now!
-<br></br>
 
 <form action="https://hackclub.enterprise.slack.com/team/U079MU5B5R6" method="get">
     <button type="submit">Slack!</button>
@@ -25,14 +20,13 @@ I'm considerably active here and often lurk around but I also have my own channe
 
 <!-- Section: Github -->
 
-# GitHub
+<img src="https://unavatar.io/github/Somebud0180" alt="GitHub Profile Picture" class="social__profile"/>
 
-<img src="https://unavatar.io/github/Somebud0180" class="circle" alt="GitHub Profile Picture" height="192"/>
+#### Ethan John
 
-#### @Somebud0180
+<h4 class="social__github--username"> Somebud0180 </h4>
 
 I upload my repos here! You can view the random stuff I make here I guess.
-<br></br>
 
 <form action="https://github.com/somebud0180" method="get">
     <button type="submit">Visit!</button>
@@ -40,15 +34,15 @@ I upload my repos here! You can view the random stuff I make here I guess.
 
 <!-- Section: Instagram -->
 
-# Instagram
-
-<img src="/Assets/Texture/Socials/Fallback_Profile.png" class="circle" alt="Instagram Profile Picture" height="192"/>
-
-#### @Somebud
+<div class="social__instagram">
+    <img src="/Assets/Texture/Socials/Fallback_Profile.png" alt="Instagram Profile Picture" class="social__profile"/>
+    <div>
+        <h3> somebud0180 </h4>
+        <h4 class="social__instagram--username"> Somebud </h4>
+    </div>
+</div>
 
 I post my art here! I also vent a lot here via the notes and stories. This is where I'm most active outside the Slack.
-
-<br></br>
 
 <form action="https://instagram.com/somebud0180" method="get">
     <button type="submit">Visit!</button>
@@ -56,14 +50,13 @@ I post my art here! I also vent a lot here via the notes and stories. This is wh
 
 <!-- Section: Twitter -->
 
-# Twitter
+<img src="https://pbs.twimg.com/profile_banners/758203515843977216/1748962223/1500x500" alt="Twitter Banner Picture" class="social__banner"/>
 
-<img src="https://unavatar.io/twitter/0180ethan" class="circle" alt="Twitter Profile Picture" height="192"/>
+<img src="https://unavatar.io/twitter/0180ethan" alt="Twitter Profile Picture" class="social__profile--banner"/>
 
 #### @0180ethan
 
 I completely just lurk here. But I'm there I guess.
-<br></br>
 
 <form action="https://x.com/0180ethan" method="get">
     <button type="submit">Visit!</button>
