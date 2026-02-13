@@ -130,6 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	updateHeaderHeight();
 	updateTallScreenHeights();
 	loadMarkdown();
+	loadJournalEntries();
+	loadJournalViewer();
 	updateCardHeight();
 });
 
@@ -391,6 +393,11 @@ function updateCardHeight() {
 
 async function loadMarkdown() {
 	try {
+		const sectionElements = document.querySelectorAll("[section]");
+		if (!sectionElements.length) {
+			return;
+		}
+
 		// Get page name from body data attribute
 		const pageName = document.body.getAttribute("data-page") || "Home";
 		const response = await fetch(`Assets/Text/${pageName}.md`);
@@ -425,7 +432,6 @@ async function loadMarkdown() {
 		}
 
 		// Insert content into elements with section attribute
-		const sectionElements = document.querySelectorAll("[section]");
 		sectionElements.forEach((element) => {
 			const sectionName = element.getAttribute("section");
 			if (sectionsMap[sectionName]) {
@@ -438,4 +444,158 @@ async function loadMarkdown() {
 	} catch (error) {
 		console.error("Error loading markdown:", error);
 	}
+}
+
+const JOURNAL_MANIFEST_PATH = "Assets/Text/Journals/index.json";
+
+const parseJournalMetadata = (markdown) => {
+	const lines = markdown.split(/\r?\n/);
+	let index = 0;
+	while (index < lines.length && lines[index].trim() === "") {
+		index += 1;
+	}
+	let title = "";
+	let subtitle = "";
+	if (lines[index] && lines[index].startsWith("# ")) {
+		title = lines[index].replace(/^#\s+/, "").trim();
+		index += 1;
+	}
+	while (index < lines.length && lines[index].trim() === "") {
+		index += 1;
+	}
+	if (lines[index] && lines[index].startsWith("## ")) {
+		subtitle = lines[index].replace(/^##\s+/, "").trim();
+		index += 1;
+	}
+	const bodyMarkdown = lines.slice(index).join("\n").trim();
+	return { title, subtitle, bodyMarkdown };
+};
+
+const formatFallbackTitle = (slug) => slug.replace(/[_-]+/g, " ").trim();
+
+const buildJournalEntryElement = ({ slug, title, subtitle }) => {
+	const entry = document.createElement("a");
+	entry.classList.add("journal-entry");
+	entry.href = `journal_viewer.html?entry=${encodeURIComponent(slug)}`;
+
+	const titleElement = document.createElement("div");
+	titleElement.classList.add("journal-entry__title");
+	titleElement.textContent = title || formatFallbackTitle(slug);
+
+	const subtitleElement = document.createElement("div");
+	subtitleElement.classList.add("journal-entry__subtitle");
+	subtitleElement.textContent = subtitle || "";
+
+	entry.appendChild(titleElement);
+	entry.appendChild(subtitleElement);
+	return entry;
+};
+
+async function loadJournalEntries() {
+	const entriesTarget = document.getElementById("journalEntries");
+	if (!entriesTarget) {
+		return;
+	}
+
+	try {
+		const response = await fetch(JOURNAL_MANIFEST_PATH);
+		if (!response.ok) {
+			throw new Error(`Failed to load journal index: ${response.status}`);
+		}
+		const manifest = await response.json();
+		const entries = Array.isArray(manifest) ? manifest : manifest.entries;
+		if (!entries || entries.length === 0) {
+			entriesTarget.innerHTML = "<p>No journal entries yet.</p>";
+			return;
+		}
+
+		entriesTarget.innerHTML = "";
+		for (const entryFile of entries) {
+			const entryPath = `Assets/Text/Journals/${entryFile}`;
+			const entryResponse = await fetch(entryPath);
+			if (!entryResponse.ok) {
+				console.warn(`Missing journal entry: ${entryPath}`);
+				continue;
+			}
+			const markdown = await entryResponse.text();
+			const metadata = parseJournalMetadata(markdown);
+			const slug = entryFile.replace(/\.md$/i, "");
+			const entryElement = buildJournalEntryElement({
+				slug,
+				title: metadata.title,
+				subtitle: metadata.subtitle,
+			});
+			entriesTarget.appendChild(entryElement);
+		}
+	} catch (error) {
+		console.error("Error loading journal entries:", error);
+		entriesTarget.innerHTML = "<p>Unable to load journal entries.</p>";
+	}
+}
+
+async function loadJournalViewer() {
+	const journalBody = document.getElementById("journalBody");
+	if (!journalBody) {
+		return;
+	}
+
+	const params = new URLSearchParams(window.location.search);
+	const entrySlug = params.get("entry");
+	if (!entrySlug) {
+		journalBody.innerHTML = "<p>Select a journal entry to read.</p>";
+		return;
+	}
+
+	try {
+		const entryPath = `Assets/Text/Journals/${entrySlug}.md`;
+		const response = await fetch(entryPath);
+		if (!response.ok) {
+			throw new Error(`Failed to load journal entry: ${response.status}`);
+		}
+		const markdown = await response.text();
+		const { title, subtitle, bodyMarkdown } = parseJournalMetadata(markdown);
+		const titleElement = document.getElementById("journalTitle");
+		const subtitleElement = document.getElementById("journalSubtitle");
+		const readerTitle = document.getElementById("readerBarTitle");
+
+		if (titleElement) {
+			titleElement.textContent = title || formatFallbackTitle(entrySlug);
+		}
+		if (readerTitle) {
+			readerTitle.textContent = title || formatFallbackTitle(entrySlug);
+		}
+		if (subtitleElement) {
+			if (subtitle) {
+				subtitleElement.textContent = subtitle;
+				subtitleElement.removeAttribute("hidden");
+			} else {
+				subtitleElement.textContent = "";
+				subtitleElement.setAttribute("hidden", "true");
+			}
+		}
+
+		journalBody.innerHTML = marked.parse(bodyMarkdown || markdown);
+		setupReaderBar();
+	} catch (error) {
+		console.error("Error loading journal entry:", error);
+		journalBody.innerHTML = "<p>Unable to load this journal entry.</p>";
+	}
+}
+
+function setupReaderBar() {
+	const readerBar = document.getElementById("readerBar");
+	const header = document.getElementById("journalHeader");
+	if (!readerBar || !header) {
+		return;
+	}
+
+	const updateReaderBar = () => {
+		const headerBottom = header.getBoundingClientRect().bottom;
+		const barHeight = readerBar.getBoundingClientRect().height;
+		const isPastHeader = headerBottom - barHeight <= 0;
+		readerBar.classList.toggle("reader-bar--solid", isPastHeader);
+	};
+
+	updateReaderBar();
+	window.addEventListener("scroll", updateReaderBar, { passive: true });
 }

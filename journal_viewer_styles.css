@@ -1,0 +1,135 @@
+.journal-viewer,
+body[data-page="JournalViewer"] {
+	overflow-x: hidden;
+}
+
+.journal-viewer {
+	max-width: 980px;
+	margin: 0 auto;
+	padding: 2rem 2rem 4rem;
+	color: #2f2a24;
+}
+
+.reader-bar {
+	position: sticky;
+	top: var(--header-height, 0px);
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.75rem 1.5rem;
+	margin: 0 -2rem 1.5rem;
+	background-color: transparent;
+	border-radius: 999px;
+	transition:
+		background-color 0.3s ease,
+		box-shadow 0.3s ease;
+	z-index: 2;
+}
+
+.reader-bar__back {
+	color: #f3f3f3;
+	text-decoration: none;
+	background-color: rgba(35, 35, 60, 0.6);
+	padding: 0.4rem 0.9rem;
+	border-radius: 999px;
+	font-weight: 600;
+	transition:
+		transform 0.2s ease,
+		background-color 0.2s ease;
+}
+
+.reader-bar__back:hover {
+	transform: translateY(-1px);
+	background-color: rgba(35, 35, 60, 0.8);
+}
+
+.reader-bar__title {
+	color: #f3f3f3;
+	font-weight: 600;
+	opacity: 0;
+	transform: translateY(6px);
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease;
+}
+
+.reader-bar--solid {
+	background-color: rgba(26, 26, 50, 0.88);
+	box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+	backdrop-filter: blur(8px);
+}
+
+.reader-bar--solid .reader-bar__title {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.journal-viewer__content {
+	background-image:
+		repeating-linear-gradient(
+			to bottom,
+			rgba(90, 70, 50, 0.1) 0,
+			rgba(90, 70, 50, 0.1) 2px,
+			transparent 2px,
+			transparent 30px
+		),
+		linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 0.85),
+			rgba(238, 228, 210, 0.95)
+		);
+	border-radius: 2.5rem;
+	padding: 2.5rem;
+	box-shadow: 0 22px 40px rgba(11, 10, 20, 0.35);
+}
+
+.journal-viewer__header {
+	border-bottom: 2px solid rgba(150, 120, 90, 0.35);
+	padding-bottom: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+.journal-viewer__header h1 {
+	font-size: clamp(2rem, 3.5vw, 2.8rem);
+	margin-bottom: 0.5rem;
+}
+
+.journal-viewer__header p {
+	font-size: 1.1rem;
+	color: rgba(60, 50, 40, 0.7);
+}
+
+.journal-viewer__body {
+	font-size: 1.05rem;
+	line-height: 1.75;
+}
+
+.journal-viewer__body h2,
+.journal-viewer__body h3,
+.journal-viewer__body h4 {
+	margin-top: 2rem;
+}
+
+.journal-viewer__body p {
+	margin-bottom: 1.2rem;
+}
+
+.journal-viewer__body a {
+	color: #5a5ed0;
+}
+
+@media (max-width: 720px) {
+	.journal-viewer {
+		padding: 1.5rem 1.25rem 3rem;
+	}
+
+	.reader-bar {
+		margin: 0 -1.25rem 1.25rem;
+		padding: 0.6rem 1.1rem;
+	}
+
+	.journal-viewer__content {
+		padding: 1.75rem;
+		border-radius: 2rem;
+	}
+}

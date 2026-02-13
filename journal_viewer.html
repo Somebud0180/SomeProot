@@ -6,9 +6,9 @@
     <meta name="description" content="A starter website template">
     <title>SomeProot</title>
     <link rel="stylesheet" href="main_styles.css">
-    <link rel="stylesheet" href="journal_styles.css">
+    <link rel="stylesheet" href="journal_viewer_styles.css">
 </head>
-<body data-page="Journal">
+<body data-page="JournalViewer">
     <header>
         <nav>
             <h1>SomeProot</h1>
@@ -21,18 +21,22 @@
     </header>
 
     <main>
-        <section id="journal" class="journal-page">
-            <div class="journal__page">
-                <div class="journal__intro" section="Page"></div>
-                <div class="journal__entries" id="journalEntries" aria-live="polite"></div>
+        <section class="journal-viewer">
+            <div class="reader-bar" id="readerBar">
+                <a class="reader-bar__back" href="journal.html">&larr; Back</a>
+                <div class="reader-bar__title" id="readerBarTitle"></div>
             </div>
+
+            <article class="journal-viewer__content">
+                <div class="journal-viewer__header" id="journalHeader">
+                    <h1 id="journalTitle"></h1>
+                    <p id="journalSubtitle"></p>
+                </div>
+                <div class="journal-viewer__body" id="journalBody"></div>
+            </article>
         </section>
     </main>
 
-    <footer>
-        <img src="Assets/Texture/Footer.png" alt="Signature. Love, Hack Club" height="32">
-        <p>&copy; 2026 Somebud. <a href="https://github.com/Somebud/SomeProot">Source on GitHub</a></p>
-    </footer>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="script.js"></script>
 </body>
