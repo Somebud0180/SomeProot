@@ -53,13 +53,24 @@ document.addEventListener("DOMContentLoaded", function () {
 	const updateHeaderHeight = () => {
 		if (!header) {
 			document.body.style.removeProperty("--header-height");
+			document.body.style.setProperty("--reader-bar-top", "8px");
 			headerHeight = 0;
 			return;
 		}
 
-		const rect = header.getBoundingClientRect();
-		headerHeight = Math.max(0, Math.round(rect.height || 0));
+		if (header.classList.contains("nav-hidden")) {
+			headerHeight = 0;
+			document.body.style.setProperty("--header-height", "0px");
+			document.body.style.setProperty("--reader-bar-top", "8px");
+			return;
+		}
+
+		headerHeight = Math.max(0, Math.round(header.offsetHeight || 0));
 		document.body.style.setProperty("--header-height", `${headerHeight}px`);
+		document.body.style.setProperty(
+			"--reader-bar-top",
+			`${headerHeight + 8}px`,
+		);
 	};
 
 	const getViewportHeight = () => {
@@ -116,6 +127,47 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	};
 
+	// Nav hide-on-scroll-down logic
+	let lastScrollY = 0;
+	const headerElement = document.querySelector("header");
+	let scrollThreshold = 10; // Don't hide until user scrolls more than this
+
+	const handleNavScroll = () => {
+		if (!headerElement) return;
+
+		const currentScrollY = window.scrollY;
+		const scrollDelta = currentScrollY - lastScrollY;
+
+		// Scrolling down (delta > threshold)
+		if (scrollDelta > scrollThreshold && currentScrollY > 50) {
+			headerElement.classList.add("nav-hidden");
+		}
+		// Scrolling up (delta < -threshold)
+		else if (scrollDelta < -scrollThreshold) {
+			headerElement.classList.remove("nav-hidden");
+		}
+		// Near top of page
+		else if (currentScrollY < 50) {
+			headerElement.classList.remove("nav-hidden");
+		}
+
+		requestAnimationFrame(updateHeaderHeight);
+
+		lastScrollY = currentScrollY;
+	};
+
+	if (headerElement) {
+		const headerObserver = new MutationObserver(() => {
+			requestAnimationFrame(updateHeaderHeight);
+		});
+		headerObserver.observe(headerElement, {
+			attributes: true,
+			attributeFilter: ["class"],
+		});
+		headerElement.addEventListener("transitionend", updateHeaderHeight);
+	}
+
+	window.addEventListener("scroll", handleNavScroll, { passive: true });
 	window.addEventListener("scroll", scheduleUpdate, { passive: true });
 	window.addEventListener("resize", scheduleUpdate);
 	if (typeof tallScreenQuery.addEventListener === "function") {

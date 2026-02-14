@@ -4,8 +4,4 @@
 
 # Journal
 
-<hr>
-
 ### A few of my writeups
-
-<hr>
