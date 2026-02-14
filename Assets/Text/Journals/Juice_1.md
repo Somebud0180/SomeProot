@@ -1,5 +1,4 @@
 # Juice! (Part 1)
-
 ## The most and best _firsts_ in my lifetime
 
 _(I kinda went through this a lot longer than I expected so I decided to split this into two parts. I enabled copilot to quickly do the shortcuts and now it's predicting what I want to type here. So yeah this part is the before and arriving, 2nd part is the actual Juice and Post-Juice.)_
