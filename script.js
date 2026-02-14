@@ -357,10 +357,15 @@ class SocialSelect {
 				const line = document.createElement("div");
 
 				socialImage.src = "Assets/Texture/Socials/" + socialName + ".png";
-			socialImage.alt = socialName;
+				socialImage.alt = socialName;
 
-			line.classList.add("social__line");
+				line.classList.add("social__line");
 
+				socialImage.addEventListener("click", () => {
+					if (line.classList.contains("social__line--selected")) {
+						this._deselect(socialItem);
+					} else {
+						this._select(socialItem);
 					}
 				});
 
