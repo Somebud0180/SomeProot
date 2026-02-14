@@ -2,13 +2,13 @@
 
 ## The most and best _firsts_ in my lifetime
 
+_(I kinda went through this a lot longer than I expected so I decided to split this into two parts. I enabled copilot to quickly do the shortcuts and now it's predicting what I want to type here. So yeah this part is the before and arriving, 2nd part is the actual Juice and Post-Juice.)_
+
 To quote my post
 
 > 2 months ago, I saw a new hackathon and said, “It would be cool if I made a game and went to another country, right?”.
 
 Hi guys! A little late writeup for Juice, but something I wanted to share even more beyond a post I made on my Instagram (for my moots) and Facebook (for my relatives and everyone else). Juice was my first time in-person event at Hack Club, and I would say my first venture into actual game development (I kinda did game development with Sprig, that was lovely). And I kinda just want to share stuff here so yea.
-
-I kinda went through this a lot longer than I expected so I decided to split this into two parts. I enabled copilot to quickly do the shortcuts and now it's predicting what I want to type here. So yeah this part is the before and arriving, 2nd part is the actual Juice and Post-Juice.
 
 Thing's kinda long, here are some shortcuts:
 
