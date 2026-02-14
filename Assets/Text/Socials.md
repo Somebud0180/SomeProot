@@ -20,7 +20,7 @@ I'm considerably active here and often lurk around but I also have my own channe
 
 <!-- Section: Github -->
 
-<img src="https://unavatar.io/github/Somebud0180" alt="GitHub Profile Picture" class="social__profile"/>
+<img src="https://unavatar.io/github/Somebud0180" alt="GitHub Profile Picture" class="social__profile" onerror="this.onerror=null; this.src='/Assets/Texture/Socials/Fallback_Profile.png';"/>
 
 #### Ethan John
 
@@ -50,9 +50,9 @@ I post my art here! I also vent a lot here via the notes and stories. This is wh
 
 <!-- Section: Twitter -->
 
-<img src="https://pbs.twimg.com/profile_banners/758203515843977216/1748962223/1500x500" alt="Twitter Banner Picture" class="social__banner"/>
+<img src="https://pbs.twimg.com/profile_banners/758203515843977216/1748962223/1500x500" alt="Twitter Banner Picture" class="social__banner" onerror="this.onerror=null; this.src='/Assets/Texture/Socials/Fallback_Profile.png';"/>
 
-<img src="https://unavatar.io/twitter/0180ethan" alt="Twitter Profile Picture" class="social__profile--banner"/>
+<img src="https://unavatar.io/twitter/0180ethan" alt="Twitter Profile Picture" class="social__profile--banner" onerror="this.onerror=null; this.src='/Assets/Texture/Socials/Fallback_Profile.png';"/>
 
 #### @0180ethan
 
