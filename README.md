@@ -4,7 +4,7 @@
 
 <img style="width:100%; height:auto;" alt="Website Screenshot showing the homepage" src="https://github.com/user-attachments/assets/92f0b8ba-405a-4a90-a035-0d906547bdbb" />
 
-My personal website!
+[My personal website!](https://somebud0180.github.io/SomeProot/)
 - A homepage!
   - A pointer tracking face!
   - A little excerpt about me
