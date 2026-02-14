@@ -142,7 +142,7 @@ const faceMotionConfig = {
 	mouthParallaxY: 0.14, // Separate parallax factor for vertical mouth movement
 	cursorBiasX: 0, // Horizontal bias to offset cursor influence
 	cursorBiasY: 0.05, // Vertical bias to offset cursor influence
-	cursorBiasYTall: 0.05, // Vertical bias for tall screens
+	touchBiasY: 0.2, // Vertical bias for touch input
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -183,7 +183,7 @@ const updateFaceBounds = () => {
 	faceMotionState.maxMoveY = Math.min(aspectMaxMoveY, containerMaxMoveY);
 };
 
-const updateFaceTargets = (clientX, clientY) => {
+const updateFaceTargets = (clientX, clientY, isTouch = false) => {
 	let boundsWidth = window.innerWidth;
 	let boundsHeight = window.innerHeight;
 	let originX = 0;
@@ -198,8 +198,8 @@ const updateFaceTargets = (clientX, clientY) => {
 	const rawXRatio = ((clientX - originX) / boundsWidth - 0.5) * 2;
 	const rawYRatio = ((clientY - originY) / boundsHeight - 0.5) * 2;
 	const xRatio = clamp(rawXRatio + faceMotionConfig.cursorBiasX, -1, 1);
-	const yBias = faceMotionState.isTall
-		? faceMotionConfig.cursorBiasYTall
+	const yBias = isTouch
+		? faceMotionConfig.touchBiasY
 		: faceMotionConfig.cursorBiasY;
 	const yRatio = clamp(rawYRatio + yBias, -1, 1);
 	const baseMoveX = boundsWidth * 0.5;
@@ -254,8 +254,29 @@ updateFaceBounds();
 requestAnimationFrame(animateFaceMotion);
 
 const motionTarget = heroArea || document;
-motionTarget.addEventListener("mousemove", (e) => {
-	updateFaceTargets(e.clientX, e.clientY);
+const getClientPoint = (event) => {
+	const isTouch =
+		event.type.startsWith("touch") || event.pointerType === "touch";
+	if (event.touches && event.touches.length) {
+		return {
+			x: event.touches[0].clientX,
+			y: event.touches[0].clientY,
+			isTouch,
+		};
+	}
+	return { x: event.clientX, y: event.clientY, isTouch };
+};
+
+const handlePointerMove = (event) => {
+	const point = getClientPoint(event);
+	if (!point) return;
+	updateFaceTargets(point.x, point.y, point.isTouch);
+};
+
+motionTarget.addEventListener("mousemove", handlePointerMove);
+motionTarget.addEventListener("pointermove", handlePointerMove);
+motionTarget.addEventListener("touchmove", handlePointerMove, {
+	passive: true,
 });
 
 motionTarget.addEventListener("mouseleave", () => {
@@ -269,6 +290,10 @@ motionTarget.addEventListener("mouseleave", () => {
 // Handle blush visibility on pointer down/up
 const handlePointerDown = (e) => {
 	if (!banner) return;
+	const point = getClientPoint(e);
+	if (point) {
+		updateFaceTargets(point.x, point.y, point.isTouch);
+	}
 
 	const bannerRect = banner.getBoundingClientRect();
 	const bannerCenterX = bannerRect.left + bannerRect.width / 2;
@@ -292,10 +317,19 @@ const handlePointerUp = () => {
 	if (blushRight) blushRight.classList.remove("visible");
 };
 
-motionTarget.addEventListener("pointerdown", handlePointerDown);
-motionTarget.addEventListener("mousedown", handlePointerDown);
+motionTarget.addEventListener("pointerdown", handlePointerDown, {
+	passive: false,
+});
+motionTarget.addEventListener("mousedown", handlePointerDown, {
+	passive: false,
+});
+motionTarget.addEventListener("touchstart", handlePointerDown, {
+	passive: false,
+});
 motionTarget.addEventListener("pointerup", handlePointerUp);
 motionTarget.addEventListener("mouseup", handlePointerUp);
+motionTarget.addEventListener("touchend", handlePointerUp);
+motionTarget.addEventListener("touchcancel", handlePointerUp);
 motionTarget.addEventListener("pointerleave", handlePointerUp);
 
 window.addEventListener("resize", () => {
