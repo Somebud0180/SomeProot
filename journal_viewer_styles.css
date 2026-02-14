@@ -95,7 +95,7 @@ body[data-page="JournalViewer"] {
 .journal-viewer__header h1 {
 	font-size: clamp(2rem, 3.5vw, 2.8rem);
 	line-height: calc(var(--line-height) * 2);
-	margin: 4px 0 2px 0;
+	margin: 2px 0 2px 0;
 }
 
 .journal-viewer__header p {

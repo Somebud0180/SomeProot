@@ -10,15 +10,13 @@ To quote my post
 Hi guys! A little late writeup for Juice, but something I wanted to share even more beyond a post I made on my Instagram (for my moots) and Facebook (for my relatives and everyone else). Juice was my first time in-person event at Hack Club, and I would say my first venture into actual game development (I kinda did game development with Sprig, that was lovely). And I kinda just want to share stuff here so yea.
 
 Thing's kinda long, here are some shortcuts:
-
 - [Beginning](#beginning:)
 - [Pre-Juicing](#pre-juicing:)
 - [Juicing](#juicing:)
 - [Struggles](#struggles:)
 - [Starstruck](#starstruck:)
 - [More Struggles Because Why Not](#more-struggles-because-why-not:)
-- [JUICE!](#juice!)
-- [We Juicing Now! (Kinda)](#we-juicing-now-kinda:)
+- [JUICE!](#juice:)
 
 ## Beginning:
 

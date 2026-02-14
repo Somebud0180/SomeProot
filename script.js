@@ -562,11 +562,38 @@ async function loadJournalViewer() {
 		}
 
 		journalBody.innerHTML = marked.parse(bodyMarkdown || markdown);
+		generateHeadingIds(journalBody);
 		setupReaderBar();
 	} catch (error) {
 		console.error("Error loading journal entry:", error);
 		journalBody.innerHTML = "<p>Unable to load this journal entry.</p>";
 	}
+}
+
+function generateHeadingIds(container) {
+	const headings = container.querySelectorAll("h2, h3, h4, h5, h6");
+	headings.forEach((heading) => {
+		if (!heading.id) {
+			// Convert heading text to a slug format, preserving some special chars
+			let slug = heading.textContent.toLowerCase();
+			// Keep trailing colon if present, remove it temporarily
+			const hasTrailingColon = slug.endsWith(":");
+			if (hasTrailingColon) {
+				slug = slug.slice(0, -1);
+			}
+			// Convert to URL-safe format
+			slug = slug
+				.replace(/[^\w\s-]/g, "") // Remove special characters except spaces and hyphens
+				.replace(/\s+/g, "-") // Replace spaces with hyphens
+				.replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+				.trim();
+			// Add back trailing colon if original had one
+			if (hasTrailingColon) {
+				slug += ":";
+			}
+			heading.id = slug;
+		}
+	});
 }
 
 function setupReaderBar() {
