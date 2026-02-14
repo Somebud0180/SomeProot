@@ -145,6 +145,13 @@ body[data-page="Journal"] section {
 	line-height: var(--line-height);
 }
 
+.journal-entry__date {
+	font-size: 0.85rem;
+	color: rgba(60, 50, 40, 0.55);
+	line-height: var(--line-height);
+	margin-top: -8px;
+}
+
 em,
 i {
 	font-style: italic;

@@ -139,8 +139,8 @@ const faceMotionConfig = {
 	mouthParallax: 0.25, // Parallax factor for mouth movement (higher = more movement)
 	mouthParallaxY: 0.14, // Separate parallax factor for vertical mouth movement
 	cursorBiasX: 0, // Horizontal bias to offset cursor influence
-	cursorBiasY: -0.15, // Vertical bias to offset cursor influence
-	cursorBiasYTall: 0.15, // Vertical bias for tall screens
+	cursorBiasY: 0.05, // Vertical bias to offset cursor influence
+	cursorBiasYTall: 0.05, // Vertical bias for tall screens
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -439,6 +439,7 @@ const parseJournalMetadata = (markdown) => {
 	}
 	let title = "";
 	let subtitle = "";
+	let date = "";
 	if (lines[index] && lines[index].startsWith("# ")) {
 		title = lines[index].replace(/^#\s+/, "").trim();
 		index += 1;
@@ -450,13 +451,21 @@ const parseJournalMetadata = (markdown) => {
 		subtitle = lines[index].replace(/^##\s+/, "").trim();
 		index += 1;
 	}
+	while (index < lines.length && lines[index].trim() === "") {
+		index += 1;
+	}
+	// Extract date from italicized line (e.g., _February 14, 2026_)
+	if (lines[index] && /^_.*_$/.test(lines[index].trim())) {
+		date = lines[index].replace(/^_|_$/g, "").trim();
+		index += 1;
+	}
 	const bodyMarkdown = lines.slice(index).join("\n").trim();
-	return { title, subtitle, bodyMarkdown };
+	return { title, subtitle, date, bodyMarkdown };
 };
 
 const formatFallbackTitle = (slug) => slug.replace(/[_-]+/g, " ").trim();
 
-const buildJournalEntryElement = ({ slug, title, subtitle }) => {
+const buildJournalEntryElement = ({ slug, title, subtitle, date }) => {
 	const entry = document.createElement("a");
 	entry.classList.add("journal-entry");
 	entry.href = `journal_viewer.html?entry=${encodeURIComponent(slug)}`;
@@ -473,8 +482,15 @@ const buildJournalEntryElement = ({ slug, title, subtitle }) => {
 		subtitleElement.textContent = "";
 	}
 
+	const dateElement = document.createElement("div");
+	dateElement.classList.add("journal-entry__date");
+	dateElement.textContent = date || "";
+
 	entry.appendChild(titleElement);
 	entry.appendChild(subtitleElement);
+	if (date) {
+		entry.appendChild(dateElement);
+	}
 	return entry;
 };
 
@@ -497,6 +513,7 @@ async function loadJournalEntries() {
 		}
 
 		entriesTarget.innerHTML = "";
+		const entryMetadataList = [];
 		for (const entryFile of entries) {
 			const entryPath = `Assets/Text/Journals/${entryFile}`;
 			const entryResponse = await fetch(entryPath);
@@ -507,11 +524,24 @@ async function loadJournalEntries() {
 			const markdown = await entryResponse.text();
 			const metadata = parseJournalMetadata(markdown);
 			const slug = entryFile.replace(/\.md$/i, "");
-			const entryElement = buildJournalEntryElement({
+			entryMetadataList.push({
 				slug,
 				title: metadata.title,
 				subtitle: metadata.subtitle,
+				date: metadata.date,
 			});
+		}
+
+		// Sort entries by date (newest first)
+		entryMetadataList.sort((a, b) => {
+			const dateA = a.date ? new Date(a.date) : new Date(0);
+			const dateB = b.date ? new Date(b.date) : new Date(0);
+			return dateB - dateA;
+		});
+
+		// Render sorted entries
+		for (const metadata of entryMetadataList) {
+			const entryElement = buildJournalEntryElement(metadata);
 			entriesTarget.appendChild(entryElement);
 		}
 	} catch (error) {
@@ -540,7 +570,8 @@ async function loadJournalViewer() {
 			throw new Error(`Failed to load journal entry: ${response.status}`);
 		}
 		const markdown = await response.text();
-		const { title, subtitle, bodyMarkdown } = parseJournalMetadata(markdown);
+		const { title, subtitle, date, bodyMarkdown } =
+			parseJournalMetadata(markdown);
 		const titleElement = document.getElementById("journalTitle");
 		const subtitleElement = document.getElementById("journalSubtitle");
 		const readerTitle = document.getElementById("readerBarTitle");
@@ -552,8 +583,15 @@ async function loadJournalViewer() {
 			readerTitle.textContent = title || formatFallbackTitle(entrySlug);
 		}
 		if (subtitleElement) {
+			let subtitleContent = "";
 			if (subtitle) {
-				subtitleElement.innerHTML = marked.parse(subtitle);
+				subtitleContent += marked.parse(subtitle);
+			}
+			if (date) {
+				subtitleContent += `<p class="journal-date">${date}</p>`;
+			}
+			if (subtitleContent) {
+				subtitleElement.innerHTML = subtitleContent;
 				subtitleElement.removeAttribute("hidden");
 			} else {
 				subtitleElement.textContent = "";
@@ -599,6 +637,7 @@ function generateHeadingIds(container) {
 function setupReaderBar() {
 	const readerBar = document.getElementById("readerBar");
 	const header = document.getElementById("journalHeader");
+	const backToTopBtn = document.getElementById("backToTopBtn");
 	if (!readerBar || !header) {
 		return;
 	}
@@ -610,6 +649,26 @@ function setupReaderBar() {
 		readerBar.classList.toggle("reader-bar--solid", isPastHeader);
 	};
 
+	const updateBackToTopVisibility = () => {
+		if (backToTopBtn) {
+			if (window.scrollY > 300) {
+				backToTopBtn.classList.add("visible");
+			} else {
+				backToTopBtn.classList.remove("visible");
+			}
+		}
+	};
+
+	if (backToTopBtn) {
+		backToTopBtn.addEventListener("click", () => {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		});
+	}
+
 	updateReaderBar();
+	updateBackToTopVisibility();
 	window.addEventListener("scroll", updateReaderBar, { passive: true });
+	window.addEventListener("scroll", updateBackToTopVisibility, {
+		passive: true,
+	});
 }
