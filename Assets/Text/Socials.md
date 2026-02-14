@@ -8,7 +8,7 @@
 
 <!-- Section: Slack -->
 
-<img src="/Assets/Texture/Socials/Fallback_Profile.png" alt="Slack Profile Picture" class="social__profile"/>
+<img src="Assets/Texture/Socials/Fallback_Profile.png" alt="Slack Profile Picture" class="social__profile"/>
 
 #### @Somebud
 
@@ -20,7 +20,7 @@ I'm considerably active here and often lurk around but I also have my own channe
 
 <!-- Section: Github -->
 
-<img src="https://unavatar.io/github/Somebud0180" alt="GitHub Profile Picture" class="social__profile" onerror="this.onerror=null; this.src='/Assets/Texture/Socials/Fallback_Profile.png';"/>
+<img src="https://unavatar.io/github/Somebud0180" alt="GitHub Profile Picture" class="social__profile" onerror="this.onerror=null; this.src='Assets/Texture/Socials/Fallback_Profile.png';"/>
 
 #### Ethan John
 
@@ -35,7 +35,7 @@ I upload my repos here! You can view the random stuff I make here I guess.
 <!-- Section: Instagram -->
 
 <div class="social__instagram">
-    <img src="/Assets/Texture/Socials/Fallback_Profile.png" alt="Instagram Profile Picture" class="social__profile"/>
+    <img src="Assets/Texture/Socials/Fallback_Profile.png" alt="Instagram Profile Picture" class="social__profile"/>
     <div>
         <h3> somebud0180 </h4>
         <h4 class="social__instagram--username"> Somebud </h4>

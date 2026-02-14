@@ -356,11 +356,7 @@ class SocialSelect {
 				const socialImage = document.createElement("img");
 				const line = document.createElement("div");
 
-				socialImage.src = "/Assets/Texture/Socials/" + socialName + ".png";
-				socialImage.alt = socialName;
-
-				line.classList.add("social__line");
-
+			socialImage.src = "Assets/Texture/Socials/" + socialName + ".png";
 				socialImage.addEventListener("click", () => {
 					if (line.classList.contains("social__line--selected")) {
 						this._deselect(socialItem);
