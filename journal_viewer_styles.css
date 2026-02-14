@@ -127,6 +127,16 @@ body[data-page="JournalViewer"] {
 	color: #5a5ed0;
 }
 
+.journal-viewer__body em,
+.journal-viewer__body i {
+	font-style: italic;
+}
+
+.journal-viewer__body strong,
+.journal-viewer__body b {
+	font-weight: bold;
+}
+
 @media (max-width: 720px) {
 	.journal-viewer {
 		padding: 1.5rem 1.25rem 3rem;

@@ -74,7 +74,7 @@ body[data-page="Journal"] section {
 
 .journal__intro h3 {
 	line-height: var(--line-height);
-	margin: -8px 0 18px 0;
+	margin: -8px 0 20px 0;
 }
 
 .journal__intro br {
@@ -143,6 +143,16 @@ body[data-page="Journal"] section {
 	font-size: 1rem;
 	color: rgba(60, 50, 40, 0.7);
 	line-height: var(--line-height);
+}
+
+em,
+i {
+	font-style: italic;
+}
+
+strong,
+b {
+	font-weight: bold;
 }
 
 hr {

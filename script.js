@@ -467,7 +467,11 @@ const buildJournalEntryElement = ({ slug, title, subtitle }) => {
 
 	const subtitleElement = document.createElement("div");
 	subtitleElement.classList.add("journal-entry__subtitle");
-	subtitleElement.textContent = subtitle || "";
+	if (subtitle) {
+		subtitleElement.innerHTML = marked.parse(subtitle);
+	} else {
+		subtitleElement.textContent = "";
+	}
 
 	entry.appendChild(titleElement);
 	entry.appendChild(subtitleElement);
@@ -549,7 +553,7 @@ async function loadJournalViewer() {
 		}
 		if (subtitleElement) {
 			if (subtitle) {
-				subtitleElement.textContent = subtitle;
+				subtitleElement.innerHTML = marked.parse(subtitle);
 				subtitleElement.removeAttribute("hidden");
 			} else {
 				subtitleElement.textContent = "";
