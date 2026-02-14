@@ -123,6 +123,8 @@ const face = document.querySelector(".face");
 const leftEye = document.getElementById("left-eye-container");
 const rightEye = document.getElementById("right-eye-container");
 const mouth = document.querySelector(".mouth");
+const blushLeft = document.querySelector(".blush--left");
+const blushRight = document.querySelector(".blush--right");
 const banner = document.querySelector(".banner");
 const heroArea = document.querySelector(".hero");
 
@@ -259,7 +261,42 @@ motionTarget.addEventListener("mousemove", (e) => {
 motionTarget.addEventListener("mouseleave", () => {
 	faceMotionState.targetX = 0;
 	faceMotionState.targetY = 0;
+	// Hide blush on mouse leave
+	if (blushLeft) blushLeft.classList.remove("visible");
+	if (blushRight) blushRight.classList.remove("visible");
 });
+
+// Handle blush visibility on pointer down/up
+const handlePointerDown = (e) => {
+	if (!banner) return;
+
+	const bannerRect = banner.getBoundingClientRect();
+	const bannerCenterX = bannerRect.left + bannerRect.width / 2;
+	const bannerCenterY = bannerRect.top + bannerRect.height / 2;
+
+	// Calculate distance from pointer to banner center
+	const distX = e.clientX - bannerCenterX;
+	const distY = e.clientY - bannerCenterY;
+	const distance = Math.sqrt(distX * distX + distY * distY);
+
+	// Show blush if pointer is within 200px of center (face center)
+	const threshold = 200;
+	if (distance < threshold) {
+		if (blushLeft) blushLeft.classList.add("visible");
+		if (blushRight) blushRight.classList.add("visible");
+	}
+};
+
+const handlePointerUp = () => {
+	if (blushLeft) blushLeft.classList.remove("visible");
+	if (blushRight) blushRight.classList.remove("visible");
+};
+
+motionTarget.addEventListener("pointerdown", handlePointerDown);
+motionTarget.addEventListener("mousedown", handlePointerDown);
+motionTarget.addEventListener("pointerup", handlePointerUp);
+motionTarget.addEventListener("mouseup", handlePointerUp);
+motionTarget.addEventListener("pointerleave", handlePointerUp);
 
 window.addEventListener("resize", () => {
 	updateFaceBounds();

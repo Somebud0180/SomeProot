@@ -187,6 +187,30 @@ section {
 	will-change: transform;
 }
 
+.blush {
+	width: clamp(8px, 8vw, 32px);
+	height: auto;
+	position: absolute;
+	transform: translateY(64px);
+	top: 30%;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	will-change: opacity;
+	pointer-events: none;
+}
+
+.blush--left {
+	left: -5%;
+}
+
+.blush--right {
+	right: -5%;
+}
+
+.blush.visible {
+	opacity: 1;
+}
+
 .blur {
 	--blur_amount: 4px;
 	position: absolute;
