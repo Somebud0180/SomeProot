@@ -98,7 +98,7 @@ body[data-page="Journal"] section {
 	flex-direction: column;
 	gap: 0;
 	padding: calc(var(--line-height) / 4) 0.5rem;
-	margin-bottom: calc(var(--line-height) / 2);
+	margin-bottom: calc(var(--line-height) / 2 - 20px);
 	text-decoration: none;
 	color: inherit;
 	border-bottom: 2px solid rgba(150, 120, 90, 0.35);
