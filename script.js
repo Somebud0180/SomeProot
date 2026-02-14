@@ -493,12 +493,39 @@ async function loadMarkdown() {
 			}
 		});
 
+		updateAgePlaceholders();
+
 		// Update card height with animation
 		updateCardHeight();
 	} catch (error) {
 		console.error("Error loading markdown:", error);
 	}
 }
+
+const BIRTH_DATE = new Date(2008, 6, 18);
+
+const calculateYearsSince = (date) => {
+	const now = new Date();
+	let years = now.getFullYear() - date.getFullYear();
+	const hasHadBirthday =
+		now.getMonth() > date.getMonth() ||
+		(now.getMonth() === date.getMonth() && now.getDate() >= date.getDate());
+	if (!hasHadBirthday) {
+		years -= 1;
+	}
+	return Math.max(0, years);
+};
+
+const updateAgePlaceholders = () => {
+	const ageTargets = document.querySelectorAll("#Age");
+	if (!ageTargets.length) {
+		return;
+	}
+	const years = calculateYearsSince(BIRTH_DATE);
+	ageTargets.forEach((target) => {
+		target.textContent = String(years);
+	});
+};
 
 const JOURNAL_MANIFEST_PATH = "Assets/Text/Journals/index.json";
 

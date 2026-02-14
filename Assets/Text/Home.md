@@ -14,4 +14,4 @@ I typically find myself coding with ease with Swift app development. I did also 
 
 I also got around to 3D modelling due to events and from recently getting a 3D Printer! While I do make "art", I would describe it as poorly drawn. I do wish to practice these further.
 
-If you insist, you can find my art via my Instagram, along with my other socials through the link below.
+If you insist, you can find my art via my Instagram, along with my other socials through the top bar!
