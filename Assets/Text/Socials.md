@@ -14,9 +14,7 @@
 
 I'm considerably active here and often lurk around but I also have my own channel now!
 
-<form action="https://hackclub.enterprise.slack.com/team/U079MU5B5R6" method="get">
-    <button type="submit">Slack!</button>
-</form>
+<a class="social__button" href="https://hackclub.enterprise.slack.com/team/U079MU5B5R6" aria-label="Open my Slack profile">Slack!</a>
 
 <!-- Section: Github -->
 
@@ -28,9 +26,7 @@ I'm considerably active here and often lurk around but I also have my own channe
 
 I upload my repos here! You can view the random stuff I make here I guess.
 
-<form action="https://github.com/somebud0180" method="get">
-    <button type="submit">Visit!</button>
-</form>
+<a class="social__button" href="https://github.com/somebud0180" aria-label="Visit my GitHub profile">Visit!</a>
 
 <!-- Section: Instagram -->
 
@@ -44,9 +40,7 @@ I upload my repos here! You can view the random stuff I make here I guess.
 
 I post my art here! I also vent a lot here via the notes and stories. This is where I'm most active outside the Slack.
 
-<form action="https://instagram.com/somebud0180" method="get">
-    <button type="submit">Visit!</button>
-</form>
+<a class="social__button" href="https://instagram.com/somebud0180" aria-label="Visit my Instagram profile">Visit!</a>
 
 <!-- Section: Twitter -->
 
@@ -58,6 +52,4 @@ I post my art here! I also vent a lot here via the notes and stories. This is wh
 
 I completely just lurk here. But I'm there I guess.
 
-<form action="https://x.com/0180ethan" method="get">
-    <button type="submit">Visit!</button>
-</form>
+<a class="social__button" href="https://x.com/0180ethan" aria-label="Visit my Twitter profile">Visit!</a>

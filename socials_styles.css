@@ -130,13 +130,14 @@
 }
 
 .social__greeting {
+	margin-top: 0.5rem;
 	padding: 0 1rem;
 	align-self: flex-start;
 }
 
 .social__description {
-	padding: 0 1rem;
 	margin-bottom: 0.5rem;
+	padding: 0 1rem;
 	font-size: 0.9rem;
 	color: #c2c2c2;
 }
@@ -160,6 +161,8 @@
 .social__details {
 	display: flex;
 	flex-direction: column;
+	gap: 0.5rem;
+	padding-bottom: 1rem;
 	align-items: baseline;
 	justify-content: space-between;
 	text-wrap-mode: wrap;
@@ -187,13 +190,22 @@
 	padding: 0 1rem;
 }
 
-.social__details form {
-	height: fit-content;
+.social__button {
+	display: block;
 	width: 100%;
-	padding: 1rem;
+	padding: 0.5rem 1rem;
+	background: var(--social-button-bg);
+	color: var(--social-button-text);
+	text-decoration: none;
+	font-weight: 700;
+	border-radius: 12px;
+	text-align: left;
+	transition:
+		transform 0.2s ease,
+		filter 0.2s ease;
 }
 
-.social__details button {
-	width: 100%;
-	padding: 1rem;
+.social__button:hover {
+	transform: translateY(-2px);
+	filter: brightness(1.02);
 }
