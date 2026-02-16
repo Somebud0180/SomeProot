@@ -2,11 +2,9 @@
 ## The most and best _firsts_ in my lifetime, continued!
 _February 15, 2026_
 
-Recap:
-_To quote my post
-
-> 2 months ago, I saw a new hackathon and said, “It would be cool if I made a game and went to another country, right?”.
-_
+Recap: <br>
+_To quote my post,_
+> _2 months ago, I saw a new hackathon and said, “It would be cool if I made a game and went to another country, right?”._
 
 Thing's also kinda long, here are some shortcuts:
 - [Beginning](#beginning:)
