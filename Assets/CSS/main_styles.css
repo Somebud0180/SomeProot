@@ -37,7 +37,7 @@
 
 @media (max-width: 720px) {
 	:root {
-		--content-inline: 1.1rem;
+		--content-inline: 0;
 	}
 }
 
