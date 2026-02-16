@@ -55,7 +55,7 @@ body {
 	color: #f3f3f3;
 	--pattern-max: 640px;
 	background-image:
-		url("Assets/Texture/Pattern_L.png"), url("Assets/Texture/Pattern_R.png"),
+		url("Assets/Images/Pattern_L.png"), url("Assets/Images/Pattern_R.png"),
 		linear-gradient(180deg, #232344 0%, #18181b 90%);
 	background-position:
 		left top,
