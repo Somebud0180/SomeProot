@@ -50,11 +50,13 @@ SomeProot/
 │   │   │   ├── Instagram.png
 │   │   │   ├── Slack.png
 │   │   │   └── Twitter.png
-│   │   ├── Backdrop.png
-│   │   ├── Footer.png
-│   │   ├── Pattern_L.png
-│   │   ├── Pattern_R.png
-│   │   └── Somebud.png
+│   │   ├── Background
+│   │   │   ├── Backdrop.png
+│   │   │   ├── Pattern_L.png
+│   │   │   └── Pattern_R.png
+│   │   └── Misc
+│   │       ├── Footer.png
+│   │       └── Somebud.png
 │   └── Text
 │       ├── Journals
 │       │   ├── index.json
