@@ -118,6 +118,7 @@
 
 .social__profile--banner {
 	height: clamp(64px, 44vw, 128px);
+	min-width: clamp(64px, 44vw, 128px);
 	border-radius: 50%;
 	border: 4px solid var(--social-card-border);
 	box-sizing: border-box;

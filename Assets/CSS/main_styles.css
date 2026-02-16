@@ -49,17 +49,6 @@
 
 html {
 	background-color: #18181b;
-	background-image: linear-gradient(180deg, #232344 0%, #18181b 90%);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-}
-
-body {
-	font-family:
-		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-		Cantarell, sans-serif;
-	line-height: 1.6;
-	color: #f3f3f3;
 	--pattern-max: 640px;
 	background-image:
 		url("../Images/Background/Pattern_L.png"),
@@ -74,6 +63,14 @@ body {
 		min(50vw, var(--pattern-max)) auto,
 		min(50vw, var(--pattern-max)) auto,
 		100% 100%;
+}
+
+body {
+	font-family:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+		Cantarell, sans-serif;
+	line-height: 1.6;
+	color: #f3f3f3;
 	min-height: 100vh;
 	min-height: 100svh;
 	min-height: 100dvh;
