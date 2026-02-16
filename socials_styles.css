@@ -95,8 +95,14 @@
 	padding-top: 0;
 	margin-top: 1rem;
 	overflow: hidden;
-	max-height: 160px;
-	transition: max-height 0.4s ease;
+	transition: height 0.45s ease;
+}
+
+.social__ghost {
+	height: 0;
+	pointer-events: none;
+	visibility: hidden;
+	transition: height 0.45s ease;
 }
 
 .social__profile {

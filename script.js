@@ -435,13 +435,29 @@ document.querySelectorAll(".social-select").forEach((selectElement) => {
 function updateCardHeight() {
 	const card = document.getElementById("socialCard");
 	const details = document.querySelector(".social__details");
+	const ghost = card ? card.querySelector(".social__ghost") : null;
 	if (card && details) {
-		// Set current height as the starting point
-		card.style.maxHeight = card.scrollHeight + "px";
-		// Force a reflow to establish the "from" state
+		const styles = window.getComputedStyle(card);
+		const paddingTop = parseFloat(styles.paddingTop) || 0;
+		const paddingBottom = parseFloat(styles.paddingBottom) || 0;
+		const targetHeight = details.scrollHeight + paddingTop + paddingBottom;
+		const previousHeight =
+			Number(card.dataset.prevHeight) || card.getBoundingClientRect().height;
+
+		if (ghost) {
+			const delta = Math.max(0, previousHeight - targetHeight);
+			ghost.style.height = `${delta}px`;
+		}
+
+		card.style.height = `${previousHeight}px`;
 		void card.offsetHeight;
-		// Now set the target height
-		card.style.maxHeight = details.scrollHeight + "px";
+
+		if (ghost && previousHeight > targetHeight) {
+			ghost.style.height = "0px";
+		}
+
+		card.style.height = `${targetHeight}px`;
+		card.dataset.prevHeight = String(targetHeight);
 	}
 }
 
