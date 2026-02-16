@@ -114,29 +114,29 @@ body[data-page="JournalViewer"] {
 }
 
 .journal-viewer__header {
-	border-bottom: 2px solid rgba(150, 120, 90, 0.35);
-	padding-bottom: 1.5rem;
+	border-bottom: 3px solid rgba(150, 120, 90, 0.35);
+	padding: 1.5rem 0;
 	margin-bottom: 2rem;
 }
 
 .journal-viewer__header h1 {
 	font-size: clamp(2rem, 3.5vw, 2.8rem);
 	line-height: calc(var(--line-height) * 2);
-	margin: 2px 0 4px 0;
+	margin: 2px 0 6px 0;
 }
 
 .journal-viewer__header p {
 	font-size: 1.1rem;
 	color: rgba(60, 50, 40, 0.7);
 	line-height: var(--line-height);
-	margin: -12px 0 0 0;
+	margin: -10px 0 0 0;
 }
 
 .journal-date {
 	font-size: 0.95rem;
 	color: rgba(60, 50, 40, 0.6);
 	line-height: var(--line-height);
-	margin: 2px 0 -2px 0 !important;
+	margin: 0 0 -2px 0 !important;
 	font-weight: 500;
 }
 
@@ -183,7 +183,7 @@ body[data-page="JournalViewer"] {
 	}
 
 	.journal-viewer__content {
-		padding: calc(1.75rem + var(--line-offset)) 1.75rem 1.75rem;
+		padding: calc(2.5rem + var(--line-offset)) 1.75rem 2.5rem;
 		border-radius: 2rem;
 	}
 }
