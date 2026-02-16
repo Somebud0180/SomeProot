@@ -149,7 +149,7 @@ section {
 	right: 50%;
 	margin-left: -50vw;
 	margin-right: -50vw;
-	padding: 4rem calc(var(--content-inline) + var(--safe-right)) 4rem
+	padding: 2rem calc(var(--content-inline) + var(--safe-right)) 2rem
 		calc(var(--content-inline) + var(--safe-left));
 	text-align: center;
 	background-color: #18181b;
@@ -177,7 +177,6 @@ section {
 
 .hero h3 {
 	font-size: 1.2rem;
-	margin-bottom: 2rem;
 	transition: ease font-size 0.5s;
 }
 
