@@ -61,15 +61,15 @@ body[data-page="Journal"] section {
 }
 
 .journal__intro {
-	padding-top: 0;
 	width: 100%;
 	margin-bottom: var(--line-height);
 	line-height: var(--line-height);
 }
 
 .journal__intro h1 {
+	font-size: clamp(2rem, 4vw, 3rem);
 	line-height: calc(var(--line-height) * 2);
-	margin: 18px 0 0 0;
+	margin: 16px 0 2px 0;
 }
 
 .journal__intro h3 {
@@ -137,6 +137,7 @@ body[data-page="Journal"] section {
 	font-size: 1.35rem;
 	font-weight: 700;
 	line-height: var(--line-height);
+	margin-bottom: 2px;
 }
 
 .journal-entry__subtitle {
@@ -149,7 +150,6 @@ body[data-page="Journal"] section {
 	font-size: 0.85rem;
 	color: rgba(60, 50, 40, 0.55);
 	line-height: var(--line-height);
-	margin-top: 2px;
 }
 
 em,
