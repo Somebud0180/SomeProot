@@ -345,80 +345,181 @@ class SocialSelect {
 		this.originalSelect = originalSelectElement;
 		this.customSelect = document.createElement("div");
 		this.customSelect.classList.add("social__content");
+		this.activeBackground = document.createElement("div");
+		this.activeBackground.classList.add("social__active-bg");
+		this.currentSelectedItem = null;
 
-		this.originalSelect
-			.querySelectorAll("option")
-			.forEach((optionElement, index) => {
-				const socialItem = document.createElement("div");
-				socialItem.classList.add("social__item");
+		this.originalSelect.querySelectorAll("option").forEach((optionElement) => {
+			const socialItem = document.createElement("div");
+			socialItem.classList.add("social__item");
+			socialItem.setAttribute("tabindex", "0");
+			socialItem.setAttribute("role", "button");
 
-				const socialName = this.toUpperCaseFirstLetter(optionElement.value);
-				const socialImage = document.createElement("img");
-				const line = document.createElement("div");
+			const socialName = this.toUpperCaseFirstLetter(optionElement.value);
+			const socialImage = document.createElement("img");
 
-				socialImage.src = "Assets/Images/Socials/" + socialName + ".png";
-				socialImage.alt = socialName;
+			socialImage.src = "Assets/Images/Socials/" + socialName + ".png";
+			socialImage.alt = socialName;
 
-				line.classList.add("social__line");
-
-				socialImage.addEventListener("click", () => {
-					if (line.classList.contains("social__line--selected")) {
-						this._deselect(socialItem);
-					} else {
-						this._select(socialItem);
-					}
-				});
-
-				socialItem.appendChild(socialImage);
-				socialItem.appendChild(line);
-				this.customSelect.appendChild(socialItem);
+			socialItem.addEventListener("click", () => {
+				if (socialItem.classList.contains("social__item--selected")) {
+					this._deselect(socialItem);
+				} else {
+					this._select(socialItem);
+				}
 			});
 
+			socialItem.addEventListener("keydown", (event) => {
+				if (event.key !== "Enter" && event.key !== " ") {
+					return;
+				}
+				event.preventDefault();
+				if (socialItem.classList.contains("social__item--selected")) {
+					this._deselect(socialItem);
+				} else {
+					this._select(socialItem);
+				}
+			});
+
+			socialItem.appendChild(socialImage);
+			this.customSelect.appendChild(socialItem);
+		});
+
+		this.customSelect.appendChild(this.activeBackground);
+
 		this.originalSelect.insertAdjacentElement("afterend", this.customSelect);
+		this.updateSelectedOptions("sync");
+		window.addEventListener("resize", () => {
+			const selectedOption =
+				this.originalSelect.querySelector("option:checked");
+			if (!selectedOption) {
+				return;
+			}
+			const selectedIndex = Array.from(
+				this.originalSelect.querySelectorAll("option"),
+			).indexOf(selectedOption);
+			const selectedItem =
+				this.customSelect.querySelectorAll(".social__item")[selectedIndex];
+			if (selectedItem) {
+				this.positionActiveBackground(selectedItem, false);
+			}
+		});
 	}
 
 	_select(itemElement) {
 		this.customSelect.querySelectorAll(".social__item").forEach((item) => {
 			if (item !== itemElement) {
-				this._deselect(item);
+				this._deselect(item, false);
 			}
 		});
 
 		const index = Array.from(this.customSelect.children).indexOf(itemElement);
 		this.originalSelect.querySelectorAll("option")[index].selected = true;
 
-		this.updateSelectedOptions();
+		this.updateSelectedOptions("select");
 	}
 
-	_deselect(itemElement) {
+	_deselect(itemElement, shouldUpdate = true) {
 		const index = Array.from(this.customSelect.children).indexOf(itemElement);
 		this.originalSelect.querySelectorAll("option")[index].selected = false;
-		this.updateSelectedOptions();
+		if (shouldUpdate) {
+			this.updateSelectedOptions("deselect");
+		}
 	}
 
-	updateSelectedOptions() {
+	positionActiveBackground(itemElement, animate = true) {
+		const containerRect = this.customSelect.getBoundingClientRect();
+		const itemRect = itemElement.getBoundingClientRect();
+		const x = itemRect.left - containerRect.left;
+		const y = itemRect.top - containerRect.top;
+		const transformValue = `translate3d(${x}px, ${y}px, 0)`;
+
+		if (!animate) {
+			this.activeBackground.style.transition = "none";
+		}
+
+		this.activeBackground.style.width = `${itemRect.width}px`;
+		this.activeBackground.style.height = `${itemRect.height}px`;
+		this.activeBackground.style.transform = transformValue;
+		this.activeBackground.style.setProperty(
+			"--social-active-transform",
+			transformValue,
+		);
+
+		if (!animate) {
+			void this.activeBackground.offsetHeight;
+			this.activeBackground.style.removeProperty("transition");
+		}
+	}
+
+	hideActiveBackgroundWithAnimation() {
+		this.activeBackground.classList.remove("social__active-bg--select-first");
+		this.activeBackground.classList.add("social__active-bg--deselect");
+		this.activeBackground.addEventListener(
+			"animationend",
+			() => {
+				this.activeBackground.classList.remove(
+					"social__active-bg--deselect",
+					"social__active-bg--visible",
+				);
+			},
+			{ once: true },
+		);
+	}
+
+	updateSelectedOptions(action = "sync") {
+		const previousSelectedItem = this.currentSelectedItem;
 		this.customSelect
 			.querySelectorAll(".social__item")
 			.forEach((item, index) => {
 				const option = this.originalSelect.querySelectorAll("option")[index];
-				const line = item.querySelector(".social__line");
 				if (option.selected) {
-					line.classList.add("social__line--selected");
+					item.classList.add("social__item--selected");
 				} else {
-					line.classList.remove("social__line--selected");
+					item.classList.remove("social__item--selected");
 				}
 			});
 
 		const details = document.querySelector(".social__details");
 		const selectedOption = this.originalSelect.querySelector("option:checked");
+		let selectedItem = null;
 		if (selectedOption) {
+			const selectedIndex = Array.from(
+				this.originalSelect.querySelectorAll("option"),
+			).indexOf(selectedOption);
+			selectedItem =
+				this.customSelect.querySelectorAll(".social__item")[selectedIndex];
+
 			details.setAttribute(
 				"section",
 				this.toUpperCaseFirstLetter(selectedOption.value),
 			);
+			if (selectedItem) {
+				this.positionActiveBackground(selectedItem);
+				this.activeBackground.classList.remove("social__active-bg--deselect");
+				this.activeBackground.classList.add("social__active-bg--visible");
+				if (action === "select" && !previousSelectedItem) {
+					this.activeBackground.classList.remove(
+						"social__active-bg--select-first",
+					);
+					void this.activeBackground.offsetHeight;
+					this.activeBackground.classList.add(
+						"social__active-bg--select-first",
+					);
+				} else {
+					this.activeBackground.classList.remove(
+						"social__active-bg--select-first",
+					);
+				}
+			}
 		} else {
 			details.setAttribute("section", "None");
+			if (action === "deselect" && previousSelectedItem) {
+				this.hideActiveBackgroundWithAnimation();
+			}
 		}
+
+		this.currentSelectedItem = selectedItem;
 
 		loadMarkdown();
 	}
