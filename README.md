@@ -24,10 +24,6 @@ SomeProot/
 ├── LICENSE
 ├── 404.html
 ├── index.html
-├── journal_viewer.html
-├── journal.html
-├── projects.html
-├── socials.html
 ├── Assets
 │   ├── CSS
 │   │   ├── journal_styles.css

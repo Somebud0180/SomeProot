@@ -14,10 +14,6 @@ This site now uses clean URLs without `.html` extensions.
 /
 ├── index.html              (root homepage)
 ├── 404.html                (error page)
-├── projects.html           (redirect stub → /projects/)
-├── journal.html            (redirect stub → /journal/)
-├── socials.html            (redirect stub → /socials/)
-├── journal_viewer.html     (redirect stub → /journal-viewer/)
 ├── projects/
 │   └── index.html
 ├── journal/
@@ -32,13 +28,6 @@ This site now uses clean URLs without `.html` extensions.
     ├── Images/
     └── Text/
 ```
-
-## Backward Compatibility
-Old `.html` URLs automatically redirect to clean URLs:
-- `projects.html` → `/projects/`
-- `journal.html` → `/journal/`
-- `socials.html` → `/socials/`
-- `journal_viewer.html?entry=X` → `/journal-viewer/?entry=X`
 
 ## Implementation Notes
 - All navigation links use root-relative paths starting with `/`
