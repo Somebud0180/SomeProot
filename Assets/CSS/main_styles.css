@@ -11,8 +11,40 @@
 	font-style: normal;
 }
 
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+	width: 16px;
+	background: transparent;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 10px;
+	border: 2px solid transparent;
+	background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.3);
+	background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+	background: rgba(255, 255, 255, 0.4);
+	background-clip: content-box;
+}
+
 /* Reset and Base Styles */
 * {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+	font-family: "Roboto Mono", monospace;
+	font-optical-sizing: auto;
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -48,6 +80,9 @@
 }
 
 html {
+	overflow-y: scroll;
+	scrollbar-gutter: auto;
+	scroll-behavior: smooth;
 	background-color: #18181b;
 	--pattern-max: 640px;
 	background-image:
@@ -66,16 +101,13 @@ html {
 }
 
 body {
-	font-family:
-		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-		Cantarell, sans-serif;
-	line-height: 1.6;
+	display: flex;
 	color: #f3f3f3;
+	line-height: 1.6;
 	min-height: 100vh;
 	min-height: 100svh;
 	min-height: 100dvh;
 	padding-bottom: var(--safe-bottom);
-	display: flex;
 	flex-direction: column;
 }
 
@@ -301,24 +333,6 @@ section {
 .content a {
 	color: #8292da;
 	text-decoration: underline;
-}
-
-button {
-	background-color: white;
-	color: #5c6798;
-	border: none;
-	padding: 0.75rem 2rem;
-	font-size: 1rem;
-	border-radius: 4px;
-	cursor: pointer;
-	transition:
-		transform 0.2s,
-		box-shadow 0.2s;
-}
-
-button:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Footer */
