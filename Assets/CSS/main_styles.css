@@ -93,11 +93,14 @@ body {
 
 /* Header and Navigation */
 header {
+	min-height: 44px;
+	padding: 0.5rem 0;
 	position: sticky;
 	top: 0;
-	background-color: #1a1a3290;
+	display: flex;
+	align-items: center;
 	line-height: 1;
-	padding: 1rem 0;
+	background-color: #1a1a3290;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	transition: transform 0.3s ease;
 	z-index: 100;
@@ -109,18 +112,20 @@ header.nav-hidden {
 
 nav {
 	max-width: 1200px;
-	margin: 0 auto;
+	margin: auto;
+	width: 100%;
 	padding: 0 calc(var(--content-inline) + var(--safe-right)) 0
 		calc(var(--content-inline) + var(--safe-left));
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	flex-wrap: wrap;
-	gap: 2rem;
+	flex-wrap: nowrap;
+	gap: 1rem;
 }
 
 nav h1 {
 	font-size: 1.5rem;
+	font-family: "Silkscreen", sans-serif;
 }
 
 nav ul {
@@ -297,6 +302,8 @@ section {
 	margin-bottom: 1rem;
 }
 
+	display: flex;
+	align-items: center;
 .content p {
 	font-size: 1.1rem;
 	margin-bottom: 1.5rem;
@@ -307,7 +314,7 @@ section {
 	text-decoration: underline;
 }
 
-body[data-page="404"] main {
+	flex-wrap: nowrap;
 	max-width: none;
 	padding: 0;
 }
