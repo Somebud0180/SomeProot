@@ -750,7 +750,7 @@ const formatFallbackTitle = (slug) => slug.replace(/[_-]+/g, " ").trim();
 const buildJournalEntryElement = ({ slug, title, subtitle, date }) => {
 	const entry = document.createElement("a");
 	entry.classList.add("journal-entry");
-	entry.href = `/journal-viewer/?entry=${encodeURIComponent(slug)}`;
+	entry.href = `/SomeProot/journal-viewer/?entry=${encodeURIComponent(slug)}`;
 
 	const titleElement = document.createElement("div");
 	titleElement.classList.add("journal-entry__title");
