@@ -65,8 +65,8 @@ html {
 	background-color: #18181b;
 	--pattern-max: 640px;
 	background-image:
-		url("../Images/Background/Pattern_L.png"),
-		url("../Images/Background/Pattern_R.png"),
+		url("/SomeProot/Assets/Images/Background/Pattern_L.png"),
+		url("/SomeProot/Assets/Images/Background/Pattern_R.png"),
 		linear-gradient(180deg, #232344 0%, #18181b 90%);
 	background-position:
 		left top,
