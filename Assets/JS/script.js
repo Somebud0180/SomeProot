@@ -425,7 +425,7 @@ class SocialSelect {
 			const socialName = this.toUpperCaseFirstLetter(optionElement.value);
 			const socialImage = document.createElement("img");
 
-			socialImage.src = "Assets/Images/Socials/" + socialName + ".png";
+			socialImage.src = "Somebud/Assets/Images/Socials/" + socialName + ".png";
 			socialImage.alt = socialName;
 
 			socialItem.addEventListener("click", () => {
@@ -638,7 +638,7 @@ async function loadMarkdown() {
 
 		// Get page name from body data attribute
 		const pageName = document.body.getAttribute("data-page") || "Home";
-		const response = await fetch(`Assets/Text/${pageName}.md`);
+		const response = await fetch(`Somebud/Assets/Text/${pageName}.md`);
 		if (!response.ok) {
 			throw new Error(`Failed to load markdown: ${response.status}`);
 		}
@@ -711,7 +711,7 @@ const updateAgePlaceholders = () => {
 	});
 };
 
-const JOURNAL_MANIFEST_PATH = "Assets/Text/Journals/index.json";
+const JOURNAL_MANIFEST_PATH = "Somebud/Assets/Text/Journals/index.json";
 
 const parseJournalMetadata = (markdown) => {
 	const lines = markdown.split(/\r?\n/);
@@ -797,7 +797,7 @@ async function loadJournalEntries() {
 		entriesTarget.innerHTML = "";
 		const entryMetadataList = [];
 		for (const entryFile of entries) {
-			const entryPath = `Assets/Text/Journals/${entryFile}`;
+			const entryPath = `Somebud/Assets/Text/Journals/${entryFile}`;
 			const entryResponse = await fetch(entryPath);
 			if (!entryResponse.ok) {
 				console.warn(`Missing journal entry: ${entryPath}`);
@@ -846,7 +846,7 @@ async function loadJournalViewer() {
 	}
 
 	try {
-		const entryPath = `Assets/Text/Journals/${entrySlug}.md`;
+		const entryPath = `Somebud/Assets/Text/Journals/${entrySlug}.md`;
 		const response = await fetch(entryPath);
 		if (!response.ok) {
 			throw new Error(`Failed to load journal entry: ${response.status}`);
