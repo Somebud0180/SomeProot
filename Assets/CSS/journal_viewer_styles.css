@@ -1,22 +1,22 @@
 body[data-page="JournalViewer"] {
-	overflow-x: hidden;
+	overflow-x: clip;
 }
 
 .journal-viewer {
-	max-width: 980px;
-	margin: 0 auto;
-	padding: 2rem 2rem 4rem;
-	color: #2f2a24;
+	width: 100%;
+	color: #333;
+	gap: 1rem;
+	z-index: 0;
 }
 
 .reader-bar {
+	position: sticky;
 	position: sticky;
 	top: var(--reader-bar-top, 8px);
 	display: flex;
 	align-items: center;
 	gap: 1rem;
 	padding: 0.75rem 1.5rem;
-	margin: 0 -2rem 1.5rem;
 	background-color: transparent;
 	border-radius: 999px;
 	transition:
@@ -91,6 +91,7 @@ body[data-page="JournalViewer"] {
 }
 
 .journal-viewer__content {
+	margin: 0 2rem;
 	--line-height: 28px;
 	--line-offset: 8px;
 	overflow-x: hidden;
@@ -104,8 +105,8 @@ body[data-page="JournalViewer"] {
 		),
 		linear-gradient(
 			180deg,
-			rgba(255, 255, 255, 0.85),
-			rgba(238, 228, 210, 0.95)
+			rgba(255, 250, 233, 0.85),
+			rgba(240, 230, 210, 0.95)
 		);
 	background-position: 0 var(--line-offset);
 	border-radius: 2.5rem;
@@ -183,7 +184,7 @@ body[data-page="JournalViewer"] {
 	}
 
 	.journal-viewer__content {
-		padding: calc(2.5rem + var(--line-offset)) 1.75rem 2.5rem;
+		padding: calc(1.5rem + var(--line-offset)) 1.5rem 1.5rem;
 		border-radius: 2rem;
 	}
 }
