@@ -149,7 +149,7 @@ const faceMotionConfig = {
 
 if (is404Page) {
 	faceMotionConfig.cursorBiasY = -0.3;
-	faceMotionConfig.touchBiasY = -0.06;
+	faceMotionConfig.touchBiasY = -0.4;
 	faceMotionConfig.blushCenterOffsetX = -64;
 }
 
@@ -750,7 +750,7 @@ const formatFallbackTitle = (slug) => slug.replace(/[_-]+/g, " ").trim();
 const buildJournalEntryElement = ({ slug, title, subtitle, date }) => {
 	const entry = document.createElement("a");
 	entry.classList.add("journal-entry");
-	entry.href = `journal_viewer.html?entry=${encodeURIComponent(slug)}`;
+	entry.href = `/journal-viewer/?entry=${encodeURIComponent(slug)}`;
 
 	const titleElement = document.createElement("div");
 	titleElement.classList.add("journal-entry__title");

@@ -329,7 +329,6 @@ body[data-page="404"] .error404__banner {
 
 body[data-page="404"] .face {
 	transform-origin: center;
-	scale: 1.23;
 	opacity: 0.7;
 }
 
@@ -399,6 +398,10 @@ footer a {
 		flex-direction: column;
 		padding-top: 3rem;
 		padding-bottom: 3rem;
+	}
+
+	.face {
+		scale: 0.9;
 	}
 
 	.blur {
