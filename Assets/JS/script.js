@@ -407,50 +407,75 @@ window.addEventListener("load", () => {
 	updateFaceBounds();
 });
 
-class SocialSelect {
+class CustomSelector {
 	constructor(originalSelectElement) {
 		this.originalSelect = originalSelectElement;
+		this.allowDeselect = this.originalSelect.multiple;
+		this.detailsSelector =
+			this.originalSelect.dataset.detailsSelector || ".card__details";
+		this.iconBasePath = this.originalSelect.dataset.iconBasePath || "";
+		this.itemClassName = "picker__item";
+		this.itemSelectedClassName = "picker__item--selected";
+		this.activeBackgroundClassName = "picker__active-bg";
+		this.activeBackgroundVisibleClassName = "picker__active-bg--visible";
+		this.activeBackgroundSelectClassName = "picker__active-bg--select-first";
+		this.activeBackgroundDeselectClassName = "picker__active-bg--deselect";
 		this.customSelect = document.createElement("div");
-		this.customSelect.classList.add("social__content");
+		this.customSelect.classList.add("picker__content");
 		this.activeBackground = document.createElement("div");
-		this.activeBackground.classList.add("social__active-bg");
+		this.activeBackground.classList.add(this.activeBackgroundClassName);
 		this.currentSelectedItem = null;
 
 		this.originalSelect.querySelectorAll("option").forEach((optionElement) => {
-			const socialItem = document.createElement("div");
-			socialItem.classList.add("social__item");
-			socialItem.setAttribute("tabindex", "0");
-			socialItem.setAttribute("role", "button");
+			const item = document.createElement("div");
+			item.classList.add(this.itemClassName);
+			item.setAttribute("tabindex", "0");
+			item.setAttribute("role", "button");
 
-			const socialName = this.toUpperCaseFirstLetter(optionElement.value);
-			const socialImage = document.createElement("img");
+			const optionLabel =
+				optionElement.textContent?.trim() || optionElement.value;
+			const optionKey = this.toUpperCaseFirstLetter(optionElement.value);
+			const normalizedBasePath = this.iconBasePath.replace(/\/$/, "");
+			const iconSrc =
+				optionElement.dataset.icon ||
+				(normalizedBasePath ? `${normalizedBasePath}/${optionKey}.png` : "");
 
-			socialImage.src =
-				"/SomeProot/Assets/Images/Socials/" + socialName + ".png";
-			socialImage.alt = socialName;
+			if (iconSrc) {
+				const icon = document.createElement("img");
+				icon.src = iconSrc;
+				icon.alt = optionLabel;
+				item.appendChild(icon);
+			} else {
+				item.textContent = optionLabel;
+			}
 
-			socialItem.addEventListener("click", () => {
-				if (socialItem.classList.contains("social__item--selected")) {
-					this._deselect(socialItem);
+			item.addEventListener("click", () => {
+				if (
+					this.allowDeselect &&
+					item.classList.contains(this.itemSelectedClassName)
+				) {
+					this._deselect(item);
 				} else {
-					this._select(socialItem);
+					this._select(item);
 				}
 			});
 
-			socialItem.addEventListener("keydown", (event) => {
+			item.addEventListener("keydown", (event) => {
 				if (event.key !== "Enter" && event.key !== " ") {
 					return;
 				}
 				event.preventDefault();
-				if (socialItem.classList.contains("social__item--selected")) {
-					this._deselect(socialItem);
+				if (
+					this.allowDeselect &&
+					item.classList.contains(this.itemSelectedClassName)
+				) {
+					this._deselect(item);
 				} else {
-					this._select(socialItem);
+					this._select(item);
 				}
 			});
 
-			socialItem.appendChild(socialImage);
-			this.customSelect.appendChild(socialItem);
+			this.customSelect.appendChild(item);
 		});
 
 		this.customSelect.appendChild(this.activeBackground);
@@ -466,8 +491,9 @@ class SocialSelect {
 			const selectedIndex = Array.from(
 				this.originalSelect.querySelectorAll("option"),
 			).indexOf(selectedOption);
-			const selectedItem =
-				this.customSelect.querySelectorAll(".social__item")[selectedIndex];
+			const selectedItem = this.customSelect.querySelectorAll(
+				`.${this.itemClassName}`,
+			)[selectedIndex];
 			if (selectedItem) {
 				this.positionActiveBackground(selectedItem, false);
 			}
@@ -475,14 +501,16 @@ class SocialSelect {
 	}
 
 	_select(itemElement) {
-		this.customSelect.querySelectorAll(".social__item").forEach((item) => {
-			if (item !== itemElement) {
-				this._deselect(item, false);
-			}
-		});
+		this.customSelect
+			.querySelectorAll(`.${this.itemClassName}`)
+			.forEach((item) => {
+				if (item !== itemElement) {
+					this._deselect(item, false);
+				}
+			});
 
 		const index = Array.from(
-			this.customSelect.querySelectorAll(".social__item"),
+			this.customSelect.querySelectorAll(`.${this.itemClassName}`),
 		).indexOf(itemElement);
 		this.originalSelect.querySelectorAll("option")[index].selected = true;
 
@@ -491,7 +519,7 @@ class SocialSelect {
 
 	_deselect(itemElement, shouldUpdate = true) {
 		const index = Array.from(
-			this.customSelect.querySelectorAll(".social__item"),
+			this.customSelect.querySelectorAll(`.${this.itemClassName}`),
 		).indexOf(itemElement);
 		this.originalSelect.querySelectorAll("option")[index].selected = false;
 		if (shouldUpdate) {
@@ -514,7 +542,7 @@ class SocialSelect {
 		this.activeBackground.style.height = `${itemRect.height}px`;
 		this.activeBackground.style.transform = transformValue;
 		this.activeBackground.style.setProperty(
-			"--social-active-transform",
+			"--picker-active-transform",
 			transformValue,
 		);
 
@@ -525,14 +553,16 @@ class SocialSelect {
 	}
 
 	hideActiveBackgroundWithAnimation() {
-		this.activeBackground.classList.remove("social__active-bg--select-first");
-		this.activeBackground.classList.add("social__active-bg--deselect");
+		this.activeBackground.classList.remove(
+			this.activeBackgroundSelectClassName,
+		);
+		this.activeBackground.classList.add(this.activeBackgroundDeselectClassName);
 		this.activeBackground.addEventListener(
 			"animationend",
 			() => {
 				this.activeBackground.classList.remove(
-					"social__active-bg--deselect",
-					"social__active-bg--visible",
+					this.activeBackgroundDeselectClassName,
+					this.activeBackgroundVisibleClassName,
 				);
 			},
 			{ once: true },
@@ -542,50 +572,60 @@ class SocialSelect {
 	updateSelectedOptions(action = "sync") {
 		const previousSelectedItem = this.currentSelectedItem;
 		this.customSelect
-			.querySelectorAll(".social__item")
+			.querySelectorAll(`.${this.itemClassName}`)
 			.forEach((item, index) => {
 				const option = this.originalSelect.querySelectorAll("option")[index];
 				if (option.selected) {
-					item.classList.add("social__item--selected");
+					item.classList.add(this.itemSelectedClassName);
 				} else {
-					item.classList.remove("social__item--selected");
+					item.classList.remove(this.itemSelectedClassName);
 				}
+				item.setAttribute("aria-pressed", String(option.selected));
 			});
 
-		const details = document.querySelector(".social__details");
+		const details = document.querySelector(this.detailsSelector);
 		const selectedOption = this.originalSelect.querySelector("option:checked");
 		let selectedItem = null;
 		if (selectedOption) {
 			const selectedIndex = Array.from(
 				this.originalSelect.querySelectorAll("option"),
 			).indexOf(selectedOption);
-			selectedItem =
-				this.customSelect.querySelectorAll(".social__item")[selectedIndex];
+			selectedItem = this.customSelect.querySelectorAll(
+				`.${this.itemClassName}`,
+			)[selectedIndex];
 
-			details.setAttribute(
-				"section",
-				this.toUpperCaseFirstLetter(selectedOption.value),
-			);
+			const sectionValue =
+				selectedOption.dataset.section ||
+				this.toUpperCaseFirstLetter(selectedOption.value);
+			if (details) {
+				details.setAttribute("section", sectionValue);
+			}
 			if (selectedItem) {
 				this.positionActiveBackground(selectedItem);
-				this.activeBackground.classList.remove("social__active-bg--deselect");
-				this.activeBackground.classList.add("social__active-bg--visible");
+				this.activeBackground.classList.remove(
+					this.activeBackgroundDeselectClassName,
+				);
+				this.activeBackground.classList.add(
+					this.activeBackgroundVisibleClassName,
+				);
 				if (action === "select" && !previousSelectedItem) {
 					this.activeBackground.classList.remove(
-						"social__active-bg--select-first",
+						this.activeBackgroundSelectClassName,
 					);
 					void this.activeBackground.offsetHeight;
 					this.activeBackground.classList.add(
-						"social__active-bg--select-first",
+						this.activeBackgroundSelectClassName,
 					);
 				} else {
 					this.activeBackground.classList.remove(
-						"social__active-bg--select-first",
+						this.activeBackgroundSelectClassName,
 					);
 				}
 			}
 		} else {
-			details.setAttribute("section", "None");
+			if (details) {
+				details.setAttribute("section", "None");
+			}
 			if (action === "deselect" && previousSelectedItem) {
 				this.hideActiveBackgroundWithAnimation();
 			}
@@ -601,14 +641,24 @@ class SocialSelect {
 	}
 }
 
-document.querySelectorAll(".social-select").forEach((selectElement) => {
-	new SocialSelect(selectElement);
-});
+document
+	.querySelectorAll(".custom-selector, .picker-select")
+	.forEach((selectElement) => {
+		new CustomSelector(selectElement);
+	});
+
+function getCardLayoutElements() {
+	const card = document.getElementById("contentCard");
+	if (!card) {
+		return { card: null, details: null, ghost: null };
+	}
+	const details = card.querySelector(".card__details");
+	const ghost = card.querySelector(".card__ghost");
+	return { card, details, ghost };
+}
 
 function updateCardHeight() {
-	const card = document.getElementById("socialCard");
-	const details = document.querySelector(".social__details");
-	const ghost = card ? card.querySelector(".social__ghost") : null;
+	const { card, details, ghost } = getCardLayoutElements();
 	if (card && details) {
 		const styles = window.getComputedStyle(card);
 		const paddingTop = parseFloat(styles.paddingTop) || 0;

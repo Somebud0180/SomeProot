@@ -6,9 +6,9 @@
     <meta name="description" content="A starter website template">
     <title>SomeProot</title>
     <link rel="stylesheet" href="/SomeProot/Assets/CSS/main_styles.css">
-    <link rel="stylesheet" href="/SomeProot/Assets/CSS/socials_styles.css">
+    <link rel="stylesheet" href="/SomeProot/Assets/CSS/gallery_styles.css">
 </head>
-<body data-page="Socials">
+<body data-page="Gallery">
     <header>
         <nav>
             <h1>SomeProot</h1>
@@ -24,20 +24,17 @@
 
     <main>
         <section class="page">
-            <div section="Social" class="picker">
+            <h1 class="title">Gallery!</h1>
+            <p class="description">A collection of my photos and artworks!</p>
+            <div class="gallery">
+                <!-- Bar-style Picker: Artwork, Photos -->
                 <form action="">
-                    <select name="social-media" class="custom-selector" data-icon-base-path="/SomeProot/Assets/Images/Socials" data-details-selector=".card__details" multiple>
-                        <option value="slack">Slack</option>
-                        <option value="github">GitHub</option>
-                        <option value="instagram">Instagram</option>
-                        <option value="twitter">Twitter</option>
+                    <select name="gallery-category" class="picker-select">
+                        <option value="photos">Photos</option>
+                        <option value="artwork">Artworks</option>
                     </select>
                 </form>
-            </div>
 
-            <div class="card" id="contentCard">
-                <div class="card__details" section="None"></div>
-                <div class="card__ghost" aria-hidden="true"></div>
             </div>
         </section>
     </main>
@@ -52,3 +49,4 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/SomeProot/Assets/JS/script.js"></script>
 </body>
+</html>

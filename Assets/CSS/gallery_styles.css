@@ -1,0 +1,225 @@
+:root {
+	--picker-border-radius: 2rem;
+	--picker-padding: 0.75rem;
+	--picker-item-padding: 0.5rem;
+	--picker-item-active-bg: rgba(255, 255, 255, 0.09);
+	--picker-item-active-border: rgba(255, 255, 255, 0.16);
+	--card-bg: linear-gradient(
+		180deg,
+		rgba(64, 60, 78, 0.95),
+		rgba(40, 38, 52, 0.95)
+	);
+	--card-border: rgba(255, 255, 255, 0.08);
+	--card-shadow: rgba(0, 0, 0, 0.25);
+	--button-bg: #f2d36b;
+	--button-text: #1a1a1a;
+	--muted: #cfcfd6;
+}
+
+.page {
+	padding: 2.5rem 1.5rem 4rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.title {
+	font-size: clamp(2rem, 4vw, 3rem);
+	letter-spacing: 1px;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 1.5rem;
+}
+
+.card {
+	background: var(--card-bg);
+	border: 1px solid var(--card-border);
+	border-radius: 18px;
+	overflow: hidden;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 12px 24px var(--card-shadow);
+	animation: project-rise 0.6s ease both;
+}
+
+.card:nth-child(2) {
+	animation-delay: 0.08s;
+}
+
+.card:nth-child(3) {
+	animation-delay: 0.16s;
+}
+
+.card:nth-child(4) {
+	animation-delay: 0.24s;
+}
+
+.card__image {
+	width: 100%;
+	height: auto;
+	max-height: 240px;
+	object-fit: cover;
+	display: block;
+	border-bottom: 1px solid var(--card-border);
+}
+
+.card__content {
+	padding: 1rem 1.2rem 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	flex: 1;
+}
+
+.card__name {
+	font-size: 1.3rem;
+}
+
+.card__description {
+	color: var(--muted);
+	font-size: 0.98rem;
+}
+
+.card__button {
+	margin-top: auto;
+	display: block;
+	width: 100%;
+	padding: 0.85rem 1rem;
+	background: var(--button-bg);
+	color: var(--button-text);
+	text-decoration: none;
+	font-weight: 700;
+	border-radius: 12px;
+	text-align: left;
+	transition:
+		transform 0.2s ease,
+		filter 0.2s ease;
+}
+
+.card__button:hover {
+	transform: translateY(-2px);
+	filter: brightness(1.02);
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: var(--picker-padding);
+	background-color: #1a1a1a;
+	border-radius: var(--picker-border-radius);
+}
+
+select {
+	position: absolute;
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
+	height: 0;
+	width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	overflow: hidden;
+}
+
+.picker__content {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+	gap: 2rem;
+	position: relative;
+	isolation: isolate;
+}
+
+.picker__item {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: var(--picker-item-padding);
+	gap: 0.5rem;
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
+}
+
+.picker__active-bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-radius: calc(var(--picker-border-radius) - var(--picker-padding));
+	background: var(--picker-item-active-bg);
+	border: 1px solid var(--picker-item-active-border);
+	opacity: 0;
+	pointer-events: none;
+	transform: translate3d(0, 0, 0) scale(1);
+	transition:
+		transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+		width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+		height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+		opacity 0.2s ease;
+	z-index: 0;
+}
+
+.picker__active-bg--visible {
+	opacity: 1;
+}
+
+.picker__active-bg--select-first {
+	animation: picker-select-first 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.picker__active-bg--deselect {
+	animation: picker-deselect-pop 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes picker-deselect-pop {
+	0% {
+		opacity: 1;
+		transform: var(--picker-active-transform, translate3d(0, 0, 0)) scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: var(--picker-active-transform, translate3d(0, 0, 0)) scale(0);
+	}
+}
+
+@keyframes picker-select-first {
+	0% {
+		opacity: 0;
+		transform: var(--picker-active-transform, translate3d(0, 0, 0)) scale(0);
+	}
+	100% {
+		opacity: 1;
+		transform: var(--picker-active-transform, translate3d(0, 0, 0)) scale(1);
+	}
+}
+
+@keyframes project-rise {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (max-width: 580px) {
+	.page {
+		padding: 2rem 1.25rem 3rem;
+	}
+
+	.card__image {
+		min-height: 240px;
+		max-height: none;
+	}
+}
