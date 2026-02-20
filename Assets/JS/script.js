@@ -427,31 +427,42 @@ class SocialSelect {
 
 			socialImage.src =
 				"/SomeProot/Assets/Images/Socials/" + socialName + ".png";
-		socialImage.alt = socialName;
+			socialImage.alt = socialName;
 
-		socialItem.addEventListener("click", () => {
-			if (socialItem.classList.contains("social__item--selected")) {
-				this._deselect(socialItem);
-			} else {
-				this._select(socialItem);
-			}
+			socialItem.addEventListener("click", () => {
+				if (socialItem.classList.contains("social__item--selected")) {
+					this._deselect(socialItem);
+				} else {
+					this._select(socialItem);
+				}
+			});
+
+			socialItem.addEventListener("keydown", (event) => {
+				if (event.key !== "Enter" && event.key !== " ") {
+					return;
+				}
+				event.preventDefault();
+				if (socialItem.classList.contains("social__item--selected")) {
+					this._deselect(socialItem);
+				} else {
+					this._select(socialItem);
+				}
+			});
+
+			socialItem.appendChild(socialImage);
+			this.customSelect.appendChild(socialItem);
 		});
 
-		socialItem.addEventListener("keydown", (event) => {
-			if (event.key !== "Enter" && event.key !== " ") {
+		this.customSelect.appendChild(this.activeBackground);
+
+		this.originalSelect.insertAdjacentElement("afterend", this.customSelect);
+		this.updateSelectedOptions("sync");
+		window.addEventListener("resize", () => {
+			const selectedOption =
+				this.originalSelect.querySelector("option:checked");
+			if (!selectedOption) {
 				return;
 			}
-			event.preventDefault();
-			if (socialItem.classList.contains("social__item--selected")) {
-				this._deselect(socialItem);
-			} else {
-				this._select(socialItem);
-			}
-		});
-
-		socialItem.appendChild(socialImage);
-		this.customSelect.appendChild(socialItem);
-	});
 			const selectedIndex = Array.from(
 				this.originalSelect.querySelectorAll("option"),
 			).indexOf(selectedOption);
