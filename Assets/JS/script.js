@@ -425,40 +425,33 @@ class SocialSelect {
 			const socialName = this.toUpperCaseFirstLetter(optionElement.value);
 			const socialImage = document.createElement("img");
 
-		socialImage.src = "/SomeProot/Assets/Images/Socials/" + socialName + ".png";
-				if (socialItem.classList.contains("social__item--selected")) {
-					this._deselect(socialItem);
-				} else {
-					this._select(socialItem);
-				}
-			});
+			socialImage.src =
+				"/SomeProot/Assets/Images/Socials/" + socialName + ".png";
+		socialImage.alt = socialName;
 
-			socialItem.addEventListener("keydown", (event) => {
-				if (event.key !== "Enter" && event.key !== " ") {
-					return;
-				}
-				event.preventDefault();
-				if (socialItem.classList.contains("social__item--selected")) {
-					this._deselect(socialItem);
-				} else {
-					this._select(socialItem);
-				}
-			});
-
-			socialItem.appendChild(socialImage);
-			this.customSelect.appendChild(socialItem);
+		socialItem.addEventListener("click", () => {
+			if (socialItem.classList.contains("social__item--selected")) {
+				this._deselect(socialItem);
+			} else {
+				this._select(socialItem);
+			}
 		});
 
-		this.customSelect.appendChild(this.activeBackground);
-
-		this.originalSelect.insertAdjacentElement("afterend", this.customSelect);
-		this.updateSelectedOptions("sync");
-		window.addEventListener("resize", () => {
-			const selectedOption =
-				this.originalSelect.querySelector("option:checked");
-			if (!selectedOption) {
+		socialItem.addEventListener("keydown", (event) => {
+			if (event.key !== "Enter" && event.key !== " ") {
 				return;
 			}
+			event.preventDefault();
+			if (socialItem.classList.contains("social__item--selected")) {
+				this._deselect(socialItem);
+			} else {
+				this._select(socialItem);
+			}
+		});
+
+		socialItem.appendChild(socialImage);
+		this.customSelect.appendChild(socialItem);
+	});
 			const selectedIndex = Array.from(
 				this.originalSelect.querySelectorAll("option"),
 			).indexOf(selectedOption);
@@ -477,14 +470,18 @@ class SocialSelect {
 			}
 		});
 
-		const index = Array.from(this.customSelect.children).indexOf(itemElement);
+		const index = Array.from(
+			this.customSelect.querySelectorAll(".social__item"),
+		).indexOf(itemElement);
 		this.originalSelect.querySelectorAll("option")[index].selected = true;
 
 		this.updateSelectedOptions("select");
 	}
 
 	_deselect(itemElement, shouldUpdate = true) {
-		const index = Array.from(this.customSelect.children).indexOf(itemElement);
+		const index = Array.from(
+			this.customSelect.querySelectorAll(".social__item"),
+		).indexOf(itemElement);
 		this.originalSelect.querySelectorAll("option")[index].selected = false;
 		if (shouldUpdate) {
 			this.updateSelectedOptions("deselect");

@@ -8,7 +8,7 @@
 
 <!-- Section: Slack -->
 
-<img src="Assets/Images/Socials/Fallback_Profile.png" alt="Slack Profile Picture" class="social__profile"/>
+<img src="/SomeProot/Assets/Images/Socials/Fallback_Profile.png" alt="Slack Profile Picture" class="social__profile"/>
 
 #### @Somebud
 
@@ -31,9 +31,9 @@ I upload my repos here! You can view the random stuff I make here I guess.
 <!-- Section: Instagram -->
 
 <div class="social__instagram">
-    <img src="Assets/Images/Socials/Fallback_Profile.png" alt="Instagram Profile Picture" class="social__profile"/>
+    <img src="/SomeProot/Assets/Images/Socials/Fallback_Profile.png" alt="Instagram Profile Picture" class="social__profile"/>
     <div>
-        <h3> somebud0180 </h4>
+        <h3> somebud0180 </h3>
         <h4 class="social__instagram--username"> Somebud </h4>
     </div>
 </div>
