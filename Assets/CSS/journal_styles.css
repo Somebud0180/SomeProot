@@ -173,7 +173,7 @@ hr {
 	background-color: #ccc;
 }
 
-@media (max-width: 720px) {
+@media (max-aspect-ratio: 3/4) {
 	.journal__page {
 		padding: calc(1.5rem + var(--line-offset)) 1.5rem 1.5rem;
 		border-radius: 2rem;

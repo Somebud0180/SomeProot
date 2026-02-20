@@ -174,7 +174,7 @@ body[data-page="JournalViewer"] {
 	font-weight: bold;
 }
 
-@media (max-width: 720px) {
+@media (max-aspect-ratio: 3/4) {
 	.reader-bar {
 		margin: 0 1rem;
 		padding: 0.6rem 1rem;
