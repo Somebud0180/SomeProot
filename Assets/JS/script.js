@@ -127,12 +127,11 @@ const blushLeft = document.querySelector(".blush--left");
 const blushRight = document.querySelector(".blush--right");
 const banner = document.querySelector(".banner");
 const heroArea = document.querySelector(".hero");
+const currentPage = document.body?.getAttribute("data-page") || "";
+const is404Page = currentPage === "404";
 
 const faceMotionConfig = {
-	maxMoveX: 160, // Max horizontal movement in pixels
-	maxMoveXTall: 110, // Max horizontal movement for tall screens
-	maxMoveY: 320, // Max vertical movement in pixels
-	maxMoveYTall: 320, // Max vertical movement for tall screens
+	containerPadding: 12, // Keep face away from container edge
 	faceEase: 0.045, // Easing factor for face movement (higher = snappier)
 	eyeEase: 0.07, // Easing factor for eye movement (higher = snappier)
 	mouthEase: 0.01, // Easing factor for mouth movement (higher = snappier)
@@ -140,10 +139,19 @@ const faceMotionConfig = {
 	eyeParallaxY: 0.12, // Separate parallax factor for vertical eye movement
 	mouthParallax: 0.25, // Parallax factor for mouth movement (higher = more movement)
 	mouthParallaxY: 0.14, // Separate parallax factor for vertical mouth movement
+	blushParallax: 0.18, // Parallax factor for blush horizontal movement
+	blushEase: 0.06, // Easing factor for blush horizontal movement
+	blushCenterOffsetX: 0, // Horizontal blush center correction
 	cursorBiasX: 0, // Horizontal bias to offset cursor influence
 	cursorBiasY: 0.05, // Vertical bias to offset cursor influence
 	touchBiasY: 0.2, // Vertical bias for touch input
 };
+
+if (is404Page) {
+	faceMotionConfig.cursorBiasY = -0.3;
+	faceMotionConfig.touchBiasY = -0.06;
+	faceMotionConfig.blushCenterOffsetX = -64;
+}
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -156,31 +164,52 @@ const faceMotionState = {
 	currentEyeY: 0,
 	currentMouthX: 0,
 	currentMouthY: 0,
-	maxMoveX: faceMotionConfig.maxMoveX,
-	maxMoveY: faceMotionConfig.maxMoveY,
-	isTall: false,
+	targetBlushX: 0,
+	currentBlushX: 0,
+	minMoveX: 0,
+	maxMoveX: 0,
+	maxMoveY: 0,
+	centerOffsetX: 0,
 };
 
 const updateFaceBounds = () => {
-	const { innerWidth, innerHeight } = window;
-	const aspectRatio = innerWidth / innerHeight;
-	faceMotionState.isTall = aspectRatio < 0.8;
-	faceMotionState.maxMoveX = faceMotionState.isTall
-		? faceMotionConfig.maxMoveXTall
-		: faceMotionConfig.maxMoveX;
-	const aspectMaxMoveY = faceMotionState.isTall
-		? faceMotionConfig.maxMoveYTall
-		: faceMotionConfig.maxMoveY;
-	let containerMaxMoveY = aspectMaxMoveY;
-	if (banner && face) {
-		const bannerHeight =
-			banner.clientHeight || banner.getBoundingClientRect().height;
-		const faceHeight = face.offsetHeight || face.getBoundingClientRect().height;
-		const margin = 12;
-		const available = (bannerHeight - faceHeight) / 2 - margin;
-		containerMaxMoveY = Math.max(0, available);
+	const container = banner || heroArea;
+	if (!container || !face) {
+		faceMotionState.minMoveX = 0;
+		faceMotionState.maxMoveX = 0;
+		faceMotionState.maxMoveY = 0;
+		faceMotionState.centerOffsetX = 0;
+		return;
 	}
-	faceMotionState.maxMoveY = Math.min(aspectMaxMoveY, containerMaxMoveY);
+
+	updateBlushAlignment();
+
+	const containerRect = container.getBoundingClientRect();
+	const faceRect = face.getBoundingClientRect();
+	const leftBlushRect = blushLeft?.getBoundingClientRect();
+	const rightBlushRect = blushRight?.getBoundingClientRect();
+	const margin = faceMotionConfig.containerPadding;
+
+	const contentLeft = Math.min(
+		faceRect.left,
+		leftBlushRect?.left ?? faceRect.left,
+	);
+	const contentRight = Math.max(
+		faceRect.right,
+		rightBlushRect?.right ?? faceRect.right,
+	);
+	const contentCenterX = (contentLeft + contentRight) / 2;
+	const containerCenterX = containerRect.left + containerRect.width / 2;
+	const availableLeft = contentLeft - containerRect.left - margin;
+	const availableRight = containerRect.right - contentRight - margin;
+
+	faceMotionState.minMoveX = -Math.max(0, availableLeft);
+	faceMotionState.maxMoveX = Math.max(0, availableRight);
+	faceMotionState.centerOffsetX = contentCenterX - containerCenterX;
+
+	const availableY =
+		(containerRect.height - faceRect.height * 1.5) / 2 - margin;
+	faceMotionState.maxMoveY = Math.max(0, availableY);
 };
 
 const updateFaceTargets = (clientX, clientY, isTouch = false) => {
@@ -188,7 +217,7 @@ const updateFaceTargets = (clientX, clientY, isTouch = false) => {
 	let boundsHeight = window.innerHeight;
 	let originX = 0;
 	let originY = 0;
-	if (heroArea) {
+	if (heroArea && !is404Page) {
 		const rect = heroArea.getBoundingClientRect();
 		boundsWidth = rect.width || boundsWidth;
 		boundsHeight = rect.height || boundsHeight;
@@ -204,18 +233,47 @@ const updateFaceTargets = (clientX, clientY, isTouch = false) => {
 	const yRatio = clamp(rawYRatio + yBias, -1, 1);
 	const baseMoveX = boundsWidth * 0.5;
 	const baseMoveY = boundsHeight * 0.5;
+	const yResponseScale = is404Page ? 0.65 : 1;
+	const desiredMoveX = xRatio * baseMoveX - faceMotionState.centerOffsetX;
 	const moveX = clamp(
-		xRatio * baseMoveX,
-		-faceMotionState.maxMoveX,
+		desiredMoveX,
+		faceMotionState.minMoveX,
 		faceMotionState.maxMoveX,
 	);
 	const moveY = clamp(
-		yRatio * baseMoveY,
+		yRatio * baseMoveY * yResponseScale,
 		-faceMotionState.maxMoveY,
 		faceMotionState.maxMoveY,
 	);
 	faceMotionState.targetX = moveX;
 	faceMotionState.targetY = moveY;
+	faceMotionState.targetBlushX = desiredMoveX * faceMotionConfig.blushParallax;
+};
+
+const updateBlushAlignment = () => {
+	if (!face || !leftEye || !rightEye || !blushLeft || !blushRight) {
+		return;
+	}
+
+	const faceRect = face.getBoundingClientRect();
+	const leftEyeRect = leftEye.getBoundingClientRect();
+	const rightEyeRect = rightEye.getBoundingClientRect();
+
+	const leftEyeCenterX = leftEyeRect.left + leftEyeRect.width / 2;
+	const rightEyeCenterX = rightEyeRect.left + rightEyeRect.width / 2;
+	const horizontalCenter =
+		faceRect.left + faceRect.width / 2 + faceMotionConfig.blushCenterOffsetX;
+	const halfSpacing = Math.abs(rightEyeCenterX - leftEyeCenterX) / 2;
+
+	const leftBlushX = horizontalCenter - halfSpacing - faceRect.left;
+	const rightBlushX = horizontalCenter + halfSpacing - faceRect.left;
+
+	blushLeft.style.left = `${leftBlushX}px`;
+	blushRight.style.left = `${rightBlushX}px`;
+	blushLeft.style.right = "auto";
+	blushRight.style.right = "auto";
+	blushLeft.style.transform = `translate(${faceMotionState.currentBlushX - 64}px, 64px)`;
+	blushRight.style.transform = `translate(${faceMotionState.currentBlushX + 64}px, 64px)`;
 };
 
 const animateFaceMotion = () => {
@@ -241,11 +299,15 @@ const animateFaceMotion = () => {
 		(mouthTargetX - faceMotionState.currentMouthX) * faceMotionConfig.mouthEase;
 	faceMotionState.currentMouthY +=
 		(mouthTargetY - faceMotionState.currentMouthY) * faceMotionConfig.mouthEase;
+	faceMotionState.currentBlushX +=
+		(faceMotionState.targetBlushX - faceMotionState.currentBlushX) *
+		faceMotionConfig.blushEase;
 
 	face.style.transform = `translate(${faceMotionState.currentX}px, ${faceMotionState.currentY}px)`;
 	leftEye.style.transform = `translate(${faceMotionState.currentEyeX}px, ${faceMotionState.currentEyeY}px)`;
 	rightEye.style.transform = `translate(${faceMotionState.currentEyeX}px, ${faceMotionState.currentEyeY}px)`;
 	mouth.style.transform = `translate(${faceMotionState.currentMouthX}px, ${faceMotionState.currentMouthY}px)`;
+	updateBlushAlignment();
 
 	requestAnimationFrame(animateFaceMotion);
 };
@@ -253,7 +315,7 @@ const animateFaceMotion = () => {
 updateFaceBounds();
 requestAnimationFrame(animateFaceMotion);
 
-const motionTarget = heroArea || document;
+const motionTarget = is404Page ? document : heroArea || document;
 const getClientPoint = (event) => {
 	const isTouch =
 		event.type.startsWith("touch") || event.pointerType === "touch";
@@ -282,6 +344,7 @@ motionTarget.addEventListener("touchmove", handlePointerMove, {
 motionTarget.addEventListener("mouseleave", () => {
 	faceMotionState.targetX = 0;
 	faceMotionState.targetY = 0;
+	faceMotionState.targetBlushX = 0;
 	// Hide blush on mouse leave
 	if (blushLeft) blushLeft.classList.remove("visible");
 	if (blushRight) blushRight.classList.remove("visible");
@@ -291,21 +354,25 @@ motionTarget.addEventListener("mouseleave", () => {
 const handlePointerDown = (e) => {
 	if (!banner) return;
 	const point = getClientPoint(e);
-	if (point) {
-		updateFaceTargets(point.x, point.y, point.isTouch);
-	}
+	if (!point) return;
 
-	const bannerRect = banner.getBoundingClientRect();
-	const bannerCenterX = bannerRect.left + bannerRect.width / 2;
-	const bannerCenterY = bannerRect.top + bannerRect.height / 2;
+	updateFaceTargets(point.x, point.y, point.isTouch);
 
-	// Calculate distance from pointer to banner center
-	const distX = e.clientX - bannerCenterX;
-	const distY = e.clientY - bannerCenterY;
+	if (!face) return;
+
+	const faceRect = face.getBoundingClientRect();
+	const faceCenterX = faceRect.left + faceRect.width / 2;
+	const faceCenterY = faceRect.top + faceRect.height / 2;
+
+	// Calculate distance from pointer to face center
+	const distX = point.x - faceCenterX;
+	const distY = point.y - faceCenterY;
 	const distance = Math.sqrt(distX * distX + distY * distY);
 
-	// Show blush if pointer is within 200px of center (face center)
-	const threshold = 200;
+	const threshold = Math.max(
+		140,
+		Math.min(faceRect.width, faceRect.height) * 0.7,
+	);
 	if (distance < threshold) {
 		if (blushLeft) blushLeft.classList.add("visible");
 		if (blushRight) blushRight.classList.add("visible");

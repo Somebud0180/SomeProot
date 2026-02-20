@@ -14,12 +14,15 @@
   - A few writeups I made, will be added upon!
 - A socials tab!
   - My socials!
+- A catch-all error page!
+  - Shows a friendly 404 fallback for invalid routes
 
 Repository Structure:
 ```
 SomeProot/
 ├── README.md
 ├── LICENSE
+├── 404.html
 ├── index.html
 ├── journal_viewer.html
 ├── journal.html
