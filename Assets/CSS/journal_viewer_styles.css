@@ -5,12 +5,11 @@ body[data-page="JournalViewer"] {
 .journal-viewer {
 	width: 100%;
 	color: #333;
-	gap: 1rem;
 	z-index: 0;
 }
 
 .reader-bar {
-	position: sticky;
+	margin: 0 -2rem;
 	position: sticky;
 	top: var(--reader-bar-top, 8px);
 	display: flex;
@@ -91,7 +90,7 @@ body[data-page="JournalViewer"] {
 }
 
 .journal-viewer__content {
-	margin: 0 2rem;
+	margin-top: 1rem;
 	--line-height: 28px;
 	--line-offset: 8px;
 	overflow-x: hidden;
@@ -110,7 +109,8 @@ body[data-page="JournalViewer"] {
 		);
 	background-position: 0 var(--line-offset);
 	border-radius: 2.5rem;
-	padding: calc(2.5rem + var(--line-offset)) 2.5rem 2.5rem;
+	padding: calc(2.5rem + var(--line-offset)) 3rem 1.5rem;
+	line-height: var(--line-height);
 	box-shadow: 0 22px 40px rgba(11, 10, 20, 0.35);
 }
 
@@ -121,9 +121,9 @@ body[data-page="JournalViewer"] {
 }
 
 .journal-viewer__header h1 {
-	font-size: clamp(2rem, 3.5vw, 2.8rem);
+	font-size: 2.5rem;
 	line-height: calc(var(--line-height) * 2);
-	margin: 2px 0 6px 0;
+	margin: 4px 0 4px 0;
 }
 
 .journal-viewer__header p {
@@ -149,6 +149,7 @@ body[data-page="JournalViewer"] {
 .journal-viewer__body h2,
 .journal-viewer__body h3,
 .journal-viewer__body h4 {
+	scroll-margin-top: 4rem;
 	padding: 10px 0 0 0;
 	margin-bottom: -10px;
 	margin-top: calc(var(--line-height) * 2);
@@ -174,17 +175,13 @@ body[data-page="JournalViewer"] {
 }
 
 @media (max-width: 720px) {
-	.journal-viewer {
-		padding: 1.5rem 1.25rem 3rem;
-	}
-
 	.reader-bar {
-		margin: 0 -1.25rem 1.25rem;
-		padding: 0.6rem 1.1rem;
+		margin: 0 1rem;
+		padding: 0.6rem 1rem;
 	}
 
 	.journal-viewer__content {
-		padding: calc(1.5rem + var(--line-offset)) 1.5rem 1.5rem;
+		padding: calc(2.5rem + var(--line-offset)) 1.5rem 1.5rem;
 		border-radius: 2rem;
 	}
 }
