@@ -302,8 +302,8 @@ section {
 	margin-bottom: 1rem;
 }
 
-	display: flex;
-	align-items: center;
+display: flex;
+align-items: center;
 .content p {
 	font-size: 1.1rem;
 	margin-bottom: 1.5rem;
@@ -314,6 +314,7 @@ section {
 	text-decoration: underline;
 }
 
+body[data-page="404"] main {
 	flex-wrap: nowrap;
 	max-width: none;
 	padding: 0;
