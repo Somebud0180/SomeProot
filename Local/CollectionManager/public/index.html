@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collection Manager</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="panel left">
+        <h1>Collection Manager</h1>
+        <div class="controls">
+          <label for="rootSelect">Category</label>
+          <select id="rootSelect"></select>
+        </div>
+
+        <div class="controls create-row">
+          <input id="newCollectionName" type="text" placeholder="New collection name" />
+          <button id="createCollectionButton" type="button">Create</button>
+        </div>
+
+        <ul id="collectionList" class="collection-list"></ul>
+      </section>
+
+      <section class="panel right">
+        <header class="collection-header">
+          <h2 id="collectionTitle">Select a collection</h2>
+          <button id="saveButton" type="button" disabled>Save</button>
+        </header>
+
+        <p class="help-text">Arrange with up/down. Rename titles and save to rewrite files as <strong>1 - Name.ext</strong>.</p>
+        <ul id="itemList" class="item-list"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

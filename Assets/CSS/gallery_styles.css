@@ -270,6 +270,30 @@ select {
 	display: block;
 }
 
+.gallery-media {
+	width: 100%;
+	display: block;
+}
+
+.gallery-image {
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+}
+
+.gallery-video {
+	aspect-ratio: 16 / 9;
+	background: #000;
+}
+
+.gallery-item--video .gallery-video {
+	width: 100%;
+	height: auto;
+}
+
+.gallery-item--video .gallery-video::cue {
+	background: rgba(0, 0, 0, 0.8);
+}
+
 .gallery-caption-wrap {
 	padding: 0.8rem 0.9rem 1rem;
 	display: flex;

@@ -31,6 +31,8 @@ const IMAGE_EXTENSIONS = new Set([
 	".jpg",
 	".jpeg",
 	".png",
+	".heic",
+	".heif",
 	".webp",
 	".gif",
 	".avif",
@@ -39,16 +41,51 @@ const IMAGE_EXTENSIONS = new Set([
 	".tiff",
 ]);
 
+const VIDEO_EXTENSIONS = new Set([
+	".mp4",
+	".webm",
+	".mov",
+	".avi",
+	".mkv",
+	".flv",
+	".m4v",
+]);
+
+const SUPPORTED_EXTENSIONS = new Set([
+	...IMAGE_EXTENSIONS,
+	...VIDEO_EXTENSIONS,
+]);
+
 const MIME_BY_EXT = {
 	".jpg": "image/jpeg",
 	".jpeg": "image/jpeg",
 	".png": "image/png",
+	".heic": "image/heic",
+	".heif": "image/heif",
 	".webp": "image/webp",
 	".gif": "image/gif",
 	".avif": "image/avif",
 	".bmp": "image/bmp",
 	".tif": "image/tiff",
 	".tiff": "image/tiff",
+	".mp4": "video/mp4",
+	".webm": "video/webm",
+	".mov": "video/quicktime",
+	".avi": "video/x-msvideo",
+	".mkv": "video/x-matroska",
+	".flv": "video/x-flv",
+	".m4v": "video/x-m4v",
+};
+
+const getMediaType = (filePath) => {
+	const ext = path.extname(filePath).toLowerCase();
+	if (IMAGE_EXTENSIONS.has(ext)) {
+		return "image";
+	}
+	if (VIDEO_EXTENSIONS.has(ext)) {
+		return "video";
+	}
+	return null;
 };
 
 const toPosixPath = (value) => value.split(path.sep).join("/");
@@ -137,7 +174,7 @@ async function walkFilesRecursively(dirPath) {
 			continue;
 		}
 		const ext = path.extname(entry.name).toLowerCase();
-		if (IMAGE_EXTENSIONS.has(ext)) {
+		if (SUPPORTED_EXTENSIONS.has(ext)) {
 			output.push(absolutePath);
 		}
 	}
@@ -301,6 +338,11 @@ async function main() {
 				const relativeFromRoot = toPosixPath(
 					path.relative(REPO_ROOT, imagePath),
 				);
+				const mediaType = getMediaType(imagePath);
+				if (!mediaType) {
+					continue;
+				}
+
 				const { hash, buffer } = await sha256OfFile(imagePath);
 				const existingInCollection = findCollectionItemByLocalPath(
 					collection,
@@ -357,6 +399,7 @@ async function main() {
 					caption: existingInCollection?.caption || "",
 					url: resolvedUpload.url,
 					alt: existingInCollection?.alt || title,
+					type: mediaType,
 					source: {
 						localPath: relativeFromRoot,
 						sha256: hash,

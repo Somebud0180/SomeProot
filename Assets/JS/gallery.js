@@ -39,6 +39,39 @@
 		return collection.items.filter((item) => Boolean(item?.url));
 	};
 
+	const createMediaElement = (item) => {
+		const itemType = item?.type || "image";
+
+		if (itemType === "video") {
+			const video = document.createElement("video");
+			video.className = "gallery-media gallery-video";
+			video.controls = true;
+			video.preload = "metadata";
+
+			const source = document.createElement("source");
+			source.src = item.url;
+			source.type = item.mimeType || "video/mp4";
+
+			video.appendChild(source);
+			const fallbackText = document.createTextNode(
+				"Your browser does not support the video tag.",
+			);
+			video.appendChild(fallbackText);
+
+			return video;
+		}
+
+		// Default to image
+		const img = document.createElement("img");
+		img.className = "gallery-media gallery-image";
+		img.src = item.url;
+		img.alt = item.alt || item.title || "Gallery media";
+		img.loading = "lazy";
+		img.decoding = "async";
+
+		return img;
+	};
+
 	const renderGrid = (collection, grid, descriptionNode) => {
 		clearNode(grid);
 		const items = safeCollectionItems(collection);
@@ -56,12 +89,11 @@
 		items.forEach((item) => {
 			const card = document.createElement("article");
 			card.className = "gallery-item";
+			if (item?.type === "video") {
+				card.classList.add("gallery-item--video");
+			}
 
-			const img = document.createElement("img");
-			img.src = item.url;
-			img.alt = item.alt || item.title || "Gallery image";
-			img.loading = "lazy";
-			img.decoding = "async";
+			const mediaElement = createMediaElement(item);
 
 			const captionWrap = document.createElement("div");
 			captionWrap.className = "gallery-caption-wrap";
@@ -75,7 +107,7 @@
 			caption.textContent = item.caption || "";
 
 			captionWrap.append(title, caption);
-			card.append(img, captionWrap);
+			card.append(mediaElement, captionWrap);
 			grid.appendChild(card);
 		});
 	};

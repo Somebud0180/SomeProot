@@ -136,3 +136,44 @@ What it does:
 - Stores local sync cache at `Local/.cache/cdn_upload_index.json`
 
 `Local/Gallery/*` and local cache are git-ignored so image sources stay local.
+
+## Local Collection Manager (rename + reorder)
+
+There is a local tool for creating/managing collection folders and renaming media files in-order.
+
+Location:
+
+```text
+Local/CollectionManager/
+  server.mjs
+  public/
+    index.html
+    app.js
+    styles.css
+```
+
+Run locally:
+
+```bash
+node Local/CollectionManager/server.mjs
+```
+
+Then open:
+
+```text
+http://localhost:4173
+```
+
+What it does:
+
+- Lets you switch between `Local/Gallery/Photos` and `Local/Gallery/Artworks`
+- Lets you create collection folders
+- Shows thumbnails/previews for collection contents
+- Lets you reorder and rename items
+- On **Save**, rewrites filenames in order as:
+
+```text
+1 - Name.ext
+2 - Another Name.ext
+...
+```
