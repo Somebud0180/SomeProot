@@ -97,9 +97,28 @@ const slugify = (value) =>
 		.replace(/[^a-z0-9]+/g, "-")
 		.replace(/^-+|-+$/g, "") || "untitled";
 
+const parseIndexedFileName = (filename) => {
+	const ext = path.extname(filename);
+	const stem = path.basename(filename, ext);
+	const match = stem.match(/^(\d+)\s*-\s*(.+)$/);
+	if (!match) {
+		return {
+			index: Number.POSITIVE_INFINITY,
+			titleStem: stem,
+			hasExplicitIndex: false,
+		};
+	}
+
+	return {
+		index: Number.parseInt(match[1], 10),
+		titleStem: match[2].trim(),
+		hasExplicitIndex: true,
+	};
+};
+
 const titleFromFileName = (filename) =>
-	path
-		.basename(filename, path.extname(filename))
+	parseIndexedFileName(filename)
+		.titleStem
 		.replace(/[_-]+/g, " ")
 		.replace(/\s+/g, " ")
 		.trim()
@@ -301,6 +320,24 @@ function findCollectionItemByLocalPath(collection, localPath) {
 	);
 }
 
+function sortLocalMediaPaths(paths) {
+	return [...paths].sort((leftPath, rightPath) => {
+		const leftFile = path.basename(leftPath);
+		const rightFile = path.basename(rightPath);
+		const leftParsed = parseIndexedFileName(leftFile);
+		const rightParsed = parseIndexedFileName(rightFile);
+
+		if (leftParsed.index !== rightParsed.index) {
+			return leftParsed.index - rightParsed.index;
+		}
+
+		return leftFile.localeCompare(rightFile, undefined, {
+			numeric: true,
+			sensitivity: "base",
+		});
+	});
+}
+
 async function main() {
 	const apiKey = process.env.CDN_API_KEY;
 	if (!apiKey) {
@@ -332,9 +369,21 @@ async function main() {
 
 		for (const collectionDir of collectionDirs) {
 			const collection = ensureCollection(category, collectionDir.name);
-			const imagePaths = await walkFilesRecursively(collectionDir.path);
+			const existingItems = ensureArray(collection.items);
+			const existingByLocalPath = new Map(
+				existingItems
+					.filter((item) => item?.source?.localPath)
+					.map((item) => [item.source.localPath, item]),
+			);
 
-			for (const imagePath of imagePaths) {
+			const imagePaths = sortLocalMediaPaths(
+				await walkFilesRecursively(collectionDir.path),
+			);
+			const nextItems = [];
+			const usedManifestIndexes = new Set();
+
+			for (let position = 0; position < imagePaths.length; position += 1) {
+				const imagePath = imagePaths[position];
 				const relativeFromRoot = toPosixPath(
 					path.relative(REPO_ROOT, imagePath),
 				);
@@ -344,10 +393,9 @@ async function main() {
 				}
 
 				const { hash, buffer } = await sha256OfFile(imagePath);
-				const existingInCollection = findCollectionItemByLocalPath(
-					collection,
-					relativeFromRoot,
-				);
+				const existingInCollection =
+					existingByLocalPath.get(relativeFromRoot) ||
+					findCollectionItemByLocalPath(collection, relativeFromRoot);
 
 				let resolvedUpload = null;
 
@@ -390,11 +438,20 @@ async function main() {
 					updatedAt: new Date().toISOString(),
 				};
 
-				const title = titleFromFileName(path.basename(imagePath));
+				const fileName = path.basename(imagePath);
+				const parsedName = parseIndexedFileName(fileName);
+				let manifestIndex =
+					parsedName.hasExplicitIndex && Number.isFinite(parsedName.index)
+						? parsedName.index
+						: position + 1;
+				while (usedManifestIndexes.has(manifestIndex)) {
+					manifestIndex += 1;
+				}
+				usedManifestIndexes.add(manifestIndex);
+
+				const title = titleFromFileName(fileName);
 				const itemPayload = {
-					id:
-						resolvedUpload.id ||
-						`${collection.id}-${slugify(path.basename(imagePath))}`,
+					id: `${collection.id}-${manifestIndex}`,
 					title,
 					caption: existingInCollection?.caption || "",
 					url: resolvedUpload.url,
@@ -406,13 +463,11 @@ async function main() {
 					},
 				};
 
-				if (existingInCollection) {
-					Object.assign(existingInCollection, itemPayload);
-				} else {
-					collection.items.push(itemPayload);
-				}
+				nextItems.push(itemPayload);
 				updatedItems += 1;
 			}
+
+			collection.items = nextItems;
 		}
 	}
 

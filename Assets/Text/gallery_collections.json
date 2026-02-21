@@ -7,7 +7,296 @@
           "id": "juice-2025",
           "name": "Juice 2025",
           "description": "Juice in Shanghai, April 2025.",
-          "items": []
+          "items": [
+            {
+              "id": "juice-2025-1",
+              "title": "Solo Travelling",
+              "caption": "First time travelling alone, whole row to myself!",
+              "url": "https://cdn.hackclub.com/019c803b-2f9e-7a1a-80c1-70da2650a09e/1%20-%20Solo%20Travelling.heic",
+              "alt": "A picture taken from the window seat, looking to the opposite side, showing an empty row of seats.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/1 - Solo Travelling.heic",
+                "sha256": "d51f369644f70a062ce5c1e8e09ec1b19e17c09efb5bcf6c7cd39e9334ccd775"
+              }
+            },
+            {
+              "id": "juice-2025-2",
+              "title": "Watching On The Plane",
+              "caption": "Doing silly stuff in the air, it's fine because I'm a minor travelling alone.",
+              "url": "https://cdn.hackclub.com/019c803b-6d67-7102-8587-068a4b5cf658/2%20-%20Watching%20On%20The%20Plane.heic",
+              "alt": "An iPad with a Minecraft video playing on it, placed on the tray table.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/2 - Watching On The Plane.heic",
+                "sha256": "120c12c7c84fd6d6bf585b663b936dbe765ddd964ad19a118c039c8a4ee3ef51"
+              }
+            },
+            {
+              "id": "juice-2025-3",
+              "title": "Dinner Night Out",
+              "caption": "Walking to the grand dinner of day zero. The beautiful Shanghai night skyline.",
+              "url": "https://cdn.hackclub.com/019c803b-780b-7ebf-8458-3c352b9cb3a9/3%20-%20Dinner%20Night%20Out.heic",
+              "alt": "A group of Hack Clubbers walking on the street, with a elevated highway on the back with an illuminated underside and a few buildings in the background.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/3 - Dinner Night Out.heic",
+                "sha256": "9c09d5fcb0c629dc81bc9c217f571a795e8c91cb5a9c8d05c71cb94629949609"
+              }
+            },
+            {
+              "id": "juice-2025-4",
+              "title": "Hotel",
+              "caption": "My hotel room in Shanghai.",
+              "url": "https://cdn.hackclub.com/019c803b-7a70-71be-a6c6-9ab78579f247/4%20-%20Hotel.heic",
+              "alt": "A picture of my hotel room, 2 single beds, a TV, the outside sink and the bathroom door.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/4 - Hotel.heic",
+                "sha256": "3e058fb088d10796a8de0972cd7dabb1f4ae1ce2bc4c4b78978f993828fe1035"
+              }
+            },
+            {
+              "id": "juice-2025-5",
+              "title": "First Juice",
+              "caption": "It's day one, we are now juicing!",
+              "url": "https://cdn.hackclub.com/019c803b-7cf0-779d-96be-65a8c18879ea/5%20-%20First%20Juice.heic",
+              "alt": "First Juice",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/5 - First Juice.heic",
+                "sha256": "e05ce21212422e5f2e6489150b69330db693113589119f4a3a913240a2b35ac2"
+              }
+            },
+            {
+              "id": "juice-2025-6",
+              "title": "Whiteboard Day One",
+              "caption": "The whiteboard drawings of day one. Very fun to look at.",
+              "url": "https://cdn.hackclub.com/019c803b-7f85-74a9-ad2e-981c74dee0cc/6%20-%20Whiteboard%20Day%20One.heic",
+              "alt": "Whiteboard Day One",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/6 - Whiteboard Day One.heic",
+                "sha256": "14af5ec2988885c9834ae6896184d344bff30d8b30d767b90c27b796fde9e108"
+              }
+            },
+            {
+              "id": "juice-2025-7",
+              "title": "Out For Lunch",
+              "caption": "Went outside to the mall for lunch. We stole a few looks from the locals with our large group.",
+              "url": "https://cdn.hackclub.com/019c803b-8206-758f-848f-cbc26e7709ca/7%20-%20Out%20For%20Lunch.heic",
+              "alt": "Walking outside towards a mall. A group of Hack Clubbers in front wearing their Juice jackets.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/7 - Out For Lunch.heic",
+                "sha256": "03cf1034f1387ed2fde359c3638ad47f162f8145fbcbc953a122e8683f0c13ac"
+              }
+            },
+            {
+              "id": "juice-2025-8",
+              "title": "First Lunch",
+              "caption": "My first lunch in Shaghai! Vegetarian food I'm pretty sure but that spam-like thing has to have meat, it tastes so real.",
+              "url": "https://cdn.hackclub.com/019c803b-8493-7ece-8f2d-1241136474f1/8%20-%20First%20Lunch.heic",
+              "alt": "My first lunch in Shanghai, green beans and a spam-like cutlet served on a bed of rice. Tomato soup on the side and room temperature cucumber drink.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/8 - First Lunch.heic",
+                "sha256": "6e5016a4ad9a3617f12e985e9d2f57b54ac3557df2acc72372375242bb5afdb0"
+              }
+            },
+            {
+              "id": "juice-2025-9",
+              "title": "More Juicing",
+              "caption": "More juice! Got back and went straight to juicing.",
+              "url": "https://cdn.hackclub.com/019c803b-8627-7feb-9bba-eb0542814db1/9%20-%20More%20Juicing.heic",
+              "alt": "People sitting around the counter with people in the middle operating the juicer.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/9 - More Juicing.heic",
+                "sha256": "8719972583ef44919cf0fe74b61320cc8fb61434d389452308bd7e5fd651cd90"
+              }
+            },
+            {
+              "id": "juice-2025-10",
+              "title": "Theater",
+              "caption": "There's a small theater at the venue. We watched NeZha.",
+              "url": "https://cdn.hackclub.com/019c803b-3251-721c-a6c1-83545ae281ab/10%20-%20Theater.heic",
+              "alt": "Selfie with the people in the theater.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/10 - Theater.heic",
+                "sha256": "6d28efb492a7195bf9aa0d3f8bdbb2c9d07d5beebbe8fde9bc3fbbf09435296a"
+              }
+            },
+            {
+              "id": "juice-2025-11",
+              "title": "Locked In While Locked Out",
+              "caption": "Working on my game while watching the movie.",
+              "url": "https://cdn.hackclub.com/019c803b-33f2-7c9a-907e-ed5a6f50d15d/11%20-%20Locked%20In%20While%20Locked%20Out.heic",
+              "alt": "A laptop on the bottom showing my game and a screen in front showing the movie.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/11 - Locked In While Locked Out.heic",
+                "sha256": "15add1735763db5178d68010f68ade6563861aad113bd5f56afaa4c45f7fe99d"
+              }
+            },
+            {
+              "id": "juice-2025-12",
+              "title": "Whiteboard Day One Part 2",
+              "caption": "More whiteboard pics! There are even more stuff on the board.",
+              "url": "https://cdn.hackclub.com/019c803b-3741-7b54-9120-d2202b03cec7/12%20-%20Whiteboard%20Day%20One%20Part%202.heic",
+              "alt": "A picture of the whiteboard with a variety of drawings and writings. With a large paper attached on the bottom-left containing signatures of various people.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/12 - Whiteboard Day One Part 2.heic",
+                "sha256": "d468ded040c441cb52e5e0c3a37badb6f7df55a7437472a1cac3e12dceb6753b"
+              }
+            },
+            {
+              "id": "juice-2025-13",
+              "title": "Hotpot!",
+              "caption": "My first real Hotpot! And it was in China! Very good!",
+              "url": "https://cdn.hackclub.com/019c803b-39ec-7970-b4c6-85e4149e691d/13%20-%20Hotpot!.heic",
+              "alt": "Groupfie of me and a few other people around the hotpot table.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/13 - Hotpot!.heic",
+                "sha256": "d01bd4914cf28071bc6f301605279ae3bb58f193ca44fd101973c55b7740b8ee"
+              }
+            },
+            {
+              "id": "juice-2025-14",
+              "title": "Big Boba",
+              "caption": "I didn't know CoCo sells this big of a boba.",
+              "url": "https://cdn.hackclub.com/019c803b-3b80-700e-a77c-2c72b442d7f5/14%20-%20Big%20Boba.heic",
+              "alt": "A big and regular boba held up against each other, the big boba being a bit shorter but a lot wider than the regular one.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/14 - Big Boba.heic",
+                "sha256": "084534b93389cab4c134a503664d0a0e0cef1ef69c48432e04f7a4e9e94c88e7"
+              }
+            },
+            {
+              "id": "juice-2025-15",
+              "title": "Boba Night",
+              "caption": "Groupfie with the club and our bobas!",
+              "url": "https://cdn.hackclub.com/019c803b-3d22-7b72-bac8-d4cf23c4ed6f/15%20-%20Boba%20Night.heic",
+              "alt": "Me and the group holding up our bobas.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/15 - Boba Night.heic",
+                "sha256": "8d7c48aa769a4c39a4750561f513ca33221893c26b44a79834611fd5fa2bb73c"
+              }
+            },
+            {
+              "id": "juice-2025-16",
+              "title": "Convenience Store Cat",
+              "caption": "We went to a convenience store and saw a cat!",
+              "url": "https://cdn.hackclub.com/019c803b-3f9b-7428-9841-e5720a2d345f/16%20-%20Convience%20Store%20Cat.heic",
+              "alt": "A black and white cat on a glass table in a convenience store.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/16 - Convience Store Cat.heic",
+                "sha256": "3b164ba3507da97b5bcad2d3910c00bb345d4b5ab43fac133aa6e58a8cb437e9"
+              }
+            },
+            {
+              "id": "juice-2025-17",
+              "title": "Hidden Path",
+              "caption": "Went to the venue through a cool hidden walkway, lots of greenery here.",
+              "url": "https://cdn.hackclub.com/019c803b-62f1-79fb-8999-11a0406f910a/17%20-%20Hidden%20Path.mov",
+              "alt": "A walkway with many greeneries and flowers on the side. In between walls of buildings, possibly homes.",
+              "type": "video",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/17 - Hidden Path.mov",
+                "sha256": "76a33f56a5261a92318ad87aeb8e06febe02b73f5ea1b559d04d44101c95231d"
+              }
+            },
+            {
+              "id": "juice-2025-18",
+              "title": "Flower",
+              "caption": "Assorted pictures of flowers while exploring Shanghai.",
+              "url": "https://cdn.hackclub.com/019c803b-6a2d-7cfa-83db-e751247f857d/18%20-%20Flower.heic",
+              "alt": "A pink flower, possibly a Lilac",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/18 - Flower.heic",
+                "sha256": "3bae2a8a442d6f67725a9d58516fa43f8a52a3b3c8905cd32f00a51e227f4981"
+              }
+            },
+            {
+              "id": "juice-2025-19",
+              "title": "Groupfie!",
+              "caption": "Groupfie with Team Tongyu!",
+              "url": "https://cdn.hackclub.com/019c803b-6bb2-796c-9791-824569aca890/19%20-%20Groupfie!.heic",
+              "alt": "Me with a group of Hack Clubbers, Team Tongyu!",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/19 - Groupfie!.heic",
+                "sha256": "b45f415090b07d18f6c155c2a9d03c617f55708bf46fb5691e56979b923a0ead"
+              }
+            },
+            {
+              "id": "juice-2025-20",
+              "title": "Flower 2",
+              "caption": "More assorted pictures of flowers while exploring Shanghai.",
+              "url": "https://cdn.hackclub.com/019c803b-6efa-78d9-a0e8-a02767aa2eec/20%20-%20Flower%202.heic",
+              "alt": "A viola, also known as a violet, a violet flower.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/20 - Flower 2.heic",
+                "sha256": "6b494195ece788008ab0cd5e7cea5aa5cb4afea8fb76c5fd24d13197875531d1"
+              }
+            },
+            {
+              "id": "juice-2025-21",
+              "title": "Flower 3",
+              "caption": "Another assorted picture of flowers while exploring Shanghai.",
+              "url": "https://cdn.hackclub.com/019c803b-70ab-7dbd-b090-4b87e9a26862/21%20-%20Flower%203.heic",
+              "alt": "An orange pansy flower.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/21 - Flower 3.heic",
+                "sha256": "4f30bb493f66336bcbbc7f70ecf7cf0f3faf90cb041218844dec4f5de8aacd50"
+              }
+            },
+            {
+              "id": "juice-2025-22",
+              "title": "Me!",
+              "caption": "A picture of me in Shanghai!",
+              "url": "https://cdn.hackclub.com/019c803b-7324-7d6a-a881-6ed13a765904/22%20-%20Me!.heic",
+              "alt": "Me in front of a plain wall, smiling, wearing my Juice jacket.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/22 - Me!.heic",
+                "sha256": "10a4b4ab7ad0f53c99e5294ac25a91d858fecddb8b2cdf5a4d730c5cb73eec8a"
+              }
+            },
+            {
+              "id": "juice-2025-23",
+              "title": "Poster",
+              "caption": "The poster outside our venue, very cool!",
+              "url": "https://cdn.hackclub.com/019c803b-74be-7ded-8b46-7f8abbb44fa4/23%20-%20Poster.heic",
+              "alt": "An easel holding a board with an assortment of posters. Prominent of which is the Juice Poster.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/23 - Poster.heic",
+                "sha256": "a7fabf84df86739d412c96350c218549558c9d87f9c500c61ad35ae1f44e0c56"
+              }
+            },
+            {
+              "id": "juice-2025-24",
+              "title": "Six Seven",
+              "caption": "Haha six seven",
+              "url": "https://cdn.hackclub.com/019c803b-766b-7238-ad0b-536b85c68c5b/24%20-%20Six%20Seven.heic",
+              "alt": "A poster in Chinese promoting the Juice event with the date of April 6-7.",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Photos/Juice 2025/24 - Six Seven.heic",
+                "sha256": "ef0f7092b9673a5ab5faf6edeef24711f052e5b2ddf76d3f26d807b79cde41a6"
+              }
+            }
+          ]
         }
       ]
     },
