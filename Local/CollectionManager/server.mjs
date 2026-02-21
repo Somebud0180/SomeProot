@@ -18,7 +18,15 @@ const thumbCacheDir = path.join(
 	".cache",
 	"collection_manager_thumbs",
 );
+const localEnvPath = path.join(repoRoot, "Local", ".env");
+const syncScriptPath = path.join(
+	repoRoot,
+	"Local",
+	"Scripts",
+	"sync_local_gallery_to_cdn.mjs",
+);
 const execFileAsync = promisify(execFile);
+let syncInProgress = false;
 
 const roots = {
 	photos: path.join(repoRoot, "Local", "Gallery", "Photos"),
@@ -114,6 +122,79 @@ async function ensureHeicThumb(sourcePath) {
 	]);
 
 	return targetPath;
+}
+
+async function readLocalEnv(filePath) {
+	try {
+		const raw = await fs.readFile(filePath, "utf8");
+		const parsed = {};
+
+		for (const line of raw.split(/\r?\n/)) {
+			const trimmed = line.trim();
+			if (!trimmed || trimmed.startsWith("#")) {
+				continue;
+			}
+			const index = trimmed.indexOf("=");
+			if (index < 1) {
+				continue;
+			}
+			const key = trimmed.slice(0, index).trim();
+			let value = trimmed.slice(index + 1).trim();
+			if (
+				(value.startsWith('"') && value.endsWith('"')) ||
+				(value.startsWith("'") && value.endsWith("'"))
+			) {
+				value = value.slice(1, -1);
+			}
+			parsed[key] = value;
+		}
+
+		return parsed;
+	} catch {
+		return {};
+	}
+}
+
+async function runSyncScript() {
+	if (syncInProgress) {
+		throw new Error("Sync already in progress.");
+	}
+
+	syncInProgress = true;
+	const startTime = Date.now();
+
+	try {
+		const localEnv = await readLocalEnv(localEnvPath);
+		const apiKey = process.env.CDN_API_KEY || localEnv.CDN_API_KEY;
+		if (!apiKey) {
+			throw new Error(
+				"Missing CDN_API_KEY. Add it to Local/.env or export it in your shell.",
+			);
+		}
+
+		const { stdout, stderr } = await execFileAsync(
+			process.execPath,
+			[syncScriptPath],
+			{
+				cwd: repoRoot,
+				env: {
+					...process.env,
+					...localEnv,
+					CDN_API_KEY: apiKey,
+				},
+				maxBuffer: 10 * 1024 * 1024,
+			},
+		);
+
+		return {
+			ok: true,
+			stdout,
+			stderr,
+			durationMs: Date.now() - startTime,
+		};
+	} finally {
+		syncInProgress = false;
+	}
 }
 
 function safeName(value) {
@@ -429,6 +510,14 @@ const server = http.createServer(async (req, res) => {
 			return sendJson(res, 200, { ok: true, items: updatedItems });
 		}
 
+		if (req.method === "POST" && url.pathname === "/api/sync") {
+			if (syncInProgress) {
+				return sendJson(res, 409, { error: "Sync already in progress." });
+			}
+			const result = await runSyncScript();
+			return sendJson(res, 200, result);
+		}
+
 		if (req.method === "GET" && url.pathname.startsWith("/media/")) {
 			const [, , rootIdRaw, collectionRaw, fileRaw] = url.pathname.split("/");
 			const rootId = decodeURIComponent(rootIdRaw || "");
@@ -488,7 +577,7 @@ const server = http.createServer(async (req, res) => {
 
 		sendJson(res, 404, { error: "Not found." });
 	} catch (error) {
-		if (error?.code === "ENOENT") {
+		if (error?.code === "ENOENT" && req.method === "GET") {
 			sendJson(res, 404, { error: "Not found." });
 			return;
 		}

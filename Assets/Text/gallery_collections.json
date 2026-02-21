@@ -7,22 +7,7 @@
           "id": "juice-2025",
           "name": "Juice 2025",
           "description": "Juice in Shanghai, April 2025.",
-          "items": [
-            {
-              "id": "juice-1",
-              "title": "Arrived",
-              "caption": "First Group Pic",
-              "url": "https://cdn.hackclub.com/placeholder/photos/arrived.jpg",
-              "alt": "Me along with other Hack Clubbers at the airport"
-            },
-            {
-              "id": "juice-2",
-              "title": "Dinner Out",
-              "caption": "First night out in Shanghai.",
-              "url": "https://cdn.hackclub.com/placeholder/photos/dinner-out.jpg",
-              "alt": "Night time with a group of Hack Clubbers in the foreground and a elevated highway running through the picture with illuminated sides and a city skyline in the background."
-            }
-          ]
+          "items": []
         }
       ]
     },

@@ -5,6 +5,7 @@ const state = {
 	selectedCollection: null,
 	items: [],
 	dirty: false,
+	syncing: false,
 };
 
 const rootSelect = document.getElementById("rootSelect");
@@ -16,6 +17,18 @@ const createCollectionButton = document.getElementById(
 	"createCollectionButton",
 );
 const newCollectionNameInput = document.getElementById("newCollectionName");
+const syncButton = document.getElementById("syncButton");
+const syncStatus = document.getElementById("syncStatus");
+
+function setSyncing(value, message) {
+	state.syncing = value;
+	if (syncButton) {
+		syncButton.disabled = value;
+	}
+	if (syncStatus && message) {
+		syncStatus.textContent = message;
+	}
+}
 
 function setDirty(value) {
 	state.dirty = value;
@@ -99,14 +112,65 @@ function moveItem(index, delta) {
 		return;
 	}
 
+	const previousPositions = captureItemPositions();
 	const swapped = [...state.items];
 	[swapped[index], swapped[nextIndex]] = [swapped[nextIndex], swapped[index]];
 	state.items = swapped;
 	setDirty(true);
-	renderItems();
+	renderItems(previousPositions);
 }
 
-function renderItems() {
+function captureItemPositions() {
+	const positions = new Map();
+	itemList.querySelectorAll(".item-card").forEach((node) => {
+		const key = node.getAttribute("data-key");
+		if (!key) {
+			return;
+		}
+		positions.set(key, node.getBoundingClientRect());
+	});
+	return positions;
+}
+
+function animateItemReorder(previousPositions) {
+	if (!previousPositions || !previousPositions.size) {
+		return;
+	}
+
+	requestAnimationFrame(() => {
+		itemList.querySelectorAll(".item-card").forEach((node) => {
+			const key = node.getAttribute("data-key");
+			if (!key) {
+				return;
+			}
+
+			const previous = previousPositions.get(key);
+			if (!previous) {
+				return;
+			}
+
+			const current = node.getBoundingClientRect();
+			const deltaX = previous.left - current.left;
+			const deltaY = previous.top - current.top;
+			if (!deltaX && !deltaY) {
+				return;
+			}
+
+			node.animate(
+				[
+					{ transform: `translate(${deltaX}px, ${deltaY}px)` },
+					{ transform: "translate(0, 0)" },
+				],
+				{
+					duration: 260,
+					easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+				},
+			);
+		});
+	});
+}
+
+function renderItems(previousPositions) {
 	itemList.innerHTML = "";
 
 	if (!state.selectedCollection) {
@@ -133,6 +197,7 @@ function renderItems() {
 	state.items.forEach((item, index) => {
 		const li = document.createElement("li");
 		li.className = "item-card";
+		li.setAttribute("data-key", item.originalFileName);
 
 		const preview =
 			item.mediaType === "video"
@@ -187,6 +252,8 @@ function renderItems() {
 		li.append(preview, main, controls);
 		itemList.append(li);
 	});
+
+	animateItemReorder(previousPositions);
 }
 
 async function loadCollections() {
@@ -269,6 +336,24 @@ async function saveCurrentCollection() {
 	renderItems();
 }
 
+async function syncOnlineCollections() {
+	setSyncing(true, "Sync in progress...");
+	try {
+		const payload = await fetchJson("/api/sync", {
+			method: "POST",
+			body: JSON.stringify({}),
+		});
+		const seconds = (payload.durationMs / 1000).toFixed(1);
+		setSyncing(false, `Sync complete in ${seconds}s.`);
+		await loadCollections();
+		if (state.selectedCollection) {
+			await openCollection(state.selectedCollection);
+		}
+	} catch (error) {
+		setSyncing(false, `Sync failed: ${error.message}`);
+	}
+}
+
 rootSelect.addEventListener("change", async (event) => {
 	if (state.dirty) {
 		const shouldDiscard = window.confirm(
@@ -307,6 +392,14 @@ newCollectionNameInput.addEventListener("keydown", (event) => {
 		});
 	}
 });
+
+if (syncButton) {
+	syncButton.addEventListener("click", () => {
+		syncOnlineCollections().catch((error) => {
+			setSyncing(false, `Sync failed: ${error.message}`);
+		});
+	});
+}
 
 async function init() {
 	const config = await fetchJson("/api/config");
