@@ -31,8 +31,6 @@ const IMAGE_EXTENSIONS = new Set([
 	".jpg",
 	".jpeg",
 	".png",
-	".heic",
-	".heif",
 	".webp",
 	".gif",
 	".avif",
@@ -60,8 +58,6 @@ const MIME_BY_EXT = {
 	".jpg": "image/jpeg",
 	".jpeg": "image/jpeg",
 	".png": "image/png",
-	".heic": "image/heic",
-	".heif": "image/heif",
 	".webp": "image/webp",
 	".gif": "image/gif",
 	".avif": "image/avif",
@@ -319,6 +315,16 @@ function findCollectionItemByLocalPath(collection, localPath) {
 	);
 }
 
+function findCollectionItemByLocalPathStem(collection, localPathStem) {
+	return ensureArray(collection?.items).find((item) => {
+		if (!item?.source?.localPath) {
+			return false;
+		}
+		const itemStem = item.source.localPath.replace(/\.[^.]+$/, "");
+		return itemStem === localPathStem;
+	});
+}
+
 function sortLocalMediaPaths(paths) {
 	return [...paths].sort((leftPath, rightPath) => {
 		const leftFile = path.basename(leftPath);
@@ -392,9 +398,11 @@ async function main() {
 				}
 
 				const { hash, buffer } = await sha256OfFile(imagePath);
+				const relativeFromRootStem = relativeFromRoot.replace(/\.[^.]+$/, "");
 				const existingInCollection =
 					existingByLocalPath.get(relativeFromRoot) ||
-					findCollectionItemByLocalPath(collection, relativeFromRoot);
+					findCollectionItemByLocalPath(collection, relativeFromRoot) ||
+					findCollectionItemByLocalPathStem(collection, relativeFromRootStem);
 
 				let resolvedUpload = null;
 
@@ -449,18 +457,27 @@ async function main() {
 				usedManifestIndexes.add(manifestIndex);
 
 				const title = titleFromFileName(fileName);
-				const itemPayload = {
-					id: `${collection.id}-${manifestIndex}`,
-					title,
-					caption: existingInCollection?.caption || "",
-					url: resolvedUpload.url,
-					alt: existingInCollection?.alt || title,
-					type: mediaType,
-					source: {
-						localPath: relativeFromRoot,
-						sha256: hash,
-					},
-				};
+				const itemPayload = existingInCollection
+					? {
+							...existingInCollection,
+							url: resolvedUpload.url,
+							source: {
+								localPath: relativeFromRoot,
+								sha256: hash,
+							},
+						}
+					: {
+							id: `${collection.id}-${manifestIndex}`,
+							title,
+							caption: "",
+							url: resolvedUpload.url,
+							alt: title,
+							type: mediaType,
+							source: {
+								localPath: relativeFromRoot,
+								sha256: hash,
+							},
+						};
 
 				nextItems.push(itemPayload);
 				updatedItems += 1;

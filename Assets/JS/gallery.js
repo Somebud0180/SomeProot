@@ -11,7 +11,6 @@
 	const MANIFEST_PATH = "/SomeProot/Assets/Text/gallery_collections.json";
 
 	let manifestData = null;
-	const heicObjectUrlCache = new Map();
 
 	const getElements = () => ({
 		categorySelect: document.getElementById(CATEGORY_SELECT_ID),
@@ -38,78 +37,6 @@
 			return [];
 		}
 		return collection.items.filter((item) => Boolean(item?.url));
-	};
-
-	const isHeicItem = (item) => {
-		const mimeType = String(item?.mimeType || "").toLowerCase();
-		if (mimeType.includes("image/heic") || mimeType.includes("image/heif")) {
-			return true;
-		}
-
-		const url = String(item?.url || "");
-		return /\.hei[cf](?:$|[?#])/i.test(url);
-	};
-
-	const convertHeicToObjectUrl = async (sourceUrl) => {
-		if (!sourceUrl) {
-			throw new Error("Missing HEIC source URL.");
-		}
-
-		if (heicObjectUrlCache.has(sourceUrl)) {
-			return heicObjectUrlCache.get(sourceUrl);
-		}
-
-		if (typeof window.heic2any !== "function") {
-			throw new Error("heic2any is not available.");
-		}
-
-		const response = await fetch(sourceUrl);
-		if (!response.ok) {
-			throw new Error(`Failed to fetch HEIC image (${response.status}).`);
-		}
-
-		const heicBlob = await response.blob();
-		const converted = await window.heic2any({
-			blob: heicBlob,
-			toType: "image/jpeg",
-			quality: 0.9,
-		});
-
-		const convertedBlob = Array.isArray(converted) ? converted[0] : converted;
-		if (!(convertedBlob instanceof Blob)) {
-			throw new Error("HEIC conversion failed.");
-		}
-
-		const objectUrl = URL.createObjectURL(convertedBlob);
-		heicObjectUrlCache.set(sourceUrl, objectUrl);
-		return objectUrl;
-	};
-
-	const attachHeicFallback = (img, item) => {
-		if (!isHeicItem(item)) {
-			return;
-		}
-
-		let attempted = false;
-		const runConversion = async () => {
-			if (attempted) {
-				return;
-			}
-			attempted = true;
-
-			try {
-				const fallbackUrl = await convertHeicToObjectUrl(item.url);
-				img.src = fallbackUrl;
-			} catch (error) {
-				console.warn("HEIC fallback failed:", error);
-			}
-		};
-
-		img.addEventListener("error", () => {
-			runConversion();
-		});
-
-		runConversion();
 	};
 
 	const createMediaElement = (item) => {
@@ -141,7 +68,6 @@
 		img.alt = item.alt || item.title || "Gallery media";
 		img.loading = "lazy";
 		img.decoding = "async";
-		attachHeicFallback(img, item);
 
 		return img;
 	};

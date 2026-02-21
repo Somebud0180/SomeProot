@@ -12,12 +12,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, "..", "..");
 const publicDir = path.join(__dirname, "public");
-const thumbCacheDir = path.join(
-	repoRoot,
-	"Local",
-	".cache",
-	"collection_manager_thumbs",
-);
 const localEnvPath = path.join(repoRoot, "Local", ".env");
 const syncScriptPath = path.join(
 	repoRoot,
@@ -37,8 +31,6 @@ const imageExtensions = new Set([
 	".jpg",
 	".jpeg",
 	".png",
-	".heic",
-	".heif",
 	".webp",
 	".gif",
 	".avif",
@@ -64,8 +56,6 @@ const contentTypeByExt = {
 	".jpg": "image/jpeg",
 	".jpeg": "image/jpeg",
 	".png": "image/png",
-	".heic": "image/heic",
-	".heif": "image/heif",
 	".webp": "image/webp",
 	".gif": "image/gif",
 	".avif": "image/avif",
@@ -82,46 +72,8 @@ const contentTypeByExt = {
 
 const port = Number(process.env.COLLECTION_MANAGER_PORT || 4173);
 
-function isHeicExtension(fileName) {
-	const ext = path.extname(fileName).toLowerCase();
-	return ext === ".heic" || ext === ".heif";
-}
-
 function buildMediaUrl(rootId, collectionName, fileName) {
-	if (isHeicExtension(fileName)) {
-		return `/thumb/${encodeURIComponent(rootId)}/${encodeURIComponent(collectionName)}/${encodeURIComponent(fileName)}`;
-	}
 	return `/media/${encodeURIComponent(rootId)}/${encodeURIComponent(collectionName)}/${encodeURIComponent(fileName)}`;
-}
-
-async function ensureHeicThumb(sourcePath) {
-	await fs.mkdir(thumbCacheDir, { recursive: true });
-	const stat = await fs.stat(sourcePath);
-	const cacheKey = crypto
-		.createHash("sha1")
-		.update(`${sourcePath}:${stat.mtimeMs}:${stat.size}`)
-		.digest("hex");
-	const targetPath = path.join(thumbCacheDir, `${cacheKey}.jpg`);
-
-	try {
-		await fs.access(targetPath);
-		return targetPath;
-	} catch {
-		// continue to generate
-	}
-
-	await execFileAsync("/usr/bin/sips", [
-		"-s",
-		"format",
-		"jpeg",
-		sourcePath,
-		"--resampleHeightWidthMax",
-		"1024",
-		"--out",
-		targetPath,
-	]);
-
-	return targetPath;
 }
 
 async function readLocalEnv(filePath) {
@@ -537,32 +489,6 @@ const server = http.createServer(async (req, res) => {
 			}
 
 			return serveStaticFile(res, mediaPath);
-		}
-
-		if (req.method === "GET" && url.pathname.startsWith("/thumb/")) {
-			const [, , rootIdRaw, collectionRaw, fileRaw] = url.pathname.split("/");
-			const rootId = decodeURIComponent(rootIdRaw || "");
-			const collection = requireSafeSegment(
-				decodeURIComponent(collectionRaw || ""),
-			);
-			const fileName = requireSafeSegment(decodeURIComponent(fileRaw || ""));
-			const rootPath = resolveRoot(rootId);
-
-			if (!rootPath || !collection || !fileName) {
-				return sendJson(res, 400, { error: "Invalid thumbnail path." });
-			}
-
-			const sourcePath = path.join(rootPath, collection, fileName);
-			if (!sourcePath.startsWith(path.join(rootPath, collection))) {
-				return sendJson(res, 403, { error: "Forbidden." });
-			}
-
-			if (isHeicExtension(fileName)) {
-				const thumbPath = await ensureHeicThumb(sourcePath);
-				return serveStaticFile(res, thumbPath);
-			}
-
-			return serveStaticFile(res, sourcePath);
 		}
 
 		if (req.method === "GET") {
