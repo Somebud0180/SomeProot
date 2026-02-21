@@ -515,6 +515,7 @@ class CustomSelector {
 		this.originalSelect.querySelectorAll("option")[index].selected = true;
 
 		this.updateSelectedOptions("select");
+		this.originalSelect.dispatchEvent(new Event("change", { bubbles: true }));
 	}
 
 	_deselect(itemElement, shouldUpdate = true) {
@@ -524,6 +525,7 @@ class CustomSelector {
 		this.originalSelect.querySelectorAll("option")[index].selected = false;
 		if (shouldUpdate) {
 			this.updateSelectedOptions("deselect");
+			this.originalSelect.dispatchEvent(new Event("change", { bubbles: true }));
 		}
 	}
 
@@ -640,6 +642,8 @@ class CustomSelector {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
 }
+
+window.CustomSelector = CustomSelector;
 
 document
 	.querySelectorAll(".custom-selector, .picker-select")

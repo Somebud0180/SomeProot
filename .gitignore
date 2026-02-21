@@ -3,3 +3,8 @@
 .AppleDouble
 .LSOverride
 .vscode/settings.json
+
+# Local gallery sources (do not commit)
+Local/Gallery/*
+Local/.cache/
+Local/.env

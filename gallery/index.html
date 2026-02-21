@@ -27,14 +27,22 @@
             <h1 class="title">Gallery!</h1>
             <p class="description">A collection of my photos and artworks!</p>
             <div class="gallery">
-                <!-- Bar-style Picker: Artwork, Photos -->
-                <form action="">
-                    <select name="gallery-category" class="picker-select">
+                <form class="gallery-pickers" action="">
+                    <label class="picker-label" for="gallery-category-select">Category</label>
+                    <select id="gallery-category-select" name="gallery-category" class="picker-select">
                         <option value="photos">Photos</option>
                         <option value="artwork">Artworks</option>
                     </select>
-                </form>
 
+                    <label class="picker-label" for="gallery-collection-select">Collection</label>
+                    <select id="gallery-collection-select" name="gallery-collection" class="picker-select">
+                        <option value="default">Default</option>
+                    </select>
+                </form>
+                <p id="gallery-collection-description" class="gallery-collection-description"></p>
+                <div class="gallery-grid">
+                    <p class="gallery-empty">Loading gallery...</p>
+                </div>
             </div>
         </section>
     </main>
@@ -48,5 +56,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/SomeProot/Assets/JS/script.js"></script>
+    <script src="/SomeProot/Assets/JS/gallery.js"></script>
 </body>
 </html>

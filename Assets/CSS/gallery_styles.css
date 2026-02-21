@@ -223,3 +223,73 @@ select {
 		max-height: none;
 	}
 }
+
+.gallery {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.gallery-pickers {
+	gap: 0.8rem;
+}
+
+.picker-label {
+	font-size: 0.9rem;
+	font-weight: 700;
+	letter-spacing: 0.2px;
+}
+
+.gallery-collection-description {
+	color: var(--muted);
+	margin: 0;
+	min-height: 1.4em;
+}
+
+.gallery-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1rem;
+}
+
+.gallery-item {
+	background: var(--card-bg);
+	border: 1px solid var(--card-border);
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 8px 18px var(--card-shadow);
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+}
+
+.gallery-item img {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	display: block;
+}
+
+.gallery-caption-wrap {
+	padding: 0.8rem 0.9rem 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.gallery-title {
+	font-size: 1rem;
+	font-weight: 700;
+	margin: 0;
+}
+
+.caption {
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.92rem;
+}
+
+.gallery-empty {
+	margin: 0;
+	color: var(--muted);
+}
