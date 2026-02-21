@@ -118,8 +118,7 @@ const parseIndexedFileName = (filename) => {
 
 const titleFromFileName = (filename) =>
 	parseIndexedFileName(filename)
-		.titleStem
-		.replace(/[_-]+/g, " ")
+		.titleStem.replace(/[_-]+/g, " ")
 		.replace(/\s+/g, " ")
 		.trim()
 		.replace(/\b\w/g, (char) => char.toUpperCase()) || "Untitled";
