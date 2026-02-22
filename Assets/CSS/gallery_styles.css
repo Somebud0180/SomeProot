@@ -85,13 +85,13 @@ form {
 	animation-delay: 0.24s;
 }
 
-.card__image {
+.card__image,
+.img-placeholder {
 	width: 100%;
 	height: auto;
 	max-height: 250px;
 	aspect-ratio: 3 / 2;
 	object-fit: cover;
-	display: block;
 	border-bottom: 1px solid var(--card-border);
 }
 

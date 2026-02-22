@@ -235,6 +235,9 @@
 			image.alt = safeCollectionName(collection);
 			image.loading = "lazy";
 			image.decoding = "async";
+			import("./modules/img.js").then(({ attachImgErrorHandler }) => {
+				attachImgErrorHandler(image);
+			});
 			card.appendChild(image);
 		}
 

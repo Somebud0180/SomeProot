@@ -36,6 +36,9 @@ export class CustomSelector {
 				const icon = document.createElement("img");
 				icon.src = iconSrc;
 				icon.alt = optionLabel;
+				import("./img.js").then(({ attachImgErrorHandler }) => {
+					attachImgErrorHandler(icon);
+				});
 				item.appendChild(icon);
 			} else {
 				item.textContent = optionLabel;

@@ -4,6 +4,10 @@
 	--picker-padding: 1rem;
 	--picker-item-active-bg: rgba(255, 255, 255, 0.09);
 	--picker-item-active-border: rgba(255, 255, 255, 0.16);
+	--picker-item-active-border-radius: calc(
+		var(--picker-border-radius) - var(--picker-padding)
+	);
+	--picker-item-padding: 0.5rem;
 	--safe-left: 0px;
 	--safe-right: 0px;
 	--safe-bottom: 0px;
@@ -102,6 +106,16 @@ body {
 	flex-direction: column;
 }
 
+.img-placeholder {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.06);
+	color: var(--muted);
+	text-align: center;
+	padding: 1rem;
+}
+
 /* Header and Navigation */
 header {
 	min-height: 44px;
@@ -163,10 +177,6 @@ main {
 	margin: 0 auto;
 	padding: 0 calc(var(--content-inline) + var(--safe-right)) 0
 		calc(var(--content-inline) + var(--safe-left));
-}
-
-section {
-	margin-bottom: 3rem;
 }
 
 .hero {
@@ -434,7 +444,7 @@ footer a {
 	justify-content: center;
 	align-items: center;
 	gap: 0.5rem;
-	padding: 0.5rem 0;
+	padding: var(--picker-item-padding);
 	position: relative;
 	z-index: 1;
 	cursor: pointer;
@@ -444,9 +454,17 @@ footer a {
 	height: clamp(32px, 8vw, 96px);
 	cursor: pointer;
 	background-color: transparent;
-	transition:
-		ease background-color 0.3s,
-		ease transform 0.3s;
+}
+
+.picker__item .img-placeholder {
+	font-size: 1vw;
+	height: clamp(32px, 8vw, 96px);
+	width: 100%;
+	aspect-ratio: 3 / 2;
+	cursor: pointer;
+	border-radius: calc(
+		var(--picker-item-active-border-radius) - var(--picker-item-padding)
+	);
 }
 
 .picker__active-bg {
@@ -455,7 +473,7 @@ footer a {
 	left: 0;
 	width: 0;
 	height: 0;
-	border-radius: calc(var(--picker-border-radius) - var(--picker-padding));
+	border-radius: var(--picker-item-active-border-radius);
 	background: var(--picker-item-active-bg);
 	border: 1px solid var(--picker-item-active-border);
 	opacity: 0;

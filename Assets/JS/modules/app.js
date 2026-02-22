@@ -1,6 +1,7 @@
 import { initLayout, updateCardHeight } from "./layout.js";
 
 const pageName = document.body?.getAttribute("data-page") || "";
+const hasImgTargets = Boolean(document.querySelector("img"));
 const hasSectionTargets = Boolean(document.querySelector("[section]"));
 const hasFaceTargets = Boolean(
 	document.querySelector(".face") &&
@@ -17,16 +18,26 @@ const hasJournalTargets =
 	Boolean(document.getElementById("journalEntries")) ||
 	Boolean(document.getElementById("journalBody"));
 
-const [contentModule, journalModule, faceMotionModule, customSelectorModule] =
-	await Promise.all([
-		hasSectionTargets ? import("./content.js") : Promise.resolve(null),
-		hasJournalTargets ? import("./journal.js") : Promise.resolve(null),
-		hasFaceTargets ? import("./face-motion.js") : Promise.resolve(null),
-		hasCustomSelectors ? import("./custom-selector.js") : Promise.resolve(null),
-	]);
+const [
+	contentModule,
+	imgModule,
+	journalModule,
+	faceMotionModule,
+	customSelectorModule,
+] = await Promise.all([
+	hasSectionTargets ? import("./content.js") : Promise.resolve(null),
+	hasImgTargets ? import("./img.js") : Promise.resolve(null),
+	hasJournalTargets ? import("./journal.js") : Promise.resolve(null),
+	hasFaceTargets ? import("./face-motion.js") : Promise.resolve(null),
+	hasCustomSelectors ? import("./custom-selector.js") : Promise.resolve(null),
+]);
 
 function initializeApp() {
 	initLayout();
+
+	if (imgModule && typeof imgModule.autoAttachImgErrorHandlers === "function") {
+		imgModule.autoAttachImgErrorHandlers();
+	}
 
 	if (contentModule) {
 		contentModule.initContent({ onAfterRender: updateCardHeight });
