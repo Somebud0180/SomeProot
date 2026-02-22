@@ -7,7 +7,7 @@
 	const COLLECTION_GRID_ID = "gallery-collection-grid";
 	const CATEGORY_SELECT_ID = "gallery-category-select";
 	const COLLECTION_DESCRIPTION_ID = "gallery-collection-description";
-	const GRID_SELECTOR = ".card-grid";
+	const GRID_SELECTOR = ".photo_grid";
 	const MANIFEST_PATH = "/SomeProot/Assets/Text/gallery_collections.json";
 	const VIEWER_PATH = "/SomeProot/gallery-viewer/";
 	const IMAGE_PRELOAD_ROOT_MARGIN = "1200px 0px";

@@ -44,12 +44,21 @@ form {
 	letter-spacing: 1px;
 }
 
-.grid {
+.collection_grid,
+.photo_grid {
 	width: 100%;
 	margin: 0 auto;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 512px));
 	gap: 1rem;
+}
+
+.collection_grid {
+	grid-template-columns: repeat(auto-fit, minmax(250px, 512px));
+	justify-content: center;
+}
+
+.photo_grid {
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .card {
@@ -79,7 +88,8 @@ form {
 .card__image {
 	width: 100%;
 	height: auto;
-	max-height: 240px;
+	max-height: 250px;
+	aspect-ratio: 3 / 2;
 	object-fit: cover;
 	display: block;
 	border-bottom: 1px solid var(--card-border);
@@ -163,7 +173,6 @@ form {
 
 	.card__image {
 		min-height: 240px;
-		max-height: none;
 	}
 }
 
