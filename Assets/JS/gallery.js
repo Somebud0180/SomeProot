@@ -127,6 +127,7 @@
 		// Default to image
 		const img = document.createElement("img");
 		img.className = "gallery-media gallery-image gallery-image--pending";
+		img.height = 256;
 		img.alt = item.alt || item.title || "Gallery media";
 		img.loading = index < EAGER_IMAGE_COUNT ? "eager" : "lazy";
 		img.decoding = "async";
