@@ -302,8 +302,6 @@ section {
 	margin-bottom: 1rem;
 }
 
-display: flex;
-align-items: center;
 .content p {
 	font-size: 1.1rem;
 	margin-bottom: 1.5rem;

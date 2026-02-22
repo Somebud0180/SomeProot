@@ -1,4 +1,5 @@
 :root {
+	--optimal-max-width: 1200px;
 	--picker-border-radius: 2rem;
 	--picker-padding: 0.75rem;
 	--picker-item-padding: 0.5rem;
@@ -16,11 +17,22 @@
 	--muted: #cfcfd6;
 }
 
+main {
+	max-width: none;
+}
+
 .page {
 	padding: 2.5rem 1.5rem 4rem;
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
+}
+
+.title,
+.description,
+form {
+	max-width: var(--optimal-max-width);
+	margin: 0 auto;
 }
 
 .title {
@@ -247,6 +259,7 @@ select {
 }
 
 .gallery-grid {
+	max-width: 90vw;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	gap: 1rem;
