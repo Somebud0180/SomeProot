@@ -1209,18 +1209,75 @@
     },
     "artwork": {
       "label": "Artworks",
+      "collections": []
+    },
+    "artworks": {
+      "label": "Artworks",
       "collections": [
         {
-          "id": "misc-character-sketches",
-          "name": "Miscellaneous Character Sketches",
-          "description": "A random bunch of drawings with unnamed characters.",
+          "id": "the-protogen-collection",
+          "name": "The Protogen Collection",
+          "description": "",
           "items": [
             {
-              "id": "misc-character-1",
-              "title": "Control Center",
-              "caption": "Practiced pose reference/trace and protogen design.",
-              "url": "https://cdn.hackclub.com/placeholder/artworks/misc-character-01.jpg",
-              "alt": "A protogen leaning forward with both hands on a control panel table, looking down at the screen."
+              "id": "the-protogen-collection-1",
+              "title": "Slash E Wave",
+              "caption": "",
+              "url": "https://cdn.hackclub.com/019c86de-a20e-7569-b211-2d6bddb1869e/1%20-%20slash%20e%20wave.jpg",
+              "alt": "Slash E Wave",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Artworks/The Protogen Collection/1 - slash e wave.jpg",
+                "sha256": "130f4ee55a0f4838f99b29728e3ca1f58e9ebd719db228fc181176bcb55db14d"
+              }
+            },
+            {
+              "id": "the-protogen-collection-2",
+              "title": "Memory Pressure",
+              "caption": "",
+              "url": "https://cdn.hackclub.com/019c86de-a4cf-7fa6-8eb7-116c8629653e/2%20-%20Memory%20Pressure.jpg",
+              "alt": "Memory Pressure",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Artworks/The Protogen Collection/2 - Memory Pressure.jpg",
+                "sha256": "4d521e222a5305ed75f45ab36997d525f4e433f6227dfd85d19e4a279669a01e"
+              }
+            },
+            {
+              "id": "the-protogen-collection-3",
+              "title": "ExitOne",
+              "caption": "",
+              "url": "https://cdn.hackclub.com/019c86de-a76f-7f73-81d1-57c83386a5a0/3%20-%20exitOne.jpg",
+              "alt": "ExitOne",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Artworks/The Protogen Collection/3 - exitOne.jpg",
+                "sha256": "64187b061ae158397b5adb708eaacd15098075ec0d3463051576a5c343b90495"
+              }
+            },
+            {
+              "id": "the-protogen-collection-4",
+              "title": "Fanta (ProotF Or Froot)",
+              "caption": "",
+              "url": "https://cdn.hackclub.com/019c86de-a91d-7718-ac48-3bd1619323c9/4%20-%20Fanta%20(ProotF%20or%20Froot).jpg",
+              "alt": "Fanta (ProotF Or Froot)",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Artworks/The Protogen Collection/4 - Fanta (ProotF or Froot).jpg",
+                "sha256": "d8bbae77adc9f3512cf63dd89860d3dc89cdb24ef8b701cb82007a915ab4b432"
+              }
+            },
+            {
+              "id": "the-protogen-collection-5",
+              "title": "Lil Sketch",
+              "caption": "",
+              "url": "https://cdn.hackclub.com/019c86de-ad68-799f-b450-7e11900655b2/5%20-%20Lil%20Sketch.jpg",
+              "alt": "Lil Sketch",
+              "type": "image",
+              "source": {
+                "localPath": "Local/Gallery/Artworks/The Protogen Collection/5 - Lil Sketch.jpg",
+                "sha256": "994b3cb602b2a9c9743ab75c973fc7ef7e85a931bfca95b21606a62d4b2cd3d8"
+              }
             }
           ]
         }

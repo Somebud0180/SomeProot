@@ -16,6 +16,7 @@ const saveButton = document.getElementById("saveButton");
 const createCollectionButton = document.getElementById(
 	"createCollectionButton",
 );
+const saveSyncButton = document.getElementById("saveSyncButton");
 const newCollectionNameInput = document.getElementById("newCollectionName");
 const syncButton = document.getElementById("syncButton");
 const syncStatus = document.getElementById("syncStatus");
@@ -33,6 +34,39 @@ function setSyncing(value, message) {
 function setDirty(value) {
 	state.dirty = value;
 	saveButton.disabled = !value || !state.selectedCollection;
+	if (saveSyncButton) {
+		saveSyncButton.disabled =
+			!state.selectedCollection || (!value && !state.dirty);
+	}
+}
+// Save and sync only the current collection
+async function saveAndSyncCurrentCollection() {
+	if (!state.selectedCollection || !state.items.length) {
+		return;
+	}
+	setSyncing(true, "Syncing collection...");
+	try {
+		const payload = await fetchJson("/api/sync-collection", {
+			method: "POST",
+			body: JSON.stringify({
+				rootId: state.rootId,
+				collectionName: state.selectedCollection,
+				items: state.items.map((item) => ({
+					originalFileName: item.originalFileName,
+					title: sanitizeTitle(item.title),
+				})),
+			}),
+		});
+		const seconds = (payload.durationMs / 1000).toFixed(1);
+		setSyncing(false, `Collection synced in ${seconds}s.`);
+		setDirty(false);
+		await loadCollections();
+		if (state.selectedCollection) {
+			await openCollection(state.selectedCollection);
+		}
+	} catch (error) {
+		setSyncing(false, `Sync failed: ${error.message}`);
+	}
 }
 
 function sanitizeTitle(value) {
@@ -396,6 +430,14 @@ newCollectionNameInput.addEventListener("keydown", (event) => {
 if (syncButton) {
 	syncButton.addEventListener("click", () => {
 		syncOnlineCollections().catch((error) => {
+			setSyncing(false, `Sync failed: ${error.message}`);
+		});
+	});
+}
+
+if (saveSyncButton) {
+	saveSyncButton.addEventListener("click", () => {
+		saveAndSyncCurrentCollection().catch((error) => {
 			setSyncing(false, `Sync failed: ${error.message}`);
 		});
 	});

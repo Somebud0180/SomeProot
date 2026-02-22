@@ -470,6 +470,60 @@ const server = http.createServer(async (req, res) => {
 			return sendJson(res, 200, result);
 		}
 
+		// New endpoint: sync only a single collection
+		if (req.method === "POST" && url.pathname === "/api/sync-collection") {
+			if (syncInProgress) {
+				return sendJson(res, 409, { error: "Sync already in progress." });
+			}
+			const body = await readBody(req);
+			const rootId = body?.rootId || "photos";
+			const collectionName = body?.collectionName || "";
+			// Save the collection first (if items provided)
+			if (Array.isArray(body?.items) && body.items.length > 0) {
+				await saveCollection(rootId, collectionName, body.items);
+			}
+			// Ensure the collection exists in the manifest before syncing
+			const localEnv = await readLocalEnv(localEnvPath);
+			const apiKey = process.env.CDN_API_KEY || localEnv.CDN_API_KEY;
+			if (!apiKey) {
+				return sendJson(res, 500, {
+					error:
+						"Missing CDN_API_KEY. Add it to Local/.env or export it in your shell.",
+				});
+			}
+			syncInProgress = true;
+			const startTime = Date.now();
+			try {
+				// Pass a flag to the sync script to ensure collection creation
+				const { stdout, stderr } = await execFileAsync(
+					process.execPath,
+					[syncScriptPath, rootId, collectionName, "--ensure-collection"],
+					{
+						cwd: repoRoot,
+						env: {
+							...process.env,
+							...localEnv,
+							CDN_API_KEY: apiKey,
+							SYNC_COLLECTION_ROOT: rootId,
+							SYNC_COLLECTION_NAME: collectionName,
+							ENSURE_COLLECTION: "1",
+						},
+						maxBuffer: 10 * 1024 * 1024,
+					},
+				);
+				return sendJson(res, 200, {
+					ok: true,
+					stdout,
+					stderr,
+					durationMs: Date.now() - startTime,
+				});
+			} catch (error) {
+				return sendJson(res, 500, { error: error?.message || "Sync failed." });
+			} finally {
+				syncInProgress = false;
+			}
+		}
+
 		if (req.method === "GET" && url.pathname.startsWith("/media/")) {
 			const [, , rootIdRaw, collectionRaw, fileRaw] = url.pathname.split("/");
 			const rootId = decodeURIComponent(rootIdRaw || "");

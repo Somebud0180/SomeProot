@@ -20,7 +20,7 @@ Usage:
     --alt "City crosswalk"
 
 Required:
-  --category               photos | artwork (or any category key)
+  --category               photos | artworks (or any category key)
   --collection-id          stable collection key
   --source-url             public image URL to import via CDN API
 

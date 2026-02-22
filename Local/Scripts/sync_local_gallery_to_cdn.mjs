@@ -24,7 +24,7 @@ const CACHE_PATH = path.join(
 
 const CATEGORY_DIRS = [
 	{ id: "photos", label: "Photos", dirName: "Photos" },
-	{ id: "artwork", label: "Artworks", dirName: "Artwork" },
+	{ id: "artworks", label: "Artworks", dirName: "Artworks" },
 ];
 
 const IMAGE_EXTENSIONS = new Set([

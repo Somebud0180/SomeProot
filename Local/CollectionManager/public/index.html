@@ -23,15 +23,19 @@
         <ul id="collectionList" class="collection-list"></ul>
 
         <div class="sidebar-footer">
-          <button id="syncButton" type="button" class="sync-button">Upload/Update Online</button>
+          <button id="syncButton" type="button" class="sync-button">Sync to Online</button>
           <p id="syncStatus" class="sync-status">Ready to sync to CDN manifest.</p>
         </div>
       </section>
 
       <section class="panel right">
+
         <header class="collection-header">
           <h2 id="collectionTitle">Select a collection</h2>
-          <button id="saveButton" type="button" disabled>Save</button>
+          <div style="display: flex; gap: 0.5em; align-items: center;">
+            <button id="saveSyncButton" type="button" disabled>Save &amp; Sync to Online</button>
+            <button id="saveButton" type="button" disabled>Save</button>
+          </div>
         </header>
 
         <p class="help-text">Arrange with up/down. Rename titles and save to rewrite files as <strong>1 - Name.ext</strong>.</p>
