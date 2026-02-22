@@ -30,23 +30,15 @@
         <section class="page">
             <h1 class="title">Gallery!</h1>
             <p class="description">A collection of my photos and artworks!</p>
-            <div class="gallery">
-                <form class="gallery-pickers" action="">
-                    <label class="picker-label" for="gallery-category-select">Category</label>
-                    <select id="gallery-category-select" name="gallery-category" class="picker-select">
-                        <option value="photos">Photos</option>
-                        <option value="artwork">Artworks</option>
-                    </select>
-
-                    <label class="picker-label" for="gallery-collection-select">Collection</label>
-                    <select id="gallery-collection-select" name="gallery-collection" class="picker-select">
-                        <option value="default">Default</option>
-                    </select>
-                </form>
-                <p id="gallery-collection-description" class="gallery-collection-description"></p>
-                <div class="gallery-grid">
-                    <p class="gallery-empty">Loading gallery...</p>
-                </div>
+            <form class="picker" action="">
+                <label class="picker-label" for="gallery-category-select">Category</label>
+                <select class="custom-selector" id="gallery-category-select" name="gallery-category" >
+                    <option value="photos">Photos</option>
+                    <option value="artwork">Artworks</option>
+                </select>
+            </form>
+            <div id="gallery-collection-grid" class="grid">
+                <p class="gallery-empty">Loading collections...</p>
             </div>
         </section>
     </main>

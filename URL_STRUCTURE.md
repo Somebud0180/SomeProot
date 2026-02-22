@@ -6,6 +6,8 @@ This site now uses clean URLs without `.html` extensions.
 - Home: `/` or `/index.html`
 - Projects: `/projects/`
 - Journal: `/journal/`
+- Gallery: `/gallery/`
+- Gallery Viewer: `/gallery-viewer/?category=<id>&collection=<id>`
 - Socials: `/socials/`
 - Journal Viewer: `/journal-viewer/?entry=<slug>`
 
@@ -15,6 +17,10 @@ This site now uses clean URLs without `.html` extensions.
 ├── index.html              (root homepage)
 ├── 404.html                (error page)
 ├── projects/
+│   └── index.html
+├── gallery/
+│   └── index.html
+├── gallery-viewer/
 │   └── index.html
 ├── journal/
 │   └── index.html
