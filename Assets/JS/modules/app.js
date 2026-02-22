@@ -4,9 +4,9 @@ const pageName = document.body?.getAttribute("data-page") || "";
 const hasSectionTargets = Boolean(document.querySelector("[section]"));
 const hasFaceTargets = Boolean(
 	document.querySelector(".face") &&
-		document.getElementById("left-eye-container") &&
-		document.getElementById("right-eye-container") &&
-		document.querySelector(".mouth"),
+	document.getElementById("left-eye-container") &&
+	document.getElementById("right-eye-container") &&
+	document.querySelector(".mouth"),
 );
 const hasCustomSelectors = Boolean(
 	document.querySelector(".custom-selector, .picker-select"),
@@ -22,9 +22,7 @@ const [contentModule, journalModule, faceMotionModule, customSelectorModule] =
 		hasSectionTargets ? import("./content.js") : Promise.resolve(null),
 		hasJournalTargets ? import("./journal.js") : Promise.resolve(null),
 		hasFaceTargets ? import("./face-motion.js") : Promise.resolve(null),
-		hasCustomSelectors
-			? import("./custom-selector.js")
-			: Promise.resolve(null),
+		hasCustomSelectors ? import("./custom-selector.js") : Promise.resolve(null),
 	]);
 
 function initializeApp() {
