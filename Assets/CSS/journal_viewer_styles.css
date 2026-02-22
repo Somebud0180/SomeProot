@@ -25,11 +25,12 @@ body[data-page="JournalViewer"] {
 }
 
 .reader-bar__back {
+	text-align: center;
 	color: #f3f3f3;
 	text-decoration: none;
 	background-color: rgba(35, 35, 60, 0.6);
 	padding: 0.4rem 0.9rem;
-	border-radius: 999px;
+	border-radius: 2rem;
 	font-weight: 600;
 	transition:
 		transform 0.2s ease,

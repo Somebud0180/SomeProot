@@ -616,10 +616,24 @@ footer a {
 
 	nav {
 		flex-direction: column;
+		align-items: center;
 	}
 
 	nav ul {
-		gap: 1rem;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0 0.5rem;
+		gap: 0.5rem;
+		font-size: 1.15rem;
+	}
+
+	nav a {
+		font-size: 1.2rem;
+		margin: 0.25rem;
+	}
+	nav h1 {
+		font-size: 1.5rem;
 	}
 
 	.hero h2 {
