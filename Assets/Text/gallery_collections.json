@@ -47,7 +47,7 @@
             {
               "id": "juice-2025-4",
               "title": "Hotel",
-              "caption": "My hotel room in Shanghai.",
+              "caption": "",
               "url": "https://cdn.hackclub.com/019c8492-206b-79a0-ab09-7208751e094d/4%20-%20Hotel.jpeg",
               "alt": "A picture of my hotel room, 2 single beds, a TV, the outside sink and the bathroom door.",
               "type": "image",
@@ -59,7 +59,7 @@
             {
               "id": "juice-2025-5",
               "title": "First Juice",
-              "caption": "It's day one, we are now juicing!",
+              "caption": "",
               "url": "https://cdn.hackclub.com/019c8492-241b-7b42-bd98-b77af82da4fa/5%20-%20First%20Juice.jpeg",
               "alt": "First Juice",
               "type": "image",
@@ -107,7 +107,7 @@
             {
               "id": "juice-2025-9",
               "title": "More Juicing",
-              "caption": "More juice! Got back and went straight to juicing.",
+              "caption": "",
               "url": "https://cdn.hackclub.com/019c8492-357d-7b9c-83d9-6f42a04d8043/9%20-%20More%20Juicing.jpeg",
               "alt": "People sitting around the counter with people in the middle operating the juicer.",
               "type": "image",
@@ -179,7 +179,7 @@
             {
               "id": "juice-2025-15",
               "title": "Boba Night",
-              "caption": "Groupfie with the club and our bobas!",
+              "caption": "",
               "url": "https://cdn.hackclub.com/019c8492-4a31-7edd-bf43-221db278dc05/15%20-%20Boba%20Night.jpeg",
               "alt": "Me and the group holding up our bobas.",
               "type": "image",
@@ -191,7 +191,7 @@
             {
               "id": "juice-2025-16",
               "title": "Convenience Store Cat",
-              "caption": "We went to a convenience store and saw a cat!",
+              "caption": "We went to a convenience store near our hotel and saw a cat!",
               "url": "https://cdn.hackclub.com/019c8492-4df2-7569-a1d1-4ee5a0048c14/16%20-%20Convenience%20Store%20Cat.jpeg",
               "alt": "A black and white cat on a glass table in a convenience store.",
               "type": "image",
@@ -239,7 +239,7 @@
             {
               "id": "juice-2025-20",
               "title": "Flower 2",
-              "caption": "More assorted pictures of flowers while exploring Shanghai.",
+              "caption": "",
               "url": "https://cdn.hackclub.com/019c8492-755b-7769-a103-493435758fc3/20%20-%20Flower%202.jpeg",
               "alt": "A viola, also known as a violet, a violet flower.",
               "type": "image",
@@ -251,7 +251,7 @@
             {
               "id": "juice-2025-21",
               "title": "Flower 3",
-              "caption": "Another assorted picture of flowers while exploring Shanghai.",
+              "caption": "",
               "url": "https://cdn.hackclub.com/019c8492-7807-7cf4-a490-7d78e795a882/21%20-%20Flower%203.jpeg",
               "alt": "An orange pansy flower.",
               "type": "image",
@@ -323,7 +323,7 @@
             {
               "id": "juice-2025-27",
               "title": "Robot Coffee",
-              "caption": "",
+              "caption": "This was kinda cool, being in the middle of a park.",
               "url": "https://cdn.hackclub.com/019c8492-8d92-7ab3-bd00-cb806ea7c5ba/27%20-%20Robot%20Coffee.jpeg",
               "alt": "Robot Coffee",
               "type": "image",
@@ -419,7 +419,7 @@
             {
               "id": "juice-2025-35",
               "title": "Sundog",
-              "caption": "",
+              "caption": "Cool!",
               "url": "https://cdn.hackclub.com/019c8492-b3ed-79d0-9896-a1d1dfb43834/35%20-%20Sundog.jpeg",
               "alt": "Sundog",
               "type": "image",
@@ -431,7 +431,7 @@
             {
               "id": "juice-2025-36",
               "title": "Me! (3)",
-              "caption": "",
+              "caption": "The tea I have here really tastes like nothing. At least it was cheap.",
               "url": "https://cdn.hackclub.com/019c8492-b781-7c8a-8380-9a6dd9fe0f0d/36%20-%20Me!%20(3).jpeg",
               "alt": "Me! (3)",
               "type": "image",
@@ -529,7 +529,7 @@
         {
           "id": "juice-2025-part-2",
           "name": "Juice 2025 Part 2",
-          "description": "",
+          "description": "Moving on to the second venue, cool hotel and lots of fun.",
           "items": [
             {
               "id": "juice-2025-part-2-1",
@@ -546,7 +546,7 @@
             {
               "id": "juice-2025-part-2-2",
               "title": "The Cool 2nd Hotel",
-              "caption": "",
+              "caption": "This was so big and grand. Our room was so big it might've been bigger than our house.",
               "url": "https://cdn.hackclub.com/019c851a-57ad-746c-bbd8-74009cac2615/2%20-%20The%20Cool%202nd%20Hotel.jpeg",
               "alt": "The Cool 2nd Hotel",
               "type": "image",
@@ -558,7 +558,7 @@
             {
               "id": "juice-2025-part-2-3",
               "title": "Juice!",
-              "caption": "",
+              "caption": "The everyone pic!",
               "url": "https://cdn.hackclub.com/019c851a-59b8-708d-85dd-585a47e7cb30/3%20-%20Juice!.jpeg",
               "alt": "Juice!",
               "type": "image",
@@ -582,7 +582,7 @@
             {
               "id": "juice-2025-part-2-5",
               "title": "Lunch (Is There Always Subway At Every Event)",
-              "caption": "",
+              "caption": "Somehow I just realized I had Subway at Juice and Overglade.",
               "url": "https://cdn.hackclub.com/019c851a-5e21-700c-b210-3ae730d86f3b/5%20-%20Lunch%20(Is%20there%20always%20Subway%20at%20every%20event).jpeg",
               "alt": "Lunch (Is There Always Subway At Every Event)",
               "type": "image",
@@ -594,7 +594,7 @@
             {
               "id": "juice-2025-part-2-6",
               "title": "Venue 2 Whiteboard Boogaloo",
-              "caption": "",
+              "caption": "There's 2 whiteboard now! This is the first one.",
               "url": "https://cdn.hackclub.com/019c851a-60c5-783c-8b7b-210ce688f5c4/6%20-%20Venue%202%20Whiteboard%20Boogaloo.jpeg",
               "alt": "Venue 2 Whiteboard Boogaloo",
               "type": "image",
@@ -606,7 +606,7 @@
             {
               "id": "juice-2025-part-2-7",
               "title": "Geming",
-              "caption": "",
+              "caption": "Don't eat bread in front of your laptop.",
               "url": "https://cdn.hackclub.com/019c851a-6365-719a-884d-b5daa30428ce/7%20-%20Geming.jpeg",
               "alt": "Geming",
               "type": "image",
@@ -618,7 +618,7 @@
             {
               "id": "juice-2025-part-2-8",
               "title": "Postcard!",
-              "caption": "",
+              "caption": "Gah, so cool.",
               "url": "https://cdn.hackclub.com/019c851a-6604-7108-acda-4ee30a52132e/8%20-%20Postcard!.jpeg",
               "alt": "Postcard!",
               "type": "image",
@@ -666,7 +666,7 @@
             {
               "id": "juice-2025-part-2-12",
               "title": "Milk Tea And Stuff",
-              "caption": "",
+              "caption": "Chagee is on another level.",
               "url": "https://cdn.hackclub.com/019c851a-7276-7cdb-bab7-b320e59189c1/12%20-%20Milk%20Tea%20and%20Stuff.jpeg",
               "alt": "Milk Tea And Stuff",
               "type": "image",
@@ -690,7 +690,7 @@
             {
               "id": "juice-2025-part-2-14",
               "title": "Zachary Hackary Lattaa",
-              "caption": "",
+              "caption": "The one and only.",
               "url": "https://cdn.hackclub.com/019c851a-7692-706f-b014-0462da89815a/14%20-%20Zachary%20Hackary%20Lattaa.jpeg",
               "alt": "Zachary Hackary Lattaa",
               "type": "image",
@@ -702,7 +702,7 @@
             {
               "id": "juice-2025-part-2-15",
               "title": "Thomas Juice Stubblefield!",
-              "caption": "",
+              "caption": "Another one and only.",
               "url": "https://cdn.hackclub.com/019c851a-7820-7abf-804a-265737381b43/15%20-%20Thomas%20Juice%20Stubblefield!.jpeg",
               "alt": "Thomas Juice Stubblefield!",
               "type": "image",
@@ -726,7 +726,7 @@
             {
               "id": "juice-2025-part-2-17",
               "title": "Night Time",
-              "caption": "",
+              "caption": "Outside vibes.",
               "url": "https://cdn.hackclub.com/019c851a-7c4e-7c97-ae18-629b39557907/17%20-%20Night%20Time.jpeg",
               "alt": "Night Time",
               "type": "image",
@@ -762,7 +762,7 @@
             {
               "id": "juice-2025-part-2-20",
               "title": "Vibes",
-              "caption": "",
+              "caption": "This image ate.",
               "url": "https://cdn.hackclub.com/019c851a-855b-7e3d-91ea-bb141391f60c/20%20-%20Vibes.jpeg",
               "alt": "Vibes",
               "type": "image",
@@ -774,7 +774,7 @@
             {
               "id": "juice-2025-part-2-21",
               "title": "The 2nd Whiteboard",
-              "caption": "",
+              "caption": "Question of the day!",
               "url": "https://cdn.hackclub.com/019c851a-8db9-7463-8035-52225365a200/21%20-%20The%202nd%20Whiteboard.jpeg",
               "alt": "The 2nd Whiteboard",
               "type": "image",
@@ -894,7 +894,7 @@
             {
               "id": "juice-2025-part-2-31",
               "title": "Groupfie!",
-              "caption": "",
+              "caption": "There was kinda a fieldtrip and we were rushing.",
               "url": "https://cdn.hackclub.com/019c851a-bb80-7166-9c30-1c02e76d0a0e/31%20-%20Groupfie!.jpeg",
               "alt": "Groupfie!",
               "type": "image",
@@ -930,7 +930,7 @@
             {
               "id": "juice-2025-part-2-34",
               "title": "Zoo Jumpscare",
-              "caption": "",
+              "caption": "Boop",
               "url": "https://cdn.hackclub.com/019c851a-c1e2-74be-9c27-58f24b546ad7/34%20-%20Zoo%20Jumpscare.jpeg",
               "alt": "Zoo Jumpscare",
               "type": "image",
@@ -978,7 +978,7 @@
             {
               "id": "juice-2025-part-2-38",
               "title": "BlåHaj",
-              "caption": "",
+              "caption": "This is the best pic of the trip.",
               "url": "https://cdn.hackclub.com/019c851a-cbff-76f2-9df7-559e90652ad9/38%20-%20Bl%C3%A5haj.jpeg",
               "alt": "BlåHaj",
               "type": "image",
@@ -1002,7 +1002,7 @@
             {
               "id": "juice-2025-part-2-40",
               "title": "2nd Whiteboard (3) But Diff Angle + Boykisser",
-              "caption": "",
+              "caption": "We did some shrink plastic keychains.",
               "url": "https://cdn.hackclub.com/019c851a-d410-7a79-9c26-00cb35075e83/40%20-%202nd%20Whiteboard%20(3)%20but%20diff%20angle%20+%20boykisser.jpeg",
               "alt": "2nd Whiteboard (3) But Diff Angle + Boykisser",
               "type": "image",
@@ -1014,7 +1014,7 @@
             {
               "id": "juice-2025-part-2-41",
               "title": "Hand Sewn!",
-              "caption": "",
+              "caption": "We had a make your own plushie workshop.",
               "url": "https://cdn.hackclub.com/019c851a-d5c2-7b63-ab27-03b12e4a6763/41%20-%20Hand%20Sewn!.jpeg",
               "alt": "Hand Sewn!",
               "type": "image",
@@ -1110,7 +1110,7 @@
             {
               "id": "juice-2025-part-2-49",
               "title": "Nanjing Road",
-              "caption": "",
+              "caption": "Cool, bright and lively!",
               "url": "https://cdn.hackclub.com/019c851a-f8bb-702f-b94e-33a1dfef6a32/49%20-%20Nanjing%20Road.jpeg",
               "alt": "Nanjing Road",
               "type": "image",
@@ -1122,7 +1122,7 @@
             {
               "id": "juice-2025-part-2-50",
               "title": "HeyTea!",
-              "caption": "",
+              "caption": "They ran out of tea, ironic. (This is just milk-based)",
               "url": "https://cdn.hackclub.com/019c851a-fc2e-7978-b48a-524cae6268e5/50%20-%20HeyTea!.jpeg",
               "alt": "HeyTea!",
               "type": "image",
@@ -1158,7 +1158,7 @@
             {
               "id": "juice-2025-part-2-53",
               "title": "Bye Shanghai",
-              "caption": "",
+              "caption": ":((((",
               "url": "https://cdn.hackclub.com/019c851b-0578-70e1-a7e6-f72719658975/53%20-%20Bye%20Shanghai.jpeg",
               "alt": "Bye Shanghai",
               "type": "image",
@@ -1194,7 +1194,7 @@
             {
               "id": "juice-2025-part-2-56",
               "title": "Bye! (See You Again Soon China, Hopefully)",
-              "caption": "",
+              "caption": "Hope to be back by Fallout",
               "url": "https://cdn.hackclub.com/019c851b-0a3f-7cc3-a0a7-ad3fc7ed158b/56%20-%20Bye!%20(See%20you%20again%20soon%20China,%20hopefully).jpeg",
               "alt": "Bye! (See You Again Soon China, Hopefully)",
               "type": "image",
