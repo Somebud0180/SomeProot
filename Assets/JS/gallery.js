@@ -9,8 +9,11 @@
 	const COLLECTION_DESCRIPTION_ID = "gallery-collection-description";
 	const GRID_SELECTOR = ".gallery-grid";
 	const MANIFEST_PATH = "/SomeProot/Assets/Text/gallery_collections.json";
+	const IMAGE_PRELOAD_ROOT_MARGIN = "1200px 0px";
+	const EAGER_IMAGE_COUNT = 10;
 
 	let manifestData = null;
+	let mediaObserver = null;
 
 	const getElements = () => ({
 		categorySelect: document.getElementById(CATEGORY_SELECT_ID),
@@ -39,7 +42,67 @@
 		return collection.items.filter((item) => Boolean(item?.url));
 	};
 
-	const createMediaElement = (item) => {
+	const disconnectMediaObserver = () => {
+		if (mediaObserver) {
+			mediaObserver.disconnect();
+			mediaObserver = null;
+		}
+	};
+
+	const activateImageSource = (img) => {
+		const src = img?.dataset?.src;
+		if (!src) {
+			return;
+		}
+
+		img.src = src;
+		delete img.dataset.src;
+	};
+
+	const markImageLoaded = (img) => {
+		img.classList.remove("gallery-image--pending");
+		img.classList.add("gallery-image--loaded");
+		img.closest(".gallery-item")?.classList.remove("gallery-item--pending");
+	};
+
+	const setupProgressiveImageLoading = (grid) => {
+		disconnectMediaObserver();
+
+		const pendingImages = Array.from(
+			grid.querySelectorAll("img.gallery-image[data-src]"),
+		);
+
+		if (!pendingImages.length) {
+			return;
+		}
+
+		if (!("IntersectionObserver" in window)) {
+			pendingImages.forEach((img) => activateImageSource(img));
+			return;
+		}
+
+		mediaObserver = new IntersectionObserver(
+			(entries, observer) => {
+				entries.forEach((entry) => {
+					if (!entry.isIntersecting) {
+						return;
+					}
+					const img = entry.target;
+					activateImageSource(img);
+					observer.unobserve(img);
+				});
+			},
+			{
+				root: null,
+				rootMargin: IMAGE_PRELOAD_ROOT_MARGIN,
+				threshold: 0.01,
+			},
+		);
+
+		pendingImages.forEach((img) => mediaObserver.observe(img));
+	};
+
+	const createMediaElement = (item, index) => {
 		const itemType = item?.type || "image";
 
 		if (itemType === "video") {
@@ -63,16 +126,24 @@
 
 		// Default to image
 		const img = document.createElement("img");
-		img.className = "gallery-media gallery-image";
-		img.src = item.url;
+		img.className = "gallery-media gallery-image gallery-image--pending";
 		img.alt = item.alt || item.title || "Gallery media";
-		img.loading = "lazy";
+		img.loading = index < EAGER_IMAGE_COUNT ? "eager" : "lazy";
 		img.decoding = "async";
+		img.addEventListener("load", () => markImageLoaded(img), { once: true });
+		img.addEventListener("error", () => markImageLoaded(img), { once: true });
+
+		if (index < EAGER_IMAGE_COUNT) {
+			img.src = item.url;
+		} else {
+			img.dataset.src = item.url;
+		}
 
 		return img;
 	};
 
 	const renderGrid = (collection, grid, descriptionNode) => {
+		disconnectMediaObserver();
 		clearNode(grid);
 		const items = safeCollectionItems(collection);
 
@@ -86,14 +157,16 @@
 			return;
 		}
 
-		items.forEach((item) => {
+		items.forEach((item, index) => {
 			const card = document.createElement("article");
 			card.className = "gallery-item";
 			if (item?.type === "video") {
 				card.classList.add("gallery-item--video");
+			} else {
+				card.classList.add("gallery-item--pending");
 			}
 
-			const mediaElement = createMediaElement(item);
+			const mediaElement = createMediaElement(item, index);
 
 			const captionWrap = document.createElement("div");
 			captionWrap.className = "gallery-caption-wrap";
@@ -110,6 +183,8 @@
 			card.append(mediaElement, captionWrap);
 			grid.appendChild(card);
 		});
+
+		setupProgressiveImageLoading(grid);
 	};
 
 	const getCategoryList = () => {

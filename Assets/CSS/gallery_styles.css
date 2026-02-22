@@ -278,6 +278,16 @@ select {
 .gallery-image {
 	aspect-ratio: 1 / 1;
 	object-fit: cover;
+	opacity: 1;
+	transition: opacity 0.2s ease;
+}
+
+.gallery-image--pending {
+	opacity: 0;
+}
+
+.gallery-image--loaded {
+	opacity: 1;
 }
 
 .gallery-video {
@@ -289,6 +299,10 @@ select {
 .gallery-item--video .gallery-video {
 	width: 100%;
 	height: auto;
+}
+
+.gallery-item--pending .gallery-media {
+	background: rgba(255, 255, 255, 0.06);
 }
 
 .gallery-item--video .gallery-video::cue {
