@@ -389,7 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const pageTitle = document.querySelector(".page .title");
 		const pageDescription = document.querySelector(".page .description");
 		if (pageTitle) {
-			pageTitle.textContent = `Collection: ${safeCollectionName(collection)}`;
+			pageTitle.textContent = safeCollectionName(collection);
 		}
 		if (pageDescription) {
 			pageDescription.textContent = collection?.description || "";
