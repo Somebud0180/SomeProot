@@ -1,17 +1,56 @@
 import { initLayout, updateCardHeight } from "./layout.js";
-import { initFaceMotion } from "./face-motion.js";
-import { initContent, loadMarkdown } from "./content.js";
-import { initJournal } from "./journal.js";
-import { CustomSelector, initCustomSelectors } from "./custom-selector.js";
+
+const pageName = document.body?.getAttribute("data-page") || "";
+const hasSectionTargets = Boolean(document.querySelector("[section]"));
+const hasFaceTargets = Boolean(
+	document.querySelector(".face") &&
+		document.getElementById("left-eye-container") &&
+		document.getElementById("right-eye-container") &&
+		document.querySelector(".mouth"),
+);
+const hasCustomSelectors = Boolean(
+	document.querySelector(".custom-selector, .picker-select"),
+);
+const hasJournalTargets =
+	pageName === "Journal" ||
+	pageName === "JournalViewer" ||
+	Boolean(document.getElementById("journalEntries")) ||
+	Boolean(document.getElementById("journalBody"));
+
+const [contentModule, journalModule, faceMotionModule, customSelectorModule] =
+	await Promise.all([
+		hasSectionTargets ? import("./content.js") : Promise.resolve(null),
+		hasJournalTargets ? import("./journal.js") : Promise.resolve(null),
+		hasFaceTargets ? import("./face-motion.js") : Promise.resolve(null),
+		hasCustomSelectors
+			? import("./custom-selector.js")
+			: Promise.resolve(null),
+	]);
 
 function initializeApp() {
 	initLayout();
-	initContent({ onAfterRender: updateCardHeight });
-	initJournal();
-	initFaceMotion();
-	initCustomSelectors({ onSelectionChanged: loadMarkdown });
+
+	if (contentModule) {
+		contentModule.initContent({ onAfterRender: updateCardHeight });
+	}
+
+	if (journalModule) {
+		journalModule.initJournal();
+	}
+
+	if (faceMotionModule) {
+		faceMotionModule.initFaceMotion();
+	}
+
+	if (customSelectorModule) {
+		const onSelectionChanged = contentModule
+			? contentModule.loadMarkdown
+			: undefined;
+		customSelectorModule.initCustomSelectors({ onSelectionChanged });
+		window.CustomSelector = customSelectorModule.CustomSelector;
+	}
+
 	updateCardHeight();
-	window.CustomSelector = CustomSelector;
 }
 
 if (document.readyState === "loading") {

@@ -10,7 +10,7 @@
 	const GRID_SELECTOR = ".gallery-grid";
 	const MANIFEST_PATH = "/SomeProot/Assets/Text/gallery_collections.json";
 	const IMAGE_PRELOAD_ROOT_MARGIN = "1200px 0px";
-	const EAGER_IMAGE_COUNT = 10;
+	const EAGER_IMAGE_COUNT = 0;
 
 	let manifestData = null;
 	let mediaObserver = null;
