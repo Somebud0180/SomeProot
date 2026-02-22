@@ -241,17 +241,23 @@
 		const content = document.createElement("div");
 		content.className = "card__content";
 
+		const hstack = document.createElement("div");
+		hstack.className = "h_stack";
+
 		const name = document.createElement("h2");
 		name.className = "card__name";
 		name.textContent = safeCollectionName(collection);
 
+		const amount = document.createElement("p");
+		amount.className = "card__badge";
+		const itemCount = safeCollectionItems(collection).length;
+		const itemSymbol =
+			"<img src='/SomeProot/Assets/Images/Misc/Media.svg' alt='Media' class='svg'>";
+		amount.innerHTML = `${itemCount} ${itemSymbol}`;
+
 		const description = document.createElement("p");
 		description.className = "card__description";
-		const itemCount = safeCollectionItems(collection).length;
-		const itemCountText = `${itemCount} item${itemCount === 1 ? "" : "s"}`;
-		description.textContent = collection?.description
-			? `${collection.description} • ${itemCountText}`
-			: itemCountText;
+		description.textContent = collection?.description || "";
 
 		const button = document.createElement("a");
 		button.className = "card__button";
@@ -262,7 +268,8 @@
 		});
 		button.href = `${VIEWER_PATH}?${params.toString()}`;
 
-		content.append(name, description, button);
+		hstack.append(name, amount);
+		content.append(hstack, description, button);
 		card.appendChild(content);
 
 		return card;

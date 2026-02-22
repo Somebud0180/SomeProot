@@ -24,6 +24,12 @@
 	font-style: normal;
 }
 
+.svg {
+	width: 1.5em;
+	margin-top: -0.25em;
+	vertical-align: middle;
+}
+
 /* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
 	width: 16px;
@@ -428,6 +434,7 @@ footer a {
 	justify-content: center;
 	align-items: center;
 	gap: 0.5rem;
+	padding: 0.5rem 0;
 	position: relative;
 	z-index: 1;
 	cursor: pointer;
