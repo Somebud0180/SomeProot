@@ -1,3 +1,34 @@
+// Image enlarge modal logic
+document.addEventListener("DOMContentLoaded", function () {
+	const modal = document.getElementById("image-modal");
+	const modalImg = document.querySelector(".image-modal-img");
+	const modalExit = document.querySelector(".image-modal-exit");
+	const modalOverlay = document.querySelector(".image-modal-overlay");
+	// Delegate click for images in .photo_grid
+	document.body.addEventListener("click", function (e) {
+		const img = e.target.closest(".photo_grid img");
+		if (img) {
+			modalImg.src = img.src;
+			modalImg.alt = img.alt || "";
+			modal.style.display = "flex";
+			document.body.style.overflow = "hidden";
+		}
+	});
+	function closeModal() {
+		modal.style.display = "none";
+		document.body.style.overflow = "";
+	}
+
+	// Close modal on exit button click
+	modalExit.addEventListener("click", closeModal);
+
+	// Close on Escape key
+	document.addEventListener("keydown", function (e) {
+		if (modal.style.display === "flex" && e.key === "Escape") {
+			closeModal();
+		}
+	});
+});
 (function () {
 	const PAGE_NAME = document.body?.getAttribute("data-page") || "";
 	if (PAGE_NAME !== "Gallery" && PAGE_NAME !== "GalleryViewer") {

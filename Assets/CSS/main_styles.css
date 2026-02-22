@@ -1,3 +1,58 @@
+/* Modal overlay for enlarged gallery image */
+.image-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10000;
+}
+
+.image-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.85);
+	z-index: 0;
+}
+
+.image-modal-img {
+	position: relative;
+	z-index: 1;
+	max-width: 90vw;
+	max-height: 90vh;
+	box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
+	border-radius: 12px;
+	background: #222;
+	object-fit: contain;
+}
+
+.image-modal-exit {
+	position: absolute;
+	top: 24px;
+	left: 24px;
+	z-index: 2;
+	background-color: rgba(0, 0, 0, 0.7);
+	color: #fff;
+	border: none;
+	font-size: 2.5rem;
+	border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: ease-in background-color 0.2s;
+}
+.image-modal-exit:hover {
+	background: rgba(0, 0, 0, 0.95);
+}
 /* Global CSS Variables */
 :root {
 	--picker-border-radius: 2rem;
