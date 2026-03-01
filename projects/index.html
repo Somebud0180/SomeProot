@@ -40,7 +40,7 @@
                     <div class="project-card__content">
                         <h3 class="project-card__name">SomeAppsWeb</h3>
                         <p class="project-card__description">A(nother) website but with all of my apps!</p>
-                        <a class="project-card__button" href="https://somebud0180.github.io/SomeAppsWeb/"
+                        <a class="project-card__button" href="https://somebud0180.github.io/SomeAppsWeb/" onclick="slink.saveCurrentSite()"
                             aria-label="Visit SomeAppsWeb">Visit!</a>
                     </div>
                 </article>
@@ -78,33 +78,6 @@
     </footer>
 
     <script src="https://somebud0180.github.io/slink/script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Select all links to somebud0180.github.io
-            const links = document.querySelectorAll('a[href^="https://somebud0180.github.io/"]');
-            links.forEach(function (link) {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    if (window.slink && typeof slink.saveCurrentSite === 'function') {
-                        // If saveCurrentSite is async or returns a promise, wait for it
-                        const result = slink.saveCurrentSite();
-                        if (result && typeof result.then === 'function') {
-                            result.then(() => {
-                                window.location.href = link.href;
-                            });
-                        } else {
-                            // Fallback: short delay before navigating
-                            setTimeout(() => {
-                                window.location.href = link.href;
-                            }, 100);
-                        }
-                    } else {
-                        window.location.href = link.href;
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>
