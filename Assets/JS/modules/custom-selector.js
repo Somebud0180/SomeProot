@@ -240,6 +240,13 @@ export function initCustomSelectors({ onSelectionChanged } = {}) {
 	document
 		.querySelectorAll(".custom-selector, .picker-select")
 		.forEach((selectElement) => {
+			const existingPicker = selectElement.nextElementSibling;
+			if (
+				existingPicker &&
+				existingPicker.classList.contains("picker__content")
+			) {
+				existingPicker.remove();
+			}
 			new CustomSelector(selectElement, { onSelectionChanged });
 		});
 }

@@ -18,6 +18,11 @@ async function initializeApp() {
 		pageName === "JournalViewer" ||
 		Boolean(document.getElementById("journalEntries")) ||
 		Boolean(document.getElementById("journalBody"));
+	const hasGalleryTargets =
+		pageName === "Gallery" ||
+		pageName === "GalleryViewer" ||
+		Boolean(document.getElementById("gallery-collection-grid")) ||
+		Boolean(document.querySelector(".photo_grid"));
 
 	const [
 		contentModule,
@@ -25,6 +30,7 @@ async function initializeApp() {
 		journalModule,
 		faceMotionModule,
 		customSelectorModule,
+		galleryModule,
 	] = await Promise.all([
 		hasSectionTargets ? import("./modules/content.js") : Promise.resolve(null),
 		hasImgTargets ? import("./modules/img.js") : Promise.resolve(null),
@@ -33,6 +39,7 @@ async function initializeApp() {
 		hasCustomSelectors
 			? import("./modules/custom-selector.js")
 			: Promise.resolve(null),
+		hasGalleryTargets ? import("./modules/gallery.js") : Promise.resolve(null),
 	]);
 
 	console.log("Initializing app...");
@@ -62,15 +69,25 @@ async function initializeApp() {
 		window.CustomSelector = customSelectorModule.CustomSelector;
 	}
 
+	if (galleryModule && typeof galleryModule.initGallery === "function") {
+		galleryModule.initGallery();
+	}
+
 	updateCardHeight();
 }
 
 function runAppInit() {
-	initializeApp();
+	initializeApp().catch((error) => {
+		console.error("App initialization failed:", error);
+	});
 }
 
 document.addEventListener("turbo:load", runAppInit);
 
-if (document.readyState !== "loading") {
-	runAppInit();
+if (!window.Turbo) {
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", runAppInit, { once: true });
+	} else {
+		runAppInit();
+	}
 }
