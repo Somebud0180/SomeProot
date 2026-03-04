@@ -1,5 +1,5 @@
 // Image enlarge modal logic
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("turbo:load", function () {
 	const modal = document.getElementById("image-modal");
 	const modalImg = document.querySelector(".image-modal-img");
 	const modalExit = document.querySelector(".image-modal-exit");
@@ -496,5 +496,5 @@ document.addEventListener("DOMContentLoaded", function () {
 		initViewerPage();
 	};
 
-	document.addEventListener("DOMContentLoaded", init);
+	document.addEventListener("turbo:load", init);
 })();

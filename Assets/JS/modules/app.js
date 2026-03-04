@@ -1,38 +1,39 @@
 import { initLayout, updateCardHeight } from "./layout.js";
 
-const pageName = document.body?.getAttribute("data-page") || "";
-const hasImgTargets = Boolean(document.querySelector("img"));
-const hasSectionTargets = Boolean(document.querySelector("[section]"));
-const hasFaceTargets = Boolean(
-	document.querySelector(".face") &&
-	document.getElementById("left-eye-container") &&
-	document.getElementById("right-eye-container") &&
-	document.querySelector(".mouth"),
-);
-const hasCustomSelectors = Boolean(
-	document.querySelector(".custom-selector, .picker-select"),
-);
-const hasJournalTargets =
-	pageName === "Journal" ||
-	pageName === "JournalViewer" ||
-	Boolean(document.getElementById("journalEntries")) ||
-	Boolean(document.getElementById("journalBody"));
+async function initializeApp() {
+	const pageName = document.body?.getAttribute("data-page") || "";
+	const hasImgTargets = Boolean(document.querySelector("img"));
+	const hasSectionTargets = Boolean(document.querySelector("[section]"));
+	const hasFaceTargets = Boolean(
+		document.querySelector(".face") &&
+		document.getElementById("left-eye-container") &&
+		document.getElementById("right-eye-container") &&
+		document.querySelector(".mouth"),
+	);
+	const hasCustomSelectors = Boolean(
+		document.querySelector(".custom-selector, .picker-select"),
+	);
+	const hasJournalTargets =
+		pageName === "Journal" ||
+		pageName === "JournalViewer" ||
+		Boolean(document.getElementById("journalEntries")) ||
+		Boolean(document.getElementById("journalBody"));
 
-const [
-	contentModule,
-	imgModule,
-	journalModule,
-	faceMotionModule,
-	customSelectorModule,
-] = await Promise.all([
-	hasSectionTargets ? import("./content.js") : Promise.resolve(null),
-	hasImgTargets ? import("./img.js") : Promise.resolve(null),
-	hasJournalTargets ? import("./journal.js") : Promise.resolve(null),
-	hasFaceTargets ? import("./face-motion.js") : Promise.resolve(null),
-	hasCustomSelectors ? import("./custom-selector.js") : Promise.resolve(null),
-]);
+	const [
+		contentModule,
+		imgModule,
+		journalModule,
+		faceMotionModule,
+		customSelectorModule,
+	] = await Promise.all([
+		hasSectionTargets ? import("./content.js") : Promise.resolve(null),
+		hasImgTargets ? import("./img.js") : Promise.resolve(null),
+		hasJournalTargets ? import("./journal.js") : Promise.resolve(null),
+		hasFaceTargets ? import("./face-motion.js") : Promise.resolve(null),
+		hasCustomSelectors ? import("./custom-selector.js") : Promise.resolve(null),
+	]);
 
-function initializeApp() {
+	console.log("Initializing app...");
 	initLayout();
 
 	if (imgModule && typeof imgModule.autoAttachImgErrorHandlers === "function") {
@@ -62,8 +63,12 @@ function initializeApp() {
 	updateCardHeight();
 }
 
-if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", initializeApp);
-} else {
+function runAppInit() {
 	initializeApp();
+}
+
+document.addEventListener("turbo:load", runAppInit);
+
+if (document.readyState !== "loading") {
+	runAppInit();
 }
