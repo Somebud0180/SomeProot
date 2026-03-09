@@ -23,6 +23,9 @@ async function initializeApp() {
 		pageName === "GalleryViewer" ||
 		Boolean(document.getElementById("gallery-collection-grid")) ||
 		Boolean(document.querySelector(".photo_grid"));
+	const hasProjectsTargets =
+		pageName === "Projects" ||
+		Boolean(document.querySelector(".project-card__description"));
 
 	const [
 		contentModule,
@@ -31,6 +34,7 @@ async function initializeApp() {
 		faceMotionModule,
 		customSelectorModule,
 		galleryModule,
+		projectsModule,
 	] = await Promise.all([
 		hasSectionTargets ? import("./modules/content.js") : Promise.resolve(null),
 		hasImgTargets ? import("./modules/img.js") : Promise.resolve(null),
@@ -40,6 +44,9 @@ async function initializeApp() {
 			? import("./modules/custom-selector.js")
 			: Promise.resolve(null),
 		hasGalleryTargets ? import("./modules/gallery.js") : Promise.resolve(null),
+		hasProjectsTargets
+			? import("./modules/projects.js")
+			: Promise.resolve(null),
 	]);
 
 	console.log("Initializing app...");
@@ -71,6 +78,10 @@ async function initializeApp() {
 
 	if (galleryModule && typeof galleryModule.initGallery === "function") {
 		galleryModule.initGallery();
+	}
+
+	if (projectsModule && typeof projectsModule.initProjects === "function") {
+		projectsModule.initProjects();
 	}
 
 	updateCardHeight();
