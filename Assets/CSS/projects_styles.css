@@ -297,7 +297,7 @@
 		width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
 		height 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
 		border-radius 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
-	}
+}
 
 .project-card--overlay .project-card__image {
 	max-height: 300px;

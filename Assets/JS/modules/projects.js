@@ -242,27 +242,29 @@ function openProjectCardOverlay(cardOrTrigger) {
 }
 
 function attachProjectCardExpandHandlers() {
-	document.querySelectorAll(".project-card__expand").forEach((expandControl) => {
-		if (expandControl.dataset.overlayBound === "true") {
-			return;
-		}
-
-		expandControl.dataset.overlayBound = "true";
-		expandControl.setAttribute("role", "button");
-		expandControl.setAttribute("tabindex", "0");
-		expandControl.setAttribute("aria-label", "Expand project card");
-
-		expandControl.addEventListener("click", () => {
-			openProjectCardOverlay(expandControl);
-		});
-
-		expandControl.addEventListener("keydown", (event) => {
-			if (event.key === "Enter" || event.key === " ") {
-				event.preventDefault();
-				openProjectCardOverlay(expandControl);
+	document
+		.querySelectorAll(".project-card__expand")
+		.forEach((expandControl) => {
+			if (expandControl.dataset.overlayBound === "true") {
+				return;
 			}
+
+			expandControl.dataset.overlayBound = "true";
+			expandControl.setAttribute("role", "button");
+			expandControl.setAttribute("tabindex", "0");
+			expandControl.setAttribute("aria-label", "Expand project card");
+
+			expandControl.addEventListener("click", () => {
+				openProjectCardOverlay(expandControl);
+			});
+
+			expandControl.addEventListener("keydown", (event) => {
+				if (event.key === "Enter" || event.key === " ") {
+					event.preventDefault();
+					openProjectCardOverlay(expandControl);
+				}
+			});
 		});
-	});
 }
 
 function updateModelSource(modelSrc) {
