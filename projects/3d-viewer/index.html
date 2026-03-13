@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<script
+			type="module"
+			src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"
+		></script>
+		<script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+		<meta name="turbo-refresh-method" content="morph" />
+		<meta name="turbo-refresh-scroll" content="preserve" />
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+		/>
+		<meta name="description" content="Somebud's project showcase" />
+		<meta
+			http-equiv="Cache-Control"
+			content="max-age=31536000, must-revalidate"
+		/>
+		<title>SomeProot - Projects</title>
+		<link rel="stylesheet" href="/SomeProot/Assets/CSS/main_styles.css" />
+		<link rel="stylesheet" href="/SomeProot/Assets/CSS/projects_styles.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+
+	<body data-page="Projects3DViewer">
+		<div id="project-3d-modal" class="project-3d-modal" style="display: none">
+			<div class="project-3d-modal-overlay" data-close-3d-modal></div>
+			<button
+				type="button"
+				class="project-3d-modal-exit"
+				aria-label="Close 3D project view"
+			>
+				&times;
+			</button>
+			<div class="project-3d-modal-content">
+				<h2 class="project-3d-modal-title">Project 3D View</h2>
+				<a-scene embedded class="project-3d-scene">
+					<a-assets>
+						<a-asset-item
+							id="project-model"
+							src="/SomeProot/Assets/3D/HackerCard.glb"
+						></a-asset-item>
+					</a-assets>
+					<a-entity
+						id="active-project-model"
+						gltf-model="#project-model"
+						position="0 0 0"
+						rotation="0 0 0"
+						scale="0.1 0.1 0.1"
+					></a-entity>
+				</a-scene>
+			</div>
+		</div>
+	</body>
+</html>
