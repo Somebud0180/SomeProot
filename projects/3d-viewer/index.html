@@ -32,15 +32,16 @@
 	<body data-page="Projects3DViewer">
 		<div id="project-3d-modal" class="project-3d-modal" style="display: none">
 			<div class="project-3d-modal-overlay" data-close-3d-modal></div>
-			<button
-				type="button"
-				class="project-3d-modal-exit"
-				aria-label="Close 3D project view"
-			>
-				&times;
-			</button>
 			<div class="project-3d-modal-content">
-				<h2 class="project-3d-modal-title">Project 3D View</h2>
+				<div class="project-3d-modal-bar">
+					<h2 class="project-3d-modal-title">Project 3D View</h2>
+					<button
+						class="project-3d-modal-exit"
+						aria-label="Close 3D project view"
+					>
+						&times;
+					</button>
+				</div>
 				<model-viewer
 					id="active-project-model-viewer"
 					class="project-3d-viewer"
