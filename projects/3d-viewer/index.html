@@ -5,7 +5,7 @@
 			type="module"
 			src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"
 		></script>
-		<script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.2.0/dist/model-viewer.min.js"></script>
 		<meta name="turbo-refresh-method" content="morph" />
 		<meta name="turbo-refresh-scroll" content="preserve" />
 		<meta charset="UTF-8" />
@@ -41,21 +41,15 @@
 			</button>
 			<div class="project-3d-modal-content">
 				<h2 class="project-3d-modal-title">Project 3D View</h2>
-				<a-scene embedded class="project-3d-scene">
-					<a-assets>
-						<a-asset-item
-							id="project-model"
-							src="/SomeProot/Assets/3D/HackerCard.glb"
-						></a-asset-item>
-					</a-assets>
-					<a-entity
-						id="active-project-model"
-						gltf-model="#project-model"
-						position="0 0 0"
-						rotation="0 0 0"
-						scale="0.1 0.1 0.1"
-					></a-entity>
-				</a-scene>
+				<model-viewer
+					id="active-project-model-viewer"
+					class="project-3d-viewer"
+					alt="Project 3D model"
+					src="/SomeProot/Assets/3D/HackerCard.glb"
+					shadow-intensity="1"
+					camera-controls
+					touch-action="pan-y"
+				></model-viewer>
 			</div>
 		</div>
 	</body>

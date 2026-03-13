@@ -1,12 +1,10 @@
 const OVERLAY_PAGE_PATH = "/SomeProot/projects/3d-viewer/index.html";
 const MODEL_BASE_PATH = "/SomeProot/Assets/3D/";
-const AFRAME_SCRIPT_SRC = "https://aframe.io/releases/1.7.1/aframe.min.js";
+const MODEL_VIEWER_SCRIPT_SRC =
+	"https://cdn.jsdelivr.net/npm/@google/model-viewer@4.2.0/dist/model-viewer.min.js";
 
 let overlayElement = null;
 let escapeListenerAttached = false;
-let rotationHandlersAttached = false;
-
-const DEFAULT_MODEL_ROTATION = { x: 0, y: 0, z: 0 };
 
 function buildModelPath(modelSrc) {
 	if (typeof modelSrc !== "string" || !modelSrc.trim()) {
@@ -49,86 +47,6 @@ function attachOverlayEvents(modal) {
 		});
 		escapeListenerAttached = true;
 	}
-
-	setupModelRotationInteraction(modal);
-}
-
-function centerLoadedModel(modal) {
-	const modelEntity = modal.querySelector("#active-project-model");
-	const modelObject = modelEntity?.getObject3D("mesh");
-
-	if (!modelEntity || !modelObject || !window.THREE) {
-		return;
-	}
-
-	const box = new window.THREE.Box3().setFromObject(modelObject);
-	if (box.isEmpty()) {
-		modelEntity.setAttribute("position", "0 0 0");
-		return;
-	}
-
-	const center = box.getCenter(new window.THREE.Vector3());
-
-	modelObject.position.x -= center.x;
-	modelObject.position.y -= center.y;
-	modelObject.position.z -= center.z;
-	modelEntity.setAttribute("position", "0 0 0");
-}
-
-function setupModelRotationInteraction(modal) {
-	if (rotationHandlersAttached) {
-		return;
-	}
-
-	const scene = modal.querySelector("a-scene.project-3d-scene");
-	const modelEntity = modal.querySelector("#active-project-model");
-
-	if (!scene || !modelEntity) {
-		return;
-	}
-
-	let dragging = false;
-	let lastX = 0;
-	let lastY = 0;
-
-	scene.addEventListener("pointerdown", (event) => {
-		dragging = true;
-		lastX = event.clientX;
-		lastY = event.clientY;
-	});
-
-	window.addEventListener("pointerup", () => {
-		dragging = false;
-	});
-
-	window.addEventListener("pointermove", (event) => {
-		if (!dragging) {
-			return;
-		}
-
-		const deltaX = event.clientX - lastX;
-		const deltaY = event.clientY - lastY;
-
-		const rotation = modelEntity.getAttribute("rotation") || {
-			x: DEFAULT_MODEL_ROTATION.x,
-			y: DEFAULT_MODEL_ROTATION.y,
-			z: DEFAULT_MODEL_ROTATION.z,
-		};
-
-		const nextX = Math.max(-50, Math.min(50, rotation.x - deltaY * 0.2));
-		const nextY = rotation.y + deltaX * 0.35;
-
-		modelEntity.setAttribute("rotation", `${nextX} ${nextY} 0`);
-
-		lastX = event.clientX;
-		lastY = event.clientY;
-	});
-
-	modelEntity.addEventListener("model-loaded", () => {
-		centerLoadedModel(modal);
-	});
-
-	rotationHandlersAttached = true;
 }
 
 function updateModelSource(modelSrc) {
@@ -137,22 +55,17 @@ function updateModelSource(modelSrc) {
 		throw new Error("3D overlay is not available.");
 	}
 
-	const assetItem = modal.querySelector("#project-model");
-	const modelEntity = modal.querySelector("#active-project-model");
+	const modelViewer = modal.querySelector("#active-project-model-viewer");
 	const resolvedPath = buildModelPath(modelSrc);
 
-	if (!assetItem || !modelEntity) {
+	if (!modelViewer) {
 		throw new Error("Overlay model elements are missing.");
 	}
 
-	assetItem.setAttribute("src", resolvedPath);
-	modelEntity.setAttribute("position", "0 0 0");
-	modelEntity.setAttribute(
-		"rotation",
-		`${DEFAULT_MODEL_ROTATION.x} ${DEFAULT_MODEL_ROTATION.y} ${DEFAULT_MODEL_ROTATION.z}`,
-	);
-	modelEntity.removeAttribute("gltf-model");
-	modelEntity.setAttribute("gltf-model", "#project-model");
+	modelViewer.setAttribute("src", resolvedPath);
+	if (typeof modelViewer.resetTurntableRotation === "function") {
+		modelViewer.resetTurntableRotation();
+	}
 }
 
 function open3DOverlay() {
@@ -164,18 +77,18 @@ function open3DOverlay() {
 	modal.style.display = "block";
 }
 
-async function ensureAFrameLoaded() {
-	if (window.AFRAME) {
+async function ensureModelViewerLoaded() {
+	if (customElements.get("model-viewer")) {
 		return;
 	}
 
 	const existingScript = document.querySelector(
-		`script[src="${AFRAME_SCRIPT_SRC}"]`,
+		`script[src="${MODEL_VIEWER_SCRIPT_SRC}"]`,
 	);
 
 	if (existingScript) {
 		await new Promise((resolve, reject) => {
-			if (window.AFRAME) {
+			if (customElements.get("model-viewer")) {
 				resolve();
 				return;
 			}
@@ -183,24 +96,28 @@ async function ensureAFrameLoaded() {
 			existingScript.addEventListener("load", () => resolve(), { once: true });
 			existingScript.addEventListener(
 				"error",
-				() => reject(new Error("Failed to load A-Frame.")),
+				() => reject(new Error("Failed to load model-viewer.")),
 				{ once: true },
 			);
 		});
+		await customElements.whenDefined("model-viewer");
 		return;
 	}
 
 	await new Promise((resolve, reject) => {
 		const script = document.createElement("script");
-		script.src = AFRAME_SCRIPT_SRC;
+		script.type = "module";
+		script.src = MODEL_VIEWER_SCRIPT_SRC;
 		script.addEventListener("load", () => resolve(), { once: true });
 		script.addEventListener(
 			"error",
-			() => reject(new Error("Failed to load A-Frame.")),
+			() => reject(new Error("Failed to load model-viewer.")),
 			{ once: true },
 		);
 		document.head.appendChild(script);
 	});
+
+	await customElements.whenDefined("model-viewer");
 }
 
 async function ensureOverlayInjected() {
@@ -238,7 +155,7 @@ async function ensureOverlayInjected() {
 }
 
 async function load3DOverlay(modelSrc) {
-	await ensureAFrameLoaded();
+	await ensureModelViewerLoaded();
 	await ensureOverlayInjected();
 	updateModelSource(modelSrc);
 	open3DOverlay();

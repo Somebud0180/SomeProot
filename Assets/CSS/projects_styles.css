@@ -199,6 +199,14 @@
 	min-height: 320px;
 }
 
+.project-3d-viewer {
+	width: 100%;
+	height: 100%;
+	flex: 1 1 auto;
+	min-height: 320px;
+	background: #111;
+}
+
 .project-3d-modal-exit {
 	position: absolute;
 	top: 1rem;
