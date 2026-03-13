@@ -30,6 +30,7 @@
 }
 
 .project-card {
+	position: relative;
 	background: var(--projects-card-bg);
 	border: 1px solid var(--projects-card-border);
 	border-radius: 18px;
@@ -39,6 +40,10 @@
 	flex-direction: column;
 	box-shadow: 0 12px 24px var(--projects-card-shadow);
 	animation: project-rise 0.6s ease both;
+}
+
+.project-card--source-hidden {
+	visibility: hidden;
 }
 
 .project-card:nth-child(2) {
@@ -65,9 +70,17 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	cursor: pointer;
 	transition:
 		opacity 0.2s ease,
 		transform 0.2s ease;
+}
+
+.project-card__expand--close {
+	color: #fff;
+	font-size: 1.75rem;
+	line-height: 1;
+	padding: 0;
 }
 
 .project-card__expand p {
@@ -107,6 +120,10 @@
 	-webkit-line-clamp: 5;
 	line-clamp: 5;
 	overflow: hidden;
+}
+
+.project-card__description a {
+	color: inherit;
 }
 
 .project-card__button {
@@ -223,10 +240,103 @@
 	cursor: pointer;
 }
 
+.project-card-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 9998;
+	display: none;
+}
+
+.project-card-overlay__backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(5, 7, 14, 0.7);
+	backdrop-filter: blur(4px);
+	opacity: 0;
+	transition: opacity 0.28s ease;
+}
+
+.project-card-overlay__viewport {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.project-card-overlay__mount {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.project-card--overlay {
+	width: min(420px, calc(100vw - 2rem));
+	height: min(92vh, 980px);
+	max-height: min(92vh, 980px);
+	animation: none;
+}
+
+.project-card-overlay--visible .project-card-overlay__backdrop {
+	opacity: 1;
+}
+
+.project-card-overlay--animating .project-card--overlay {
+	position: fixed;
+	margin: 0;
+	max-width: none;
+	max-height: none;
+	transition:
+		left 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+		top 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+		width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+		height 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+		border-radius 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+
+.project-card--overlay .project-card__image {
+	max-height: 300px;
+	min-height: 240px;
+	flex: 0 0 auto;
+}
+
+.project-card--overlay .project-card__content {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.project-card--overlay .project-card__description {
+	display: block;
+	-webkit-line-clamp: unset;
+	line-clamp: unset;
+	overflow-y: auto;
+	padding-right: 0.2rem;
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+.project-card--overlay .project-card__button {
+	position: sticky;
+	bottom: 0;
+	margin-top: auto;
+	flex: 0 0 auto;
+}
+
 @media (max-width: 700px) {
 	.project-3d-modal-content {
 		width: calc(100vw - 1rem);
 		height: min(78vh, 620px);
 		margin-top: 3.25rem;
+	}
+
+	.project-card--overlay {
+		width: calc(100vw - 1rem);
+		height: min(94vh, 980px);
 	}
 }
