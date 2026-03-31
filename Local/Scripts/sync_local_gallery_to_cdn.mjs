@@ -21,6 +21,7 @@ const CACHE_PATH = path.join(
 	".cache",
 	"cdn_upload_index.json",
 );
+const COLLECTION_MANIFEST_FILE_NAME = "manifest.json";
 
 const CATEGORY_DIRS = [
 	{ id: "photos", label: "Photos", dirName: "Photos" },
@@ -152,6 +153,53 @@ async function readJson(filePath, fallback) {
 async function writeJson(filePath, value) {
 	await fs.mkdir(path.dirname(filePath), { recursive: true });
 	await fs.writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+}
+
+function getCollectionManifestPath(collectionDirPath) {
+	return path.join(collectionDirPath, COLLECTION_MANIFEST_FILE_NAME);
+}
+
+function normalizeCollectionManifest(input) {
+	const manifest = input && typeof input === "object" ? input : {};
+	const items =
+		manifest.items && typeof manifest.items === "object" ? manifest.items : {};
+
+	const normalizedItems = {};
+	for (const [fileName, metadata] of Object.entries(items)) {
+		if (typeof fileName !== "string" || !fileName.trim()) {
+			continue;
+		}
+		if (typeof metadata === "string") {
+			normalizedItems[fileName] = { alt: metadata.trim() };
+			continue;
+		}
+		if (!metadata || typeof metadata !== "object") {
+			continue;
+		}
+		if (metadata.alt === null) {
+			normalizedItems[fileName] = { alt: null };
+			continue;
+		}
+		if (typeof metadata.alt === "string") {
+			normalizedItems[fileName] = { alt: metadata.alt.trim() };
+		}
+	}
+
+	return {
+		version: 1,
+		items: normalizedItems,
+	};
+}
+
+async function readCollectionManifest(collectionDirPath) {
+	const manifestPath = getCollectionManifestPath(collectionDirPath);
+	const parsed = await readJson(manifestPath, {});
+	return normalizeCollectionManifest(parsed);
+}
+
+async function writeCollectionManifest(collectionDirPath, manifest) {
+	const manifestPath = getCollectionManifestPath(collectionDirPath);
+	await writeJson(manifestPath, normalizeCollectionManifest(manifest));
 }
 
 async function sha256OfFile(filePath) {
@@ -375,6 +423,10 @@ async function main() {
 		for (const collectionDir of collectionDirs) {
 			const collection = ensureCollection(category, collectionDir.name);
 			const existingItems = ensureArray(collection.items);
+			const collectionManifest = await readCollectionManifest(
+				collectionDir.path,
+			);
+			let collectionManifestDirty = false;
 			const existingByLocalPath = new Map(
 				existingItems
 					.filter((item) => item?.source?.localPath)
@@ -389,6 +441,7 @@ async function main() {
 
 			for (let position = 0; position < imagePaths.length; position += 1) {
 				const imagePath = imagePaths[position];
+				const localFileName = path.basename(imagePath);
 				const relativeFromRoot = toPosixPath(
 					path.relative(REPO_ROOT, imagePath),
 				);
@@ -457,9 +510,49 @@ async function main() {
 				usedManifestIndexes.add(manifestIndex);
 
 				const title = titleFromFileName(fileName);
+				const hasManifestAltKey = Object.prototype.hasOwnProperty.call(
+					collectionManifest.items,
+					localFileName,
+				);
+				const manifestEntry = collectionManifest.items[localFileName];
+				const manifestAlt =
+					manifestEntry && typeof manifestEntry.alt === "string"
+						? manifestEntry.alt.trim()
+						: manifestEntry?.alt === null
+							? null
+							: undefined;
+				const existingAlt =
+					typeof existingInCollection?.alt === "string"
+						? existingInCollection.alt.trim()
+						: "";
+
+				if (!hasManifestAltKey && existingAlt) {
+					collectionManifest.items[localFileName] = { alt: existingAlt };
+					collectionManifestDirty = true;
+				}
+
+				const explicitlyCleared =
+					hasManifestAltKey && (manifestAlt === null || manifestAlt === "");
+				let resolvedAlt = "";
+				if (explicitlyCleared) {
+					resolvedAlt = "";
+				} else if (typeof manifestAlt === "string" && manifestAlt) {
+					resolvedAlt = manifestAlt;
+				} else if (existingAlt) {
+					resolvedAlt = existingAlt;
+				} else {
+					resolvedAlt = title;
+				}
+
 				const itemPayload = existingInCollection
 					? {
 							...existingInCollection,
+							type: mediaType,
+							title,
+							caption:
+								typeof existingInCollection.caption === "string"
+									? existingInCollection.caption
+									: "",
 							url: resolvedUpload.url,
 							source: {
 								localPath: relativeFromRoot,
@@ -471,7 +564,6 @@ async function main() {
 							title,
 							caption: "",
 							url: resolvedUpload.url,
-							alt: title,
 							type: mediaType,
 							source: {
 								localPath: relativeFromRoot,
@@ -479,11 +571,20 @@ async function main() {
 							},
 						};
 
+				if (resolvedAlt) {
+					itemPayload.alt = resolvedAlt;
+				} else {
+					delete itemPayload.alt;
+				}
+
 				nextItems.push(itemPayload);
 				updatedItems += 1;
 			}
 
 			collection.items = nextItems;
+			if (collectionManifestDirty) {
+				await writeCollectionManifest(collectionDir.path, collectionManifest);
+			}
 		}
 	}
 

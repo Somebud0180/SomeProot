@@ -114,9 +114,11 @@ Local/
       <collection-folder>/
         image1.jpg
         image2.png
+        manifest.json
     Artwork/
       <collection-folder>/
         art1.jpg
+        manifest.json
   Scripts/
     sync_local_gallery_to_cdn.mjs
 ```
@@ -133,6 +135,9 @@ What it does:
 - Hashes each local image (`sha256`) and checks if that hash already has a valid CDN URL
 - Reuses existing CDN URL when possible; uploads only missing images via `POST /api/v4/upload`
 - Creates/updates matching collections and items inside `Assets/Text/gallery_collections.json`
+- Maintains per-collection `manifest.json` metadata keyed by local filename for alt text
+- Syncs manifest alt entries from `gallery_collections.json` alt text
+- Preserves existing gallery alt text (unless explicitly edited)
 - Stores local sync cache at `Local/.cache/cdn_upload_index.json`
 
 `Local/Gallery/*` and local cache are git-ignored so image sources stay local.
@@ -170,6 +175,7 @@ What it does:
 - Lets you create collection folders
 - Shows thumbnails/previews for collection contents
 - Lets you reorder and rename items
+- Lets you edit per-image alt text (saved in collection `manifest.json`)
 - On **Save**, rewrites filenames in order as:
 
 ```text

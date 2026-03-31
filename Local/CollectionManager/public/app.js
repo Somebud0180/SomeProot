@@ -54,6 +54,7 @@ async function saveAndSyncCurrentCollection() {
 				items: state.items.map((item) => ({
 					originalFileName: item.originalFileName,
 					title: sanitizeTitle(item.title),
+					altText: sanitizeAltText(item.altText),
 				})),
 			}),
 		});
@@ -74,6 +75,10 @@ function sanitizeTitle(value) {
 		.replace(/[\\/]/g, " ")
 		.replace(/\s+/g, " ")
 		.trim();
+}
+
+function sanitizeAltText(value) {
+	return String(value || "").trim();
 }
 
 async function fetchJson(url, options = {}) {
@@ -263,6 +268,21 @@ function renderItems(previousPositions) {
 		});
 		main.append(input);
 
+		const altLabel = document.createElement("label");
+		altLabel.textContent = "Alt text";
+		main.append(altLabel);
+
+		const altInput = document.createElement("input");
+		altInput.type = "text";
+		altInput.value = item.altText || "";
+		altInput.placeholder = "Describe the media for accessibility";
+		altInput.className = "alt-input";
+		altInput.addEventListener("input", (event) => {
+			state.items[index].altText = event.target.value;
+			setDirty(true);
+		});
+		main.append(altInput);
+
 		const subLabel = document.createElement("label");
 		subLabel.textContent = `Source: ${item.originalFileName}`;
 		main.append(subLabel);
@@ -360,6 +380,7 @@ async function saveCurrentCollection() {
 			items: state.items.map((item) => ({
 				originalFileName: item.originalFileName,
 				title: sanitizeTitle(item.title),
+				altText: sanitizeAltText(item.altText),
 			})),
 		}),
 	});

@@ -47,6 +47,7 @@ const videoExtensions = new Set([
 	".m4v",
 ]);
 const supportedExtensions = new Set([...imageExtensions, ...videoExtensions]);
+const collectionManifestFileName = "manifest.json";
 
 const contentTypeByExt = {
 	".html": "text/html; charset=utf-8",
@@ -191,6 +192,71 @@ function resolveRoot(rootId) {
 	return roots[rootId] || null;
 }
 
+function sanitizeAltText(value) {
+	if (value == null) {
+		return "";
+	}
+	return String(value).trim();
+}
+
+function getCollectionManifestPath(collectionPath) {
+	return path.join(collectionPath, collectionManifestFileName);
+}
+
+function normalizeCollectionManifest(input) {
+	const manifest = input && typeof input === "object" ? input : {};
+	const items =
+		manifest.items && typeof manifest.items === "object" ? manifest.items : {};
+
+	const normalizedItems = {};
+	for (const [fileName, metadata] of Object.entries(items)) {
+		if (!fileName || fileName.includes("..") || fileName.includes(path.sep)) {
+			continue;
+		}
+		if (typeof metadata === "string") {
+			normalizedItems[fileName] = { alt: metadata.trim() };
+			continue;
+		}
+		if (!metadata || typeof metadata !== "object") {
+			continue;
+		}
+		const next = {};
+		if (metadata.alt === null) {
+			next.alt = null;
+		} else if (typeof metadata.alt === "string") {
+			next.alt = metadata.alt.trim();
+		}
+		normalizedItems[fileName] = next;
+	}
+
+	return {
+		version: 1,
+		items: normalizedItems,
+	};
+}
+
+async function readCollectionManifest(collectionPath) {
+	const manifestPath = getCollectionManifestPath(collectionPath);
+	try {
+		const raw = await fs.readFile(manifestPath, "utf8");
+		return normalizeCollectionManifest(JSON.parse(raw));
+	} catch {
+		return normalizeCollectionManifest({});
+	}
+}
+
+async function writeCollectionManifest(collectionPath, manifest) {
+	const manifestPath = getCollectionManifestPath(collectionPath);
+	const tmpPath = `${manifestPath}.tmp-${crypto.randomUUID()}`;
+	const normalized = normalizeCollectionManifest(manifest);
+	await fs.writeFile(
+		tmpPath,
+		`${JSON.stringify(normalized, null, 2)}\n`,
+		"utf8",
+	);
+	await fs.rename(tmpPath, manifestPath);
+}
+
 function requireSafeSegment(segment) {
 	if (!segment || segment.includes("..") || segment.includes(path.sep)) {
 		return null;
@@ -251,6 +317,7 @@ async function getCollectionItems(rootId, collectionName) {
 
 	const collectionPath = path.join(rootPath, safeCollectionName);
 	await fs.mkdir(collectionPath, { recursive: true });
+	const metadataManifest = await readCollectionManifest(collectionPath);
 	const entries = await fs.readdir(collectionPath, { withFileTypes: true });
 	const mediaFiles = sortFilesByIndexThenName(
 		entries
@@ -263,6 +330,11 @@ async function getCollectionItems(rootId, collectionName) {
 
 	return mediaFiles.map((fileName) => {
 		const parsed = parsePrefixedName(fileName);
+		const manifestEntry = metadataManifest.items[fileName];
+		const altText =
+			manifestEntry && typeof manifestEntry.alt === "string"
+				? manifestEntry.alt
+				: "";
 		const mediaType = imageExtensions.has(path.extname(fileName).toLowerCase())
 			? "image"
 			: "video";
@@ -275,6 +347,7 @@ async function getCollectionItems(rootId, collectionName) {
 		return {
 			originalFileName: fileName,
 			title: parsed.title,
+			altText,
 			url: mediaUrl,
 			previewUrl,
 			mediaType,
@@ -311,6 +384,7 @@ async function saveCollection(rootId, collectionName, requestedItems) {
 
 	const collectionPath = path.join(rootPath, safeCollectionName);
 	await fs.mkdir(collectionPath, { recursive: true });
+	const existingManifest = await readCollectionManifest(collectionPath);
 
 	const existingEntries = await fs.readdir(collectionPath, {
 		withFileTypes: true,
@@ -355,6 +429,7 @@ async function saveCollection(rootId, collectionName, requestedItems) {
 		return {
 			originalFileName,
 			desiredFileName: uniqueDesired,
+			altText: sanitizeAltText(item?.altText),
 			tempFileName: `.__tmp__.${crypto.randomUUID()}${ext}`,
 		};
 	});
@@ -372,6 +447,40 @@ async function saveCollection(rootId, collectionName, requestedItems) {
 			path.join(collectionPath, step.desiredFileName),
 		);
 	}
+
+	const nextManifestItems = { ...existingManifest.items };
+	for (const step of renamePlan) {
+		if (
+			Object.prototype.hasOwnProperty.call(
+				nextManifestItems,
+				step.originalFileName,
+			) &&
+			step.originalFileName !== step.desiredFileName
+		) {
+			nextManifestItems[step.desiredFileName] =
+				nextManifestItems[step.originalFileName];
+			delete nextManifestItems[step.originalFileName];
+		}
+	}
+
+	for (const step of renamePlan) {
+		const hasExisting = Object.prototype.hasOwnProperty.call(
+			nextManifestItems,
+			step.desiredFileName,
+		);
+		if (step.altText) {
+			nextManifestItems[step.desiredFileName] = { alt: step.altText };
+			continue;
+		}
+		if (hasExisting) {
+			nextManifestItems[step.desiredFileName] = { alt: null };
+		}
+	}
+
+	await writeCollectionManifest(collectionPath, {
+		version: 1,
+		items: nextManifestItems,
+	});
 
 	return getCollectionItems(rootId, safeCollectionName);
 }
