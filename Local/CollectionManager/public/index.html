@@ -1,51 +1,66 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"></script>
-    <meta name="turbo-refresh-method" content="morph">
-    <meta name="turbo-refresh-scroll" content="preserve">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Collection Manager</title>
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body>
-    <main class="layout">
-      <section class="panel left">
-        <h1>Collection Manager</h1>
-        <div class="controls">
-          <label for="rootSelect">Category</label>
-          <select id="rootSelect"></select>
-        </div>
+	<head>
+		<script
+			type="module"
+			src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"
+		></script>
+		<meta name="turbo-refresh-method" content="morph" />
+		<meta name="turbo-refresh-scroll" content="preserve" />
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Collection Manager</title>
+		<link rel="stylesheet" href="/styles.css" />
+	</head>
+	<body>
+		<main class="layout">
+			<section class="panel left">
+				<h1>Collection Manager</h1>
+				<div class="controls">
+					<label for="rootSelect">Category</label>
+					<select id="rootSelect"></select>
+				</div>
 
-        <div class="controls create-row">
-          <input id="newCollectionName" type="text" placeholder="New collection name" />
-          <button id="createCollectionButton" type="button">Create</button>
-        </div>
+				<div class="controls create-row">
+					<input
+						id="newCollectionName"
+						type="text"
+						placeholder="New collection name"
+					/>
+					<button id="createCollectionButton" type="button">Create</button>
+				</div>
 
-        <ul id="collectionList" class="collection-list"></ul>
+				<ul id="collectionList" class="collection-list"></ul>
 
-        <div class="sidebar-footer">
-          <button id="syncButton" type="button" class="sync-button">Sync to Online</button>
-          <p id="syncStatus" class="sync-status">Ready to sync to CDN manifest.</p>
-        </div>
-      </section>
+				<div class="sidebar-footer">
+					<button id="syncButton" type="button" class="sync-button">
+						Sync to Online
+					</button>
+					<p id="syncStatus" class="sync-status">
+						Ready to sync to CDN manifest.
+					</p>
+				</div>
+			</section>
 
-      <section class="panel right">
+			<section class="panel right">
+				<header class="collection-header">
+					<h2 id="collectionTitle">Select a collection</h2>
+					<div style="display: flex; gap: 0.5em; align-items: center">
+						<button id="saveSyncButton" type="button" disabled>
+							Save &amp; Sync to Online
+						</button>
+						<button id="saveButton" type="button" disabled>Save</button>
+					</div>
+				</header>
 
-        <header class="collection-header">
-          <h2 id="collectionTitle">Select a collection</h2>
-          <div style="display: flex; gap: 0.5em; align-items: center;">
-            <button id="saveSyncButton" type="button" disabled>Save &amp; Sync to Online</button>
-            <button id="saveButton" type="button" disabled>Save</button>
-          </div>
-        </header>
+				<p class="help-text">
+					Arrange with up/down. Rename titles and save to rewrite files as
+					<strong>1 - Name.ext</strong>.
+				</p>
+				<ul id="itemList" class="item-list"></ul>
+			</section>
+		</main>
 
-        <p class="help-text">Arrange with up/down. Rename titles and save to rewrite files as <strong>1 - Name.ext</strong>.</p>
-        <ul id="itemList" class="item-list"></ul>
-      </section>
-    </main>
-
-    <script type="module" src="/app.js"></script>
-  </body>
+		<script type="module" src="/app.js"></script>
+	</body>
 </html>
