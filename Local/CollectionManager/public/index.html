@@ -45,13 +45,45 @@
 			<section class="panel right">
 				<header class="collection-header">
 					<h2 id="collectionTitle">Select a collection</h2>
-					<div style="display: flex; gap: 0.5em; align-items: center">
+					<div id="collectionActions" class="collection-actions">
+						<button id="addMediaButton" type="button" disabled>
+							Add Media
+						</button>
 						<button id="saveSyncButton" type="button" disabled>
 							Save &amp; Sync to Online
 						</button>
 						<button id="saveButton" type="button" disabled>Save</button>
 					</div>
 				</header>
+
+				<div
+					class="upload-controls"
+					style="
+						margin-bottom: 1rem;
+						display: flex;
+						align-items: center;
+						gap: 0.75rem;
+					"
+				>
+					<input id="mediaInput" type="file" multiple disabled />
+					<select
+						id="uploadSortDirection"
+						disabled
+						style="padding: 0.5rem; font-size: 0.9rem"
+					>
+						<option value="oldest">Oldest First</option>
+						<option value="newest">Newest First</option>
+					</select>
+					<button
+						id="uploadSortButton"
+						type="button"
+						disabled
+						style="padding: 0.5rem 1rem; white-space: nowrap"
+					>
+						Sort
+					</button>
+				</div>
+				<p id="uploadStatus" class="upload-status" hidden></p>
 
 				<p class="help-text">
 					Arrange with up/down. Rename titles and save to rewrite files as

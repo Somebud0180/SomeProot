@@ -161,9 +161,37 @@ button:disabled {
 	gap: 16px;
 }
 
+.collection-actions {
+	display: flex;
+	gap: 0.5em;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+}
+
 .help-text {
 	color: var(--muted);
 	margin: 10px 0 14px;
+}
+
+#mediaInput {
+	display: none;
+}
+
+#addMediaButton {
+	background: var(--button-bg);
+	color: var(--button-text);
+	font-weight: 700;
+	border-color: rgba(0, 0, 0, 0.25);
+	white-space: nowrap;
+}
+
+.upload-status {
+	margin: 8px 0 6px;
+	font-size: 0.86rem;
+	color: var(--muted);
+	min-height: 1.2rem;
+	margin-top: 8px;
 }
 
 .item-card {
@@ -219,6 +247,7 @@ button:disabled {
 }
 
 .sync-button,
+#addMediaButton,
 #saveButton,
 #createCollectionButton {
 	background: var(--button-bg);
@@ -237,6 +266,10 @@ button:disabled {
 @media (max-width: 900px) {
 	.layout {
 		grid-template-columns: 1fr;
+	}
+
+	.collection-header {
+		align-items: flex-start;
 	}
 
 	.left {

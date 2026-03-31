@@ -72,6 +72,7 @@ const contentTypeByExt = {
 };
 
 const port = Number(process.env.COLLECTION_MANAGER_PORT || 4173);
+const maxUploadBytes = 250 * 1024 * 1024;
 
 function buildMediaUrl(rootId, collectionName, fileName) {
 	return `/media/${encodeURIComponent(rootId)}/${encodeURIComponent(collectionName)}/${encodeURIComponent(fileName)}`;
@@ -155,6 +156,14 @@ function safeName(value) {
 		.replace(/[\\/]/g, " ")
 		.replace(/\s+/g, " ")
 		.trim();
+}
+
+function extensionFromName(fileName) {
+	const dotIndex = fileName.lastIndexOf(".");
+	if (dotIndex < 0) {
+		return "";
+	}
+	return fileName.slice(dotIndex).toLowerCase();
 }
 
 function parsePrefixedName(fileName) {
@@ -494,6 +503,129 @@ async function readBody(req) {
 	return text ? JSON.parse(text) : {};
 }
 
+async function readBodyBuffer(req, maxBytes = maxUploadBytes) {
+	const chunks = [];
+	let total = 0;
+	for await (const chunk of req) {
+		total += chunk.length;
+		if (total > maxBytes) {
+			throw new Error("Upload too large.");
+		}
+		chunks.push(chunk);
+	}
+	return Buffer.concat(chunks);
+}
+
+function parseBoundary(contentType) {
+	if (!contentType) {
+		return null;
+	}
+	const match = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/i);
+	return match ? (match[1] || match[2]).trim() : null;
+}
+
+function parseContentDisposition(headerValue) {
+	if (!headerValue) {
+		return { name: null, filename: null };
+	}
+
+	const nameMatch = headerValue.match(/name="([^"]+)"/i);
+	const fileNameMatch = headerValue.match(/filename="([^"]*)"/i);
+	return {
+		name: nameMatch ? nameMatch[1] : null,
+		filename: fileNameMatch ? fileNameMatch[1] : null,
+	};
+}
+
+function parseMultipartParts(bodyBuffer, boundary) {
+	const boundaryMarker = `--${boundary}`;
+	const bodyText = bodyBuffer.toString("latin1");
+	const rawParts = bodyText.split(boundaryMarker).slice(1, -1);
+	const parts = [];
+
+	for (const rawPart of rawParts) {
+		let partText = rawPart;
+		if (partText.startsWith("\r\n")) {
+			partText = partText.slice(2);
+		}
+		if (partText.endsWith("\r\n")) {
+			partText = partText.slice(0, -2);
+		}
+
+		const headerBreak = partText.indexOf("\r\n\r\n");
+		if (headerBreak < 0) {
+			continue;
+		}
+
+		const headersText = partText.slice(0, headerBreak);
+		const contentText = partText.slice(headerBreak + 4);
+		const headers = {};
+		for (const line of headersText.split("\r\n")) {
+			const divider = line.indexOf(":");
+			if (divider < 1) {
+				continue;
+			}
+			const key = line.slice(0, divider).trim().toLowerCase();
+			const value = line.slice(divider + 1).trim();
+			headers[key] = value;
+		}
+
+		parts.push({
+			headers,
+			data: Buffer.from(contentText, "latin1"),
+		});
+	}
+
+	return parts;
+}
+
+async function addMediaFiles(rootId, collectionName, files) {
+	const rootPath = resolveRoot(rootId);
+	const safeCollectionName = requireSafeSegment(collectionName);
+	if (!rootPath || !safeCollectionName) {
+		throw new Error("Invalid root or collection.");
+	}
+
+	const collectionPath = path.join(rootPath, safeCollectionName);
+	await fs.mkdir(collectionPath, { recursive: true });
+
+	const existingEntries = await fs.readdir(collectionPath, {
+		withFileTypes: true,
+	});
+	const existingMediaNames = existingEntries
+		.filter((entry) => entry.isFile())
+		.map((entry) => entry.name)
+		.filter((name) => supportedExtensions.has(extensionFromName(name)));
+
+	const takenNames = new Set(existingMediaNames);
+	let nextIndex =
+		existingMediaNames.reduce((max, fileName) => {
+			const parsed = parsePrefixedName(fileName);
+			return Number.isFinite(parsed.index) && parsed.index > max
+				? parsed.index
+				: max;
+		}, 0) + 1;
+
+	let addedCount = 0;
+	for (const file of files) {
+		const ext = extensionFromName(file.fileName);
+		if (!supportedExtensions.has(ext)) {
+			throw new Error(`Unsupported file extension: ${file.fileName}`);
+		}
+
+		const baseName = path.basename(file.fileName, ext);
+		const title = safeName(baseName) || "Untitled";
+		const desired = `${nextIndex} - ${title}${ext}`;
+		const finalName = nextUniqueName(desired, takenNames);
+		await fs.writeFile(path.join(collectionPath, finalName), file.data);
+		nextIndex += 1;
+		addedCount += 1;
+	}
+
+	const items = await getCollectionItems(rootId, safeCollectionName);
+	return { addedCount, items };
+}
+
 function sendJson(res, statusCode, payload) {
 	res.writeHead(statusCode, {
 		"Content-Type": "application/json; charset=utf-8",
@@ -504,9 +636,18 @@ function sendJson(res, statusCode, payload) {
 async function serveStaticFile(res, filePath) {
 	const ext = path.extname(filePath).toLowerCase();
 	const contentType = contentTypeByExt[ext] || "application/octet-stream";
-	const content = await fs.readFile(filePath);
-	res.writeHead(200, { "Content-Type": contentType });
-	res.end(content);
+	try {
+		const content = await fs.readFile(filePath);
+		res.writeHead(200, { "Content-Type": contentType });
+		res.end(content);
+	} catch (err) {
+		if (err.code === "ENOENT") {
+			res.writeHead(404, { "Content-Type": "application/json; charset=utf-8" });
+			res.end(JSON.stringify({ error: "Not found." }));
+		} else {
+			throw err;
+		}
+	}
 }
 
 const server = http.createServer(async (req, res) => {
@@ -528,6 +669,7 @@ const server = http.createServer(async (req, res) => {
 					{ id: "photos", label: "Photos" },
 					{ id: "artworks", label: "Artworks" },
 				],
+				supportedExtensions: [...supportedExtensions].sort(),
 			});
 		}
 
@@ -569,6 +711,69 @@ const server = http.createServer(async (req, res) => {
 			const items = body?.items || [];
 			const updatedItems = await saveCollection(rootId, collectionName, items);
 			return sendJson(res, 200, { ok: true, items: updatedItems });
+		}
+
+		if (req.method === "POST" && url.pathname === "/api/media") {
+			const contentType = req.headers["content-type"] || "";
+			const boundary = parseBoundary(contentType);
+			if (!boundary) {
+				return sendJson(res, 400, {
+					error: "Expected multipart/form-data upload.",
+				});
+			}
+
+			const bodyBuffer = await readBodyBuffer(req);
+			const parts = parseMultipartParts(bodyBuffer, boundary);
+			const fieldValues = {};
+			const files = [];
+
+			for (const part of parts) {
+				const disposition = parseContentDisposition(
+					part.headers["content-disposition"],
+				);
+				if (!disposition.name) {
+					continue;
+				}
+
+				if (disposition.filename != null && disposition.filename !== "") {
+					const safeFileName = path.basename(disposition.filename).trim();
+					if (!safeFileName) {
+						continue;
+					}
+					files.push({
+						field: disposition.name,
+						fileName: safeFileName,
+						data: part.data,
+					});
+					continue;
+				}
+
+				fieldValues[disposition.name] = part.data.toString("utf8").trim();
+			}
+
+			const rootId = fieldValues.rootId || "photos";
+			const collectionName = fieldValues.collectionName || "";
+			if (!files.length) {
+				return sendJson(res, 400, { error: "No media files were uploaded." });
+			}
+
+			const unsupportedNames = files
+				.filter(
+					(file) => !supportedExtensions.has(extensionFromName(file.fileName)),
+				)
+				.map((file) => file.fileName);
+			if (unsupportedNames.length) {
+				return sendJson(res, 400, {
+					error: `Unsupported file extension: ${unsupportedNames.join(", ")}`,
+				});
+			}
+
+			const uploadResult = await addMediaFiles(rootId, collectionName, files);
+			return sendJson(res, 200, {
+				ok: true,
+				addedCount: uploadResult.addedCount,
+				items: uploadResult.items,
+			});
 		}
 
 		if (req.method === "POST" && url.pathname === "/api/sync") {

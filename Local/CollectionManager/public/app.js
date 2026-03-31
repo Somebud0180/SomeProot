@@ -1,9 +1,11 @@
 const state = {
 	roots: [],
 	rootId: "photos",
+	supportedExtensions: [],
 	collections: [],
 	selectedCollection: null,
 	items: [],
+	sortedFiles: [],
 	dirty: false,
 	syncing: false,
 };
@@ -20,6 +22,44 @@ const saveSyncButton = document.getElementById("saveSyncButton");
 const newCollectionNameInput = document.getElementById("newCollectionName");
 const syncButton = document.getElementById("syncButton");
 const syncStatus = document.getElementById("syncStatus");
+const mediaInput = document.getElementById("mediaInput");
+const uploadSortDirection = document.getElementById("uploadSortDirection");
+const uploadSortButton = document.getElementById("uploadSortButton");
+const addMediaButton = document.getElementById("addMediaButton");
+const uploadStatus = document.getElementById("uploadStatus");
+const helpText = document.querySelector(".help-text");
+
+function setUploadStatus(message) {
+	if (uploadStatus) {
+		uploadStatus.textContent = message || "";
+		uploadStatus.hidden = !state.selectedCollection || !message;
+	}
+}
+
+function updateUploadControls() {
+	const hasSelection = Boolean(state.selectedCollection);
+	const enabled = hasSelection && !state.syncing;
+	if (mediaInput) {
+		mediaInput.disabled = !enabled;
+	}
+	if (uploadSortDirection) {
+		uploadSortDirection.disabled = !enabled;
+	}
+	if (uploadSortButton) {
+		uploadSortButton.disabled = !enabled;
+	}
+	if (addMediaButton) {
+		addMediaButton.disabled = !enabled;
+		addMediaButton.hidden = !hasSelection;
+	}
+	if (helpText) {
+		helpText.hidden = !hasSelection;
+	}
+
+	if (!hasSelection) {
+		setUploadStatus("");
+	}
+}
 
 function setSyncing(value, message) {
 	state.syncing = value;
@@ -29,6 +69,7 @@ function setSyncing(value, message) {
 	if (syncStatus && message) {
 		syncStatus.textContent = message;
 	}
+	updateUploadControls();
 }
 
 function setDirty(value) {
@@ -79,6 +120,168 @@ function sanitizeTitle(value) {
 
 function sanitizeAltText(value) {
 	return String(value || "").trim();
+}
+
+function extensionFromName(fileName) {
+	const dotIndex = fileName.lastIndexOf(".");
+	if (dotIndex < 0) {
+		return "";
+	}
+	return fileName.slice(dotIndex).toLowerCase();
+}
+
+function hasSupportedExtension(fileName) {
+	return state.supportedExtensions.includes(extensionFromName(fileName));
+}
+
+function buildMediaUrl(rootId, collectionName, fileName) {
+	return `/media/${encodeURIComponent(rootId)}/${encodeURIComponent(collectionName)}/${encodeURIComponent(fileName)}`;
+}
+
+async function sortAndDisplayFiles() {
+	if (!state.selectedCollection || !state.items.length) {
+		alert("No media in collection to sort.");
+		return;
+	}
+
+	setUploadStatus("Extracting dates & sorting...");
+	try {
+		const exifr =
+			await import("https://cdn.jsdelivr.net/npm/exifr@latest/dist/full.esm.js");
+		const parseExif = exifr.parse || (exifr.default && exifr.default.parse);
+
+		console.log("Starting sort with", state.items.length, "items");
+		console.log(
+			"Parse EXIF function:",
+			parseExif ? "available" : "not available",
+		);
+
+		// Fetch and parse each file to get its creation date
+		const itemsWithDates = await Promise.all(
+			state.items.map(async (item) => {
+				let date = 0;
+				try {
+					const mediaUrl = buildMediaUrl(
+						state.rootId,
+						state.selectedCollection,
+						item.originalFileName,
+					);
+					console.log("Fetching:", mediaUrl);
+					const response = await fetch(mediaUrl);
+					if (response.ok) {
+						const blob = await response.blob();
+						console.log(`Blob type for ${item.originalFileName}:`, blob.type);
+						if (blob.type.startsWith("image/") && parseExif) {
+							const exifData = await parseExif(blob, {
+								pick: ["DateTimeOriginal"],
+							});
+							console.log(`EXIF data for ${item.originalFileName}:`, exifData);
+							if (exifData && exifData.DateTimeOriginal) {
+								date = new Date(exifData.DateTimeOriginal).getTime();
+								console.log(
+									`Extracted date for ${item.originalFileName}:`,
+									new Date(date),
+									"timestamp:",
+									date,
+								);
+							} else {
+								console.log(
+									`No DateTimeOriginal in EXIF for ${item.originalFileName}`,
+								);
+							}
+						} else {
+							console.log(
+								`Skipping EXIF parse for ${item.originalFileName} - not an image or parseExif unavailable`,
+							);
+						}
+					} else {
+						console.log(
+							`Failed to fetch ${item.originalFileName}: ${response.status}`,
+						);
+					}
+				} catch (err) {
+					console.warn(
+						`Failed to parse EXIF for ${item.originalFileName}`,
+						err,
+					);
+				}
+				return { item, date };
+			}),
+		);
+
+		console.log("Items with dates:", itemsWithDates);
+
+		// Sort by date
+		const descending =
+			uploadSortDirection && uploadSortDirection.value === "newest";
+		console.log(
+			"Sorting",
+			descending ? "descending (newest first)" : "ascending (oldest first)",
+		);
+		itemsWithDates.sort((a, b) =>
+			descending ? b.date - a.date : a.date - b.date,
+		);
+
+		console.log("After sort:", itemsWithDates);
+
+		// Keep original items sorted, preserving actual filenames
+		// saveCurrentCollection() will handle re-indexing when user saves
+		const sortedItems = itemsWithDates.map((entry) => entry.item);
+
+		state.items = sortedItems;
+		state.sortedFiles = [];
+		setDirty(true);
+		setUploadStatus(`Sorted ${sortedItems.length} file(s).`);
+		renderItems();
+	} catch (err) {
+		console.warn("Failed to sort files by EXIF date", err);
+		setUploadStatus(`Sort failed: ${err.message}`);
+		throw err;
+	}
+}
+
+async function addSelectedMedia() {
+	if (!state.selectedCollection || !mediaInput) {
+		return;
+	}
+
+	const files = Array.from(mediaInput.files || []);
+	if (!files.length) {
+		alert("Choose at least one media file.");
+		return;
+	}
+
+	const unsupported = files.filter((file) => !hasSupportedExtension(file.name));
+	if (unsupported.length) {
+		const names = unsupported.map((file) => file.name).join(", ");
+		throw new Error(`Unsupported file extension: ${names}`);
+	}
+
+	const formData = new FormData();
+	formData.append("rootId", state.rootId);
+	formData.append("collectionName", state.selectedCollection);
+	for (const file of files) {
+		formData.append("files", file, file.name);
+	}
+
+	setUploadStatus("Uploading media...");
+	const response = await fetch("/api/media", {
+		method: "POST",
+		body: formData,
+	});
+
+	const payload = await response.json().catch(() => ({}));
+	if (!response.ok) {
+		throw new Error(payload?.error || `Upload failed: ${response.status}`);
+	}
+
+	state.items = payload.items || [];
+	state.sortedFiles = [];
+	setDirty(false);
+	mediaInput.value = "";
+	setUploadStatus(`Added ${payload.addedCount || files.length} file(s).`);
+	await loadCollections();
+	renderItems();
 }
 
 async function fetchJson(url, options = {}) {
@@ -219,6 +422,7 @@ function renderItems(previousPositions) {
 		empty.textContent = "Choose a collection from the left.";
 		itemList.append(empty);
 		setDirty(false);
+		updateUploadControls();
 		return;
 	}
 
@@ -230,6 +434,7 @@ function renderItems(previousPositions) {
 		empty.textContent = "This collection has no media files yet.";
 		itemList.append(empty);
 		setDirty(false);
+		updateUploadControls();
 		return;
 	}
 
@@ -256,7 +461,29 @@ function renderItems(previousPositions) {
 		main.className = "item-main";
 
 		const indexLabel = document.createElement("label");
-		indexLabel.textContent = `Order: ${index + 1}`;
+		indexLabel.textContent = "Order: ";
+		const indexInput = document.createElement("input");
+		indexInput.type = "number";
+		indexInput.min = "1";
+		indexInput.max = state.items.length.toString();
+		indexInput.value = (index + 1).toString();
+		indexInput.style.width = "4rem";
+		indexInput.addEventListener("change", (event) => {
+			let newIndex = parseInt(event.target.value, 10) - 1;
+			if (isNaN(newIndex)) return;
+			if (newIndex < 0) newIndex = 0;
+			if (newIndex >= state.items.length) newIndex = state.items.length - 1;
+			if (newIndex !== index) {
+				const previousPositions = captureItemPositions();
+				const movedItem = state.items.splice(index, 1)[0];
+				state.items.splice(newIndex, 0, movedItem);
+				setDirty(true);
+				renderItems(previousPositions);
+			} else {
+				event.target.value = (index + 1).toString();
+			}
+		});
+		indexLabel.append(indexInput);
 		main.append(indexLabel);
 
 		const input = document.createElement("input");
@@ -308,6 +535,7 @@ function renderItems(previousPositions) {
 	});
 
 	animateItemReorder(previousPositions);
+	updateUploadControls();
 }
 
 async function loadCollections() {
@@ -433,6 +661,12 @@ saveButton.addEventListener("click", () => {
 	});
 });
 
+uploadSortButton.addEventListener("click", () => {
+	sortAndDisplayFiles().catch((error) => {
+		alert(error.message);
+	});
+});
+
 createCollectionButton.addEventListener("click", () => {
 	createCollection().catch((error) => {
 		alert(error.message);
@@ -464,14 +698,40 @@ if (saveSyncButton) {
 	});
 }
 
+if (addMediaButton) {
+	addMediaButton.addEventListener("click", () => {
+		if (!mediaInput || mediaInput.disabled) {
+			return;
+		}
+		mediaInput.value = "";
+		mediaInput.click();
+	});
+}
+
+if (mediaInput) {
+	mediaInput.addEventListener("change", () => {
+		addSelectedMedia().catch((error) => {
+			setUploadStatus(`Upload failed: ${error.message}`);
+			alert(error.message);
+		});
+	});
+}
+
 async function init() {
 	const config = await fetchJson("/api/config");
 	state.roots = config.roots;
+	state.supportedExtensions = Array.isArray(config.supportedExtensions)
+		? config.supportedExtensions.map((value) => String(value).toLowerCase())
+		: [];
+	if (mediaInput && state.supportedExtensions.length) {
+		mediaInput.setAttribute("accept", state.supportedExtensions.join(","));
+	}
 	if (!state.roots.some((root) => root.id === state.rootId)) {
 		state.rootId = state.roots[0]?.id || "photos";
 	}
 
 	renderRoots();
+	updateUploadControls();
 	await loadCollections();
 }
 
