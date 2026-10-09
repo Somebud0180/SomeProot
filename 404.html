@@ -1,56 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"></script>
-    <meta name="turbo-refresh-method" content="morph">
-    <meta name="turbo-refresh-scroll" content="preserve">
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-	<meta name="description" content="Page not found">
-	<title>404 | SomeProot</title>
-	<link rel="stylesheet" href="Assets/CSS/main_styles.css">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body data-page="404">
-	<header id="header" data-turbo-permanent>
-		<nav>
-			<h1>SomeProot</h1>
-			<ul>
-                <li><a href="/SomeProot/">Home</a></li>
-                <li><a href="/SomeProot/projects/">Projects</a></li>
-                <li><a href="/SomeProot/journal/">Journal</a></li>
-                <li><a href="/SomeProot/gallery/">Gallery</a></li>
-                <li><a href="/SomeProot/socials/">Socials</a></li>
-			</ul>
-		</nav>
-	</header>
+	<head>
+		<script
+			type="module"
+			src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"
+		></script>
+		<meta name="turbo-refresh-method" content="morph" />
+		<meta name="turbo-refresh-scroll" content="preserve" />
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+		/>
+		<meta name="description" content="Page not found" />
+		<title>404 | SomeProot</title>
+		<link rel="stylesheet" href="Assets/CSS/main_styles.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body data-page="404">
+		<header id="header" data-turbo-permanent>
+			<nav>
+				<h1>SomeProot</h1>
+				<ul>
+					<li><a href="/SomeProot/">Home</a></li>
+					<li><a href="/SomeProot/projects/">Projects</a></li>
+					<li><a href="/SomeProot/journal/">Journal</a></li>
+					<li><a href="/SomeProot/gallery/">Gallery</a></li>
+					<li><a href="/SomeProot/socials/">Socials</a></li>
+				</ul>
+			</nav>
+		</header>
 
-	<main>
-		<section id="not-found" class="hero error404__hero">
-			<div class="banner error404__banner">
-				<div class="face">
-					<div class="eye-container" id="left-eye-container">
-						<img class="eye" src="Assets/Images/Face/Eye_L.svg" alt="Left eye">
+		<main>
+			<section id="not-found" class="hero error404__hero">
+				<div class="banner error404__banner">
+					<div class="face">
+						<div class="eye-container" id="left-eye-container">
+							<img
+								class="eye"
+								src="Assets/Images/Face/Eye_L.svg"
+								alt="Left eye"
+							/>
+						</div>
+						<div class="eye-container" id="right-eye-container">
+							<img
+								class="eye"
+								src="Assets/Images/Face/Eye_R.svg"
+								alt="Right eye"
+							/>
+						</div>
+						<img
+							class="blush blush--left"
+							src="Assets/Images/Face/Blush.svg"
+							alt="Left blush"
+						/>
+						<img
+							class="blush blush--right"
+							src="Assets/Images/Face/Blush.svg"
+							alt="Right blush"
+						/>
+						<img class="mouth" src="Assets/Images/Face/Mouth.svg" alt="Mouth" />
 					</div>
-					<div class="eye-container" id="right-eye-container">
-						<img class="eye" src="Assets/Images/Face/Eye_R.svg" alt="Right eye">
-					</div>
-					<img class="blush blush--left" src="Assets/Images/Face/Blush.svg" alt="Left blush">
-					<img class="blush blush--right" src="Assets/Images/Face/Blush.svg" alt="Right blush">
-					<img class="mouth" src="Assets/Images/Face/Mouth.svg" alt="Mouth">
 				</div>
-			</div>
-			<div class="blur"></div>
-			<div class="content error404__content">
-				<h3>404 — Page Not Found</h3>
-				<p>The page you requested doesn’t exist or may have moved.</p>
-				<p><a href="/SomeProot/">Return to home</a></p>
-			</div>
-		</section>
-	</main>
+				<div class="blur"></div>
+				<div class="content error404__content">
+					<h3>404 — Page Not Found</h3>
+					<p>
+						This proot is lost (qwq). That page probably doesn't exist anymore
+						or has moved elswhere.
+					</p>
+					<p><a href="/SomeProot/">Go back home</a></p>
+				</div>
+			</section>
+		</main>
 
-	<script type="module" src="Assets/JS/script.js"></script>
-</body>
+		<script type="module" src="Assets/JS/script.js"></script>
+	</body>
 </html>
