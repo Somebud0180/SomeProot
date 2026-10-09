@@ -1,0 +1,327 @@
+:root {
+	--sonas-card-bg: linear-gradient(
+		180deg,
+		rgba(64, 60, 78, 0.95),
+		rgba(40, 38, 52, 0.95)
+	);
+	--sonas-card-border: rgba(255, 255, 255, 0.08);
+	--sonas-card-shadow: rgba(0, 0, 0, 0.25);
+	--sonas-button-bg: #f2d36b;
+	--sonas-button-text: #1a1a1a;
+	--sonas-muted: #cfcfd6;
+}
+
+.sonas-page {
+	padding: 2.5rem 1.5rem 4rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.sonas__intro h1 {
+	font-size: clamp(2rem, 4vw, 3rem);
+	letter-spacing: 1px;
+}
+
+.sonas__intro p {
+	font-size: clamp(1rem, 2vw, 2rem);
+}
+
+.sonas__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 1.5rem;
+}
+
+.sona-card {
+	position: relative;
+	background: var(--sonas-card-bg);
+	border: 1px solid var(--sonas-card-border);
+	border-radius: 18px;
+	overflow: hidden;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 12px 24px var(--sonas-card-shadow);
+	animation: sona-rise 0.6s ease both;
+}
+
+.sona-card--source-hidden {
+	visibility: hidden;
+}
+
+.sona-card:nth-child(2) {
+	animation-delay: 0.08s;
+}
+
+.sona-card:nth-child(3) {
+	animation-delay: 0.16s;
+}
+
+.sona-card:nth-child(4) {
+	animation-delay: 0.24s;
+}
+
+.sona-card__expand {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid var(--sonas-card-border);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease;
+}
+
+.sona-card__expand--close {
+	color: #fff;
+	font-size: 1.75rem;
+	line-height: 1;
+	padding: 0;
+}
+
+.sona-card__expand p {
+	margin-left: -1px;
+	margin-top: -2px;
+	font-size: 28px;
+	color: #fff;
+}
+
+.sona-card__image {
+	width: 100%;
+	height: auto;
+	max-height: 240px;
+	object-fit: cover;
+	display: block;
+	border-bottom: 1px solid var(--sonas-card-border);
+}
+
+.sona-card__content {
+	padding: 1rem 1.2rem 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	flex: 1;
+}
+
+.sona-card__name {
+	font-size: 1.3rem;
+}
+
+.sona-card__description {
+	color: var(--sonas-muted);
+	font-size: 0.98rem;
+	text-wrap: auto;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.sona-card__description a {
+	color: inherit;
+}
+
+@keyframes sona-rise {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (max-width: 580px) {
+	.sonas-page {
+		padding: 2rem 1.25rem 3rem;
+	}
+
+	.sona-card__image {
+		min-height: 240px;
+		max-height: none;
+	}
+}
+
+.sona-3d-modal {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 9999;
+	display: none;
+}
+
+.sona-3d-modal-overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.7);
+}
+
+.sona-3d-modal-content {
+	position: relative;
+	z-index: 1;
+	width: min(1000px, calc(100vw - 2rem));
+	height: min(80vh, 700px);
+	margin: 4rem auto 2rem;
+	border-radius: 14px;
+	overflow: hidden;
+	background: #111;
+	border: 1px solid var(--sonas-card-border);
+	box-shadow: 0 12px 24px var(--sonas-card-shadow);
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.sona-3d-modal-title {
+	margin: 0;
+	font-size: 1.05rem;
+}
+
+.sona-3d-modal-exit {
+	z-index: 2;
+	width: 42px;
+	height: 42px;
+	border-radius: 999px;
+	border: 1px solid var(--sonas-card-border);
+	background: var(--sonas-button-text);
+	color: #fff;
+	font-size: 1.8rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.sona-3d-modal-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	padding: 0.75rem 1rem;
+	background: rgba(0, 0, 0, 0.5);
+	border-bottom: 1px solid var(--sonas-card-border);
+	flex: 0 0 auto;
+}
+
+.sona-3d-scene {
+	width: 100%;
+	height: 100%;
+	flex: 1 1 auto;
+	min-height: 320px;
+}
+
+.sona-3d-viewer {
+	width: 100%;
+	height: 100%;
+	flex: 1 1 auto;
+	min-height: 320px;
+	background: #111;
+}
+
+.sona-card-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 9998;
+	display: none;
+}
+
+.sona-card-overlay__backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(5, 7, 14, 0.7);
+	backdrop-filter: blur(4px);
+	opacity: 0;
+	transition: opacity 0.28s ease;
+}
+
+.sona-card-overlay__viewport {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.sona-card-overlay__mount {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.sona-card--overlay {
+	width: min(420px, calc(100vw - 2rem));
+	height: min(92vh, 980px);
+	max-height: min(92vh, 980px);
+	animation: none;
+}
+
+.sona-card-overlay--visible .sona-card-overlay__backdrop {
+	opacity: 1;
+}
+
+.sona-card-overlay--animating .sona-card--overlay {
+	position: fixed;
+	margin: 0;
+	max-width: none;
+	max-height: none;
+	transition:
+		left 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+		top 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+		width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+		height 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+		border-radius 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.sona-card--overlay .sona-card__image {
+	max-height: 300px;
+	min-height: 240px;
+	flex: 0 0 auto;
+}
+
+.sona-card--overlay .sona-card__content {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.sona-card--overlay .sona-card__description {
+	display: block;
+	-webkit-line-clamp: unset;
+	line-clamp: unset;
+	overflow-y: auto;
+	padding-right: 0.2rem;
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+.sona-card--overlay .sona-card__button {
+	position: sticky;
+	bottom: 0;
+	margin-top: auto;
+	flex: 0 0 auto;
+}
+
+@media (max-width: 700px) {
+	.sona-3d-modal-content {
+		width: calc(100vw - 1rem);
+		height: min(78vh, 620px);
+		margin-top: 3.25rem;
+	}
+
+	.sona-card--overlay {
+		width: calc(100vw - 1rem);
+		height: min(94vh, 980px);
+	}
+}

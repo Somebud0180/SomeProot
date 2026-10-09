@@ -1,59 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<script
+			type="module"
+			src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"
+		></script>
+		<meta name="turbo-refresh-method" content="morph" />
+		<meta name="turbo-refresh-scroll" content="preserve" />
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+		/>
+		<meta
+			name="description"
+			content="Somebud's journal of thoughts and stuff done"
+		/>
+		<meta
+			http-equiv="Cache-Control"
+			content="max-age=31536000, must-revalidate"
+		/>
+		<title>SomeProot</title>
+		<link rel="stylesheet" href="/SomeProot/Assets/CSS/main_styles.css" />
+		<link
+			rel="stylesheet"
+			href="/SomeProot/Assets/CSS/journal_viewer_styles.css"
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
 
-<head>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"></script>
-    <meta name="turbo-refresh-method" content="morph">
-    <meta name="turbo-refresh-scroll" content="preserve">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Somebud's journal of thoughts and stuff done">
-    <meta http-equiv="Cache-Control" content="max-age=31536000, must-revalidate">
-    <title>SomeProot</title>
-    <link rel="stylesheet" href="/SomeProot/Assets/CSS/main_styles.css">
-    <link rel="stylesheet" href="/SomeProot/Assets/CSS/journal_viewer_styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap"
-        rel="stylesheet">
-</head>
+	<body data-page="JournalViewer">
+		<header id="header" data-turbo-permanent>
+			<nav>
+				<h1>SomeProot</h1>
+				<ul>
+					<li><a href="/SomeProot/">Home</a></li>
+					<li><a href="/SomeProot/projects/">Projects</a></li>
+					<li><a href="/SomeProot/journal/">Journal</a></li>
+					<li><a href="/SomeProot/gallery/">Gallery</a></li>
+					<li><a href="/SomeProot/socials/">Socials</a></li>
+					<li><a href="/SomeProot/sonas/">Sonas</a></li>
+				</ul>
+			</nav>
+		</header>
 
-<body data-page="JournalViewer">
-    <header id="header" data-turbo-permanent>
-        <nav>
-            <h1>SomeProot</h1>
-            <ul>
-                <li><a href="/SomeProot/">Home</a></li>
-                <li><a href="/SomeProot/projects/">Projects</a></li>
-                <li><a href="/SomeProot/journal/">Journal</a></li>
-                <li><a href="/SomeProot/gallery/">Gallery</a></li>
-                <li><a href="/SomeProot/socials/">Socials</a></li>
-            </ul>
-        </nav>
-    </header>
+		<main>
+			<section class="journal-viewer">
+				<div class="reader-bar" id="readerBar">
+					<a class="reader-bar__back" href="/SomeProot/journal/">&larr; Back</a>
+					<div class="reader-bar__title" id="readerBarTitle"></div>
+					<button
+						class="reader-bar__top"
+						id="backToTopBtn"
+						aria-label="Back to top"
+					>
+						Back to Top
+					</button>
+				</div>
 
-    <main>
-        <section class="journal-viewer">
-            <div class="reader-bar" id="readerBar">
-                <a class="reader-bar__back" href="/SomeProot/journal/">&larr; Back</a>
-                <div class="reader-bar__title" id="readerBarTitle"></div>
-                <button class="reader-bar__top" id="backToTopBtn" aria-label="Back to top">Back to Top</button>
-            </div>
+				<article class="journal-viewer__content">
+					<div class="journal-viewer__header" id="journalHeader">
+						<h1 id="journalTitle"></h1>
+						<p id="journalSubtitle"></p>
+					</div>
+					<div class="journal-viewer__body" id="journalBody"></div>
+				</article>
+			</section>
+		</main>
 
-            <article class="journal-viewer__content">
-                <div class="journal-viewer__header" id="journalHeader">
-                    <h1 id="journalTitle"></h1>
-                    <p id="journalSubtitle"></p>
-                </div>
-                <div class="journal-viewer__body" id="journalBody"></div>
-            </article>
-        </section>
-    </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script type="module" src="/SomeProot/Assets/JS/script.js"></script>
-    <script src="https://somebud0180.github.io/slink/slink.js"></script>
-</body>
-
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script type="module" src="/SomeProot/Assets/JS/script.js"></script>
+		<script src="https://somebud0180.github.io/slink/slink.js"></script>
+	</body>
 </html>

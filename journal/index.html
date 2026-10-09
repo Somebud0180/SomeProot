@@ -1,57 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<script
+			type="module"
+			src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"
+		></script>
+		<meta name="turbo-refresh-method" content="morph" />
+		<meta name="turbo-refresh-scroll" content="preserve" />
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+		/>
+		<meta
+			name="description"
+			content="Somebud's journal of thoughts and stuff done"
+		/>
+		<meta
+			http-equiv="Cache-Control"
+			content="max-age=31536000, must-revalidate"
+		/>
+		<title>SomeProot</title>
+		<link rel="stylesheet" href="/SomeProot/Assets/CSS/main_styles.css" />
+		<link rel="stylesheet" href="/SomeProot/Assets/CSS/journal_styles.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
 
-<head>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"></script>
-    <meta name="turbo-refresh-method" content="morph">
-    <meta name="turbo-refresh-scroll" content="preserve">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Somebud's journal of thoughts and stuff done">
-    <meta http-equiv="Cache-Control" content="max-age=31536000, must-revalidate">
-    <title>SomeProot</title>
-    <link rel="stylesheet" href="/SomeProot/Assets/CSS/main_styles.css">
-    <link rel="stylesheet" href="/SomeProot/Assets/CSS/journal_styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap"
-        rel="stylesheet">
-</head>
+	<body data-page="Journal">
+		<header id="header" data-turbo-permanent>
+			<nav>
+				<h1>SomeProot</h1>
+				<ul>
+					<li><a href="/SomeProot/">Home</a></li>
+					<li><a href="/SomeProot/projects/">Projects</a></li>
+					<li><a href="/SomeProot/journal/">Journal</a></li>
+					<li><a href="/SomeProot/gallery/">Gallery</a></li>
+					<li><a href="/SomeProot/socials/">Socials</a></li>
+					<li><a href="/SomeProot/sonas/">Sonas</a></li>
+				</ul>
+			</nav>
+		</header>
 
-<body data-page="Journal">
-    <header id="header" data-turbo-permanent>
-        <nav>
-            <h1>SomeProot</h1>
-            <ul>
-                <li><a href="/SomeProot/">Home</a></li>
-                <li><a href="/SomeProot/projects/">Projects</a></li>
-                <li><a href="/SomeProot/journal/">Journal</a></li>
-                <li><a href="/SomeProot/gallery/">Gallery</a></li>
-                <li><a href="/SomeProot/socials/">Socials</a></li>
-            </ul>
-        </nav>
-    </header>
+		<main>
+			<section id="journal" class="journal">
+				<div class="journal__page">
+					<div class="journal__intro" section="Page"></div>
+					<div
+						class="journal__entries"
+						id="journalEntries"
+						aria-live="polite"
+					></div>
+				</div>
+			</section>
+		</main>
 
-    <main>
-        <section id="journal" class="journal">
-            <div class="journal__page">
-                <div class="journal__intro" section="Page"></div>
-                <div class="journal__entries" id="journalEntries" aria-live="polite"></div>
-            </div>
-        </section>
-    </main>
+		<footer>
+			<a href="https://hackclub.com/">
+				<img
+					src="/SomeProot/Assets/Images/Misc/Footer.png"
+					alt="Signature. Love, Hack Club"
+					height="32"
+				/>
+			</a>
+			<p>
+				&copy; 2026 Somebud.
+				<a href="https://github.com/Somebud/SomeProot">Source on GitHub</a>
+			</p>
+		</footer>
 
-    <footer>
-        <a href="https://hackclub.com/">
-            <img src="/SomeProot/Assets/Images/Misc/Footer.png" alt="Signature. Love, Hack Club" height="32">
-        </a>
-        <p>&copy; 2026 Somebud. <a href="https://github.com/Somebud/SomeProot">Source on GitHub</a></p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script type="module" src="/SomeProot/Assets/JS/script.js"></script>
-    <script src="https://somebud0180.github.io/slink/slink.js"></script>
-</body>
-
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script type="module" src="/SomeProot/Assets/JS/script.js"></script>
+		<script src="https://somebud0180.github.io/slink/slink.js"></script>
+	</body>
 </html>

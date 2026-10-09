@@ -1,71 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+	<head>
+		<script
+			type="module"
+			src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"
+		></script>
+		<meta name="turbo-refresh-method" content="morph" />
+		<meta name="turbo-refresh-scroll" content="preserve" />
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+		/>
+		<meta
+			name="description"
+			content="Somebud's personal website, featuring projects, a journal, a gallery, and socials."
+		/>
+		<meta
+			http-equiv="Cache-Control"
+			content="max-age=31536000, must-revalidate"
+		/>
+		<title>SomeProot</title>
+		<link rel="stylesheet" href="Assets/CSS/main_styles.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
 
-<head>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"></script>
-    <meta name="turbo-refresh-method" content="morph">
-    <meta name="turbo-refresh-scroll" content="preserve">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description"
-        content="Somebud's personal website, featuring projects, a journal, a gallery, and socials.">
-    <meta http-equiv="Cache-Control" content="max-age=31536000, must-revalidate">
-    <title>SomeProot</title>
-    <link rel="stylesheet" href="Assets/CSS/main_styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Silkscreen:wght@400;700&display=swap"
-        rel="stylesheet">
-</head>
+	<body data-page="Home">
+		<header id="header" data-turbo-permanent>
+			<nav>
+				<h1>SomeProot</h1>
+				<ul>
+					<li><a href="/SomeProot/">Home</a></li>
+					<li><a href="/SomeProot/projects/">Projects</a></li>
+					<li><a href="/SomeProot/journal/">Journal</a></li>
+					<li><a href="/SomeProot/gallery/">Gallery</a></li>
+					<li><a href="/SomeProot/socials/">Socials</a></li>
+					<li><a href="/SomeProot/sonas/">Sonas</a></li>
+				</ul>
+			</nav>
+		</header>
 
-<body data-page="Home">
-    <header id="header" data-turbo-permanent>
-        <nav>
-            <h1>SomeProot</h1>
-            <ul>
-                <li><a href="/SomeProot/">Home</a></li>
-                <li><a href="/SomeProot/projects/">Projects</a></li>
-                <li><a href="/SomeProot/journal/">Journal</a></li>
-                <li><a href="/SomeProot/gallery/">Gallery</a></li>
-                <li><a href="/SomeProot/socials/">Socials</a></li>
-            </ul>
-        </nav>
-    </header>
+		<main>
+			<section id="home" class="hero">
+				<div class="banner">
+					<div class="face">
+						<div class="eye-container" id="left-eye-container">
+							<img
+								class="eye"
+								src="Assets/Images/Face/Eye_L.svg"
+								alt="Left eye"
+							/>
+						</div>
+						<div class="eye-container" id="right-eye-container">
+							<img
+								class="eye"
+								src="Assets/Images/Face/Eye_R.svg"
+								alt="Right eye"
+							/>
+						</div>
+						<img
+							class="blush blush--left"
+							src="Assets/Images/Face/Blush.svg"
+							alt="Left blush"
+						/>
+						<img
+							class="blush blush--right"
+							src="Assets/Images/Face/Blush.svg"
+							alt="Right blush"
+						/>
+						<img class="mouth" src="Assets/Images/Face/Mouth.svg" alt="Mouth" />
+					</div>
+				</div>
+				<div class="blur"></div>
+				<div section="Hero"></div>
+			</section>
+			<section id="about" class="content">
+				<div section="About"></div>
+			</section>
+		</main>
 
-    <main>
-        <section id="home" class="hero">
-            <div class="banner">
-                <div class="face">
-                    <div class="eye-container" id="left-eye-container">
-                        <img class="eye" src="Assets/Images/Face/Eye_L.svg" alt="Left eye">
-                    </div>
-                    <div class="eye-container" id="right-eye-container">
-                        <img class="eye" src="Assets/Images/Face/Eye_R.svg" alt="Right eye">
-                    </div>
-                    <img class="blush blush--left" src="Assets/Images/Face/Blush.svg" alt="Left blush">
-                    <img class="blush blush--right" src="Assets/Images/Face/Blush.svg" alt="Right blush">
-                    <img class="mouth" src="Assets/Images/Face/Mouth.svg" alt="Mouth">
-                </div>
-            </div>
-            <div class="blur"></div>
-            <div section="Hero"></div>
-        </section>
-        <section id="about" class="content">
-            <div section="About"></div>
-        </section>
-    </main>
+		<footer>
+			<a href="https://hackclub.com/">
+				<img
+					src="Assets/Images/Misc/Footer.png"
+					alt="Signature. Love, Hack Club"
+					height="32"
+				/>
+			</a>
+			<p>
+				&copy; 2026 Somebud.
+				<a href="https://github.com/Somebud/SomeProot">Source on GitHub</a>
+			</p>
+		</footer>
 
-    <footer>
-        <a href="https://hackclub.com/">
-            <img src="Assets/Images/Misc/Footer.png" alt="Signature. Love, Hack Club" height="32">
-        </a>
-        <p>&copy; 2026 Somebud. <a href="https://github.com/Somebud/SomeProot">Source on GitHub</a></p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script type="module" src="Assets/JS/script.js"></script>
-    <script src="https://somebud0180.github.io/slink/slink.js"></script>
-</body>
-
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script type="module" src="Assets/JS/script.js"></script>
+		<script src="https://somebud0180.github.io/slink/slink.js"></script>
+	</body>
 </html>
